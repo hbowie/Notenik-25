@@ -1,0 +1,70 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "CoreXLSX",
+        "repositoryURL": "https://github.com/CoreOffice/CoreXLSX.git",
+        "state": {
+          "branch": null,
+          "revision": "1391f3832ea2eeee5186ea8abb81ea49ed0609cc",
+          "version": "0.14.2"
+        }
+      },
+      {
+        "package": "Down",
+        "repositoryURL": "https://github.com/johnxnguyen/Down",
+        "state": {
+          "branch": null,
+          "revision": "f34b166be1f1db4aa8f573067e901d72f2a6be57",
+          "version": "0.11.0"
+        }
+      },
+      {
+        "package": "Ink",
+        "repositoryURL": "https://github.com/JohnSundell/Ink",
+        "state": {
+          "branch": null,
+          "revision": "bcc9f219900a62c4210e6db726035d7f03ae757b",
+          "version": "0.6.0"
+        }
+      },
+      {
+        "package": "SwiftSoup",
+        "repositoryURL": "https://github.com/scinfu/SwiftSoup.git",
+        "state": {
+          "branch": null,
+          "revision": "0837db354faf9c9deb710dc597046edaadf5360f",
+          "version": "2.7.6"
+        }
+      },
+      {
+        "package": "XMLCoder",
+        "repositoryURL": "https://github.com/maxdesiatov/XMLCoder.git",
+        "state": {
+          "branch": null,
+          "revision": "ca932442d7481700f5434a7b138c47dd42d9902b",
+          "version": "0.14.0"
+        }
+      },
+      {
+        "package": "ZipArchive",
+        "repositoryURL": "https://github.com/ZipArchive/ZipArchive.git",
+        "state": {
+          "branch": null,
+          "revision": "df35718ea19a94e015b91dc4881dee028ce4cdba",
+          "version": "2.6.0"
+        }
+      },
+      {
+        "package": "ZIPFoundation",
+        "repositoryURL": "https://github.com/weichsel/ZIPFoundation.git",
+        "state": {
+          "branch": null,
+          "revision": "02b6abe5f6eef7e3cbd5f247c5cc24e246efcfe0",
+          "version": "0.9.19"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,12 @@
+---
+title:  Note with YAML Frontmatter
+tags:
+- #Educational
+- #Hip
+- #Tasty
+- #groovy
+status: published
+---
+
+This is a note with YAML frontmatter. And now it's been updated.
+

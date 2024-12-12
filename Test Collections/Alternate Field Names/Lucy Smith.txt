@@ -1,0 +1,38 @@
+Name:   Lucy Smith
+
+Topics: family
+
+Type:   female
+
+Birth Sequence: 2
+
+Birthday: 23 Sep 1985
+
+Repeats: yearly
+
+Anniversary: 5 Jan 2005
+
+Stage:  4 - In Work
+
+Ix:     family; 
+
+Example: 
+
+    /// Assign a field type based on a field label and, optionally, a type string. 
+    func assignType(label: FieldLabel, type: String?) -> AnyType {
+
+        for fieldType in fieldTypes {
+            if fieldType.appliesTo(label: label, type: type) {
+                return fieldType
+            }
+        }
+        return stringType
+    }
+
+
+By:     William Shakespeare
+
+Description: 
+
+Lucky Lucy
+

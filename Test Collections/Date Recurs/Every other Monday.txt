@@ -1,0 +1,11 @@
+Title:  Every other Monday
+
+Tags:   day of the week
+
+Status: 0 - Idea
+
+Date:   11 May 2020
+
+Recurs: Every other Monday
+
+Date Added: 2020-02-04 20:23:18 +0000

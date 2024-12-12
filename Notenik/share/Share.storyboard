@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23094"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="FyN-sj-3cK">
+            <objects>
+                <windowController storyboardIdentifier="shareWC" id="Mq3-Lh-bHt" customClass="ShareWindowController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Share a Note" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="GlV-ZT-cNX">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
+                        <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="425" y="461" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+                        <connections>
+                            <outlet property="delegate" destination="Mq3-Lh-bHt" id="mAA-Xu-SSs"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="IDQ-mI-NjM" kind="relationship" relationship="window.shadowedContentViewController" id="DZb-MS-crj"/>
+                    </connections>
+                </windowController>
+                <customObject id="giX-vd-LXg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="177" y="-173"/>
+        </scene>
+        <!--Share View Controller-->
+        <scene sceneID="ljE-AP-6ws">
+            <objects>
+                <viewController id="IDQ-mI-NjM" customClass="ShareViewController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="2Jx-RJ-bAL">
+                        <rect key="frame" x="0.0" y="0.0" width="523" height="320"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qCg-Ln-fTR">
+                                <rect key="frame" x="18" y="283" width="57" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Content:" id="KEc-Wl-LZk">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MUC-MA-WTX">
+                                <rect key="frame" x="19" y="258" width="85" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Body Only" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="7BJ-XK-aDe">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareContentSelection:" target="C6S-Gq-nNR" id="3QT-wA-Hrs"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8s6-Se-dMB">
+                                <rect key="frame" x="19" y="236" width="90" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Entire Note" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="UgP-nO-k84">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareContentSelection:" target="C6S-Gq-nNR" id="JeJ-Dg-rCu"/>
+                                </connections>
+                            </button>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="84t-cv-dc7">
+                                <rect key="frame" x="372" y="283" width="77" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Destination:" id="3Xw-Y6-asy">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FqU-1u-Irh">
+                                <rect key="frame" x="373" y="258" width="132" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Copy to Clipboard" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="KAq-FP-YUS">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareDestinationSelection:" target="C6S-Gq-nNR" id="mNl-f4-6Qu"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kPg-JB-VjE">
+                                <rect key="frame" x="373" y="236" width="106" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Write to a File" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="YKB-uw-OwN">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareDestinationSelection:" target="C6S-Gq-nNR" id="uOi-Gk-4I1"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dII-uW-RRD">
+                                <rect key="frame" x="14" y="13" width="82" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7m1-r2-155">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="cancelButtonPressed:" target="IDQ-mI-NjM" id="epD-39-uRI"/>
+                                </connections>
+                            </button>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XpY-O7-CI4">
+                                <rect key="frame" x="177" y="283" width="51" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Format:" id="qWr-6P-2sa">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J3b-qb-zwe">
+                                <rect key="frame" x="178" y="258" width="125" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="HTML Document" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="WU7-QZ-iTg">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareFormatSelection:" target="C6S-Gq-nNR" id="Mae-nd-9Io"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EK6-On-3Ch">
+                                <rect key="frame" x="178" y="236" width="120" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="HTML Fragment" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="dOQ-EL-6Jw">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareFormatSelection:" target="C6S-Gq-nNR" id="0ba-9q-IC0"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nDM-fr-x96">
+                                <rect key="frame" x="178" y="214" width="130" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="HTML Blockquote" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="zNA-0w-pa2">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareFormatSelection:" target="C6S-Gq-nNR" id="LzJ-bW-YpK"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="buk-bw-lFd">
+                                <rect key="frame" x="178" y="192" width="57" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="JSON" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="1br-T3-ufK">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareFormatSelection:" target="C6S-Gq-nNR" id="1Hl-k0-wO0"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bTg-7a-2Qd">
+                                <rect key="frame" x="178" y="170" width="85" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Markdown" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="wby-pV-pVE">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareFormatSelection:" target="C6S-Gq-nNR" id="Mbj-8M-KxH"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SgD-9l-Drn">
+                                <rect key="frame" x="178" y="148" width="126" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Markdown Quote" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="6zG-Zd-EVJ">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareFormatSelection:" target="C6S-Gq-nNR" id="HxE-BL-a84"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qVS-hI-ibo">
+                                <rect key="frame" x="373" y="214" width="126" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Open in Browser" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="fBD-Yv-EVB">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareDestinationSelection:" target="C6S-Gq-nNR" id="ni6-lJ-kfl"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RwZ-7Y-eJK">
+                                <rect key="frame" x="447" y="13" width="59" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Wbb-VO-d0o">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="okButtonPressed:" target="IDQ-mI-NjM" id="MTz-BS-Avn"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4e0-3I-K0L">
+                                <rect key="frame" x="178" y="126" width="191" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Markdown with quote-from" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="RH1-oQ-zKs">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareFormatSelection:" target="C6S-Gq-nNR" id="3hQ-vU-v89"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3xP-05-Fbw">
+                                <rect key="frame" x="178" y="104" width="69" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Notenik" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="vB8-xg-USz">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareFormatSelection:" target="C6S-Gq-nNR" id="TIC-xo-RaT"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qac-bL-Xep">
+                                <rect key="frame" x="178" y="82" width="117" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Microblog Post" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="4Th-aR-nnW">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareFormatSelection:" target="C6S-Gq-nNR" id="QSK-xK-kTM"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Hm-qH-UIV">
+                                <rect key="frame" x="178" y="60" width="162" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Using Merge Template" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="7q1-CR-g6e">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareFormatSelection:" target="C6S-Gq-nNR" id="HuV-95-8S1"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4wh-Ks-8eV">
+                                <rect key="frame" x="19" y="214" width="98" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Teaser Only" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="12T-68-zIh">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="shareContentSelection:" target="C6S-Gq-nNR" id="7qi-jD-sRV"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="contentBodyOnlyButton" destination="MUC-MA-WTX" id="Zhf-IY-X0r"/>
+                        <outlet property="contentEntireNoteButton" destination="8s6-Se-dMB" id="lPY-cX-N7t"/>
+                        <outlet property="contentTeaserOnlyButton" destination="4wh-Ks-8eV" id="Bxu-on-4jL"/>
+                        <outlet property="destinationBrowserButton" destination="qVS-hI-ibo" id="jLK-0s-HcT"/>
+                        <outlet property="destinationClipboardButton" destination="FqU-1u-Irh" id="ZBi-dk-y63"/>
+                        <outlet property="destinationFileButton" destination="kPg-JB-VjE" id="QP9-b9-lpk"/>
+                        <outlet property="formatHTMLBlockquoteButton" destination="nDM-fr-x96" id="H1d-5s-zzr"/>
+                        <outlet property="formatHTMLDocButton" destination="J3b-qb-zwe" id="uIG-x5-yDx"/>
+                        <outlet property="formatHTMLFragmentButton" destination="EK6-On-3Ch" id="TFS-5N-utj"/>
+                        <outlet property="formatJSONButton" destination="buk-bw-lFd" id="UCR-dc-afv"/>
+                        <outlet property="formatMarkdownButton" destination="bTg-7a-2Qd" id="0wL-99-Til"/>
+                        <outlet property="formatMarkdownQuoteButton" destination="SgD-9l-Drn" id="Ywj-zW-QcI"/>
+                        <outlet property="formatMarkdownQuoteFrom" destination="4e0-3I-K0L" id="xca-P6-sIx"/>
+                        <outlet property="formatMicroButton" destination="Qac-bL-Xep" id="Tmh-uK-lqG"/>
+                        <outlet property="formatNotenikButton" destination="4e0-3I-K0L" id="SKs-ul-SJL"/>
+                        <outlet property="formatTemplateButton" destination="3Hm-qH-UIV" id="ag4-GA-Tev"/>
+                    </connections>
+                </viewController>
+                <customObject id="C6S-Gq-nNR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="198.5" y="371"/>
+        </scene>
+    </scenes>
+</document>

@@ -1,0 +1,16 @@
+Title:  Weekdays
+
+Tags:   days
+
+Status: 0 - Idea
+
+Date:   02 Mar 2020
+
+Recurs: Every Weekday
+
+Date Added: 2020-02-04 20:21:22 +0000
+
+Body: 
+
+A task that should only recur Monday thru Friday. 
+

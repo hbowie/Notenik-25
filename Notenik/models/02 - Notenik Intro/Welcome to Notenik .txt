@@ -1,0 +1,15 @@
+Title:  Welcome to Notenik!
+
+Tags:   welcome
+
+Seq:    1
+
+Body: 
+
+This brief into is designed to be both a tutorial and a workshop for learning some of the Notenik basics. That is, this intro is itself a Notenik Collection containing instructions on the use of Notenik; but it is a disposable copy that you can modify however you would like, so all of the editing capabilites of Notenik will be available to you as you step through the tutorial.  
+
+When you install and launch Notenik for the first time, this intro will typically be the first thing you see. 
+
+(You can also find a read-only copy of this intro on the [Notenik.app website](https://notenik.app/intro/EPUB/html/welcome-to-notenik.html).)
+
+When you're ready to move to the next Note in this tutorial, just click on the link following the `Next` label below.

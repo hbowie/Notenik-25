@@ -1,0 +1,14 @@
+Title: <title> 
+
+Tags: <tags> 
+
+Link: <link> 
+
+Seq: <seq> 
+
+Image Name: <imagename> 
+
+Image Caption:  
+
+Body:  
+

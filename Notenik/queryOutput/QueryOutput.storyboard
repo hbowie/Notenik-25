@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <plugIn identifier="com.apple.WebKit2IBPlugin" version="22505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="5ml-9e-lJ5">
+            <objects>
+                <windowController storyboardIdentifier="queryOutputWC" id="Cdh-zk-N9b" customClass="QueryOutputWindowController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Query Output" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="XqX-3m-zNv">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="425" y="462" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1415"/>
+                        <view key="contentView" id="iuh-3m-cwY">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="Cdh-zk-N9b" id="Y1X-gC-wzP"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="eZR-3m-UH5" kind="relationship" relationship="window.shadowedContentViewController" id="PtF-da-x0q"/>
+                    </connections>
+                </windowController>
+                <customObject id="Bot-uC-Qzj" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-158" y="-156"/>
+        </scene>
+        <!--Query Output View Controller-->
+        <scene sceneID="8d8-Ev-BTo">
+            <objects>
+                <viewController id="eZR-3m-UH5" customClass="QueryOutputViewController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="24K-12-snC">
+                        <rect key="frame" x="0.0" y="0.0" width="548" height="491"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z5j-4t-qoY">
+                                <rect key="frame" x="20" y="60" width="508" height="411"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Rgx-at-sqZ">
+                                <rect key="frame" x="351" y="16" width="181" height="25"/>
+                                <popUpButtonCell key="cell" type="push" title="Web Page:" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="zH7-xn-xJJ">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="x1F-CF-Aay">
+                                        <items>
+                                            <menuItem title="Web Page:" state="on" hidden="YES" id="BHd-CC-Xlh"/>
+                                            <menuItem title="Save to Disk..." id="dVO-rv-zed"/>
+                                            <menuItem title="Browse" id="qTj-Ue-jlB"/>
+                                            <menuItem title="Save and Browse..." id="8zY-mK-gS9">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="174" id="jWU-mV-PFa"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="webPageAction:" target="eZR-3m-UH5" id="IZe-Ty-Ir2"/>
+                                </connections>
+                            </popUpButton>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BUQ-NN-UOh">
+                                <rect key="frame" x="13" y="13" width="81" height="32"/>
+                                <buttonCell key="cell" type="push" title="Refresh" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="b3V-Iv-JIH">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="refreshReport:" target="eZR-3m-UH5" id="UnT-2p-1oo"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="z5j-4t-qoY" firstAttribute="trailing" secondItem="Rgx-at-sqZ" secondAttribute="trailing" id="2eY-AN-6XJ"/>
+                            <constraint firstAttribute="trailing" secondItem="z5j-4t-qoY" secondAttribute="trailing" constant="20" symbolic="YES" id="3QJ-uc-J7A"/>
+                            <constraint firstItem="z5j-4t-qoY" firstAttribute="leading" secondItem="BUQ-NN-UOh" secondAttribute="leading" id="4zG-XM-omN"/>
+                            <constraint firstItem="BUQ-NN-UOh" firstAttribute="top" secondItem="z5j-4t-qoY" secondAttribute="bottom" constant="20" symbolic="YES" id="RiA-Me-bf9"/>
+                            <constraint firstAttribute="bottom" secondItem="BUQ-NN-UOh" secondAttribute="bottom" constant="20" symbolic="YES" id="Tt3-fK-efv"/>
+                            <constraint firstItem="z5j-4t-qoY" firstAttribute="leading" secondItem="24K-12-snC" secondAttribute="leading" constant="20" symbolic="YES" id="XSN-4g-JGI"/>
+                            <constraint firstItem="z5j-4t-qoY" firstAttribute="top" secondItem="24K-12-snC" secondAttribute="top" constant="20" symbolic="YES" id="h6v-f0-zXJ"/>
+                            <constraint firstItem="BUQ-NN-UOh" firstAttribute="baseline" secondItem="Rgx-at-sqZ" secondAttribute="baseline" id="oH4-Z9-IS1"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="z5j-4t-qoY" id="G4f-yo-UbK"/>
+                    </connections>
+                </viewController>
+                <customObject id="E43-6Q-ThH" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-192" y="489.5"/>
+        </scene>
+    </scenes>
+</document>

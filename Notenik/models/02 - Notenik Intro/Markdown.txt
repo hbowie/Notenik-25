@@ -1,0 +1,25 @@
+Title:  Markdown
+
+Tags:   links, markdown
+
+Seq:    9
+
+Image Name: screenshot
+
+Image Caption: Examples of Markdown Syntax
+
+Body: 
+
+Within the Body of each Note, you can use the Markdown syntax to add formatting to your Note. The formatting will be visible when you return to [[the Display tab]]. 
+
+Almost all of the [Markdown standard syntax][df] is available, along with many [common extensions][mg] that have been developed over the years. 
+
+[df]: https://daringfireball.net/projects/markdown/syntax 
+
+[mg]: https://www.markdownguide.org/extended-syntax/
+
+*Standard* Markdown allows an author to embed hyperlinks into their text. *Notenik* also supports __wiki-style links__, using double brackets to enclose a reference to another Note within the same Collection. 
+
+In either case, click on the linked text (normally blue and underlined) to see the linked content appear within the Display tab. Click on the back button on the toolbar to return to the previous display. 
+
+If the link is a hyperlink to an external Web page, then you can Control click on the link and select `Open Link in New Window` to see the link opened in your Web browser (Safari, Chrome, etc.).

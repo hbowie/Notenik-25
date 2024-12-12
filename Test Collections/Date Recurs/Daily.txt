@@ -1,0 +1,16 @@
+Title:  Daily
+
+Tags:   days
+
+Status: 0 - Idea
+
+Date:   21 Feb 2020
+
+Recurs: Daily
+
+Date Added: 2020-02-04 22:50:25 +0000
+
+Body: 
+
+A task that should recur every day. 
+
