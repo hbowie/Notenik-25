@@ -171,6 +171,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         juggler!.showAppPreferences()
     }
     
+    @IBAction func menuResetPrefs(_ sender: Any) {
+        AppPrefs.shared.resetDefaults()
+    }
+    
+    
     @IBAction func mastProfile(_ sender: NSMenuItem) {
         let handle = appPrefs!.mastodonHandle
         let domain = appPrefs!.mastodonDomain

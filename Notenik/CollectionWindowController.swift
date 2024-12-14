@@ -141,11 +141,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             if notenikIO!.collection!.title == "" {
                 notenikIO!.collection!.setDefaultTitle()
             }
-            if notenikIO!.collection!.fullPathURL == appPrefs.essentialURL {
-                window!.title = notenikIO!.collection!.userFacingLabel() + " (E)"
-            } else {
-                window!.title = notenikIO!.collection!.userFacingLabel()
-            }
+            let essential = notenikIO!.collection!.fullPathURL == appPrefs.essentialURL
+            markEssential(essential: essential)
+
             scroller = NoteScroller(collection: notenikIO!.collection!)
             
             if self.window == nil {
@@ -3958,7 +3956,16 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     }
     
     @IBAction func makeCollectionEssential(_ sender: Any) {
+        markEssential(essential: true)
         juggler.makeCollectionEssential(io: notenikIO!)
+    }
+    
+    func markEssential(essential: Bool = true) {
+        if essential {
+            window!.title = notenikIO!.collection!.userFacingLabel() + " (E)"
+        } else {
+            window!.title = notenikIO!.collection!.userFacingLabel()
+        }
     }
     
     @IBAction func normalizeCollection(_ sender: Any) {

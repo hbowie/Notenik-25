@@ -135,32 +135,9 @@
 		9C5BE16E277167070013C0D3 /* SeqModViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5BE16D277167070013C0D3 /* SeqModViewController.swift */; };
 		9C5CBC7925D60AA300D23F4B /* Down in Frameworks */ = {isa = PBXBuildFile; productRef = 9C5CBC7825D60AA300D23F4B /* Down */; };
 		9C5DE003288E03870099EC9A /* AddNoteFromTextIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5DE002288E03870099EC9A /* AddNoteFromTextIntentHandler.swift */; };
-		9C60B52025E6D7C300371023 /* DisplayNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60B51F25E6D7C300371023 /* DisplayNoteViewController.swift */; };
 		9C60E6D221F64B3B00C332ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E6D121F64B3B00C332ED /* AppDelegate.swift */; };
 		9C60E6D621F64B3C00C332ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C60E6D521F64B3C00C332ED /* Assets.xcassets */; };
 		9C60E6D921F64B3C00C332ED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C60E6D721F64B3C00C332ED /* Main.storyboard */; };
-		9C60E6E521F64B3C00C332ED /* NotenikTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E6E421F64B3C00C332ED /* NotenikTests.swift */; };
-		9C60E6F021F64B3C00C332ED /* NotenikUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E6EF21F64B3C00C332ED /* NotenikUITests.swift */; };
-		9C60E7B721F6525F00C332ED /* FileUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7A321F6525D00C332ED /* FileUtilsTests.swift */; };
-		9C60E7B821F6525F00C332ED /* BigStringReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7A421F6525D00C332ED /* BigStringReaderTests.swift */; };
-		9C60E7B921F6525F00C332ED /* LinkValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7A521F6525D00C332ED /* LinkValueTests.swift */; };
-		9C60E7BA21F6525F00C332ED /* FileIOTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7A621F6525D00C332ED /* FileIOTests.swift */; };
-		9C60E7BB21F6525F00C332ED /* LongTextValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7A721F6525E00C332ED /* LongTextValueTests.swift */; };
-		9C60E7BC21F6525F00C332ED /* AuthorValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7A821F6525E00C332ED /* AuthorValueTests.swift */; };
-		9C60E7BD21F6525F00C332ED /* DateUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7A921F6525E00C332ED /* DateUtilsTests.swift */; };
-		9C60E7BE21F6525F00C332ED /* TagsValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7AA21F6525E00C332ED /* TagsValueTests.swift */; };
-		9C60E7BF21F6525F00C332ED /* StatusValueConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7AB21F6525E00C332ED /* StatusValueConfigTests.swift */; };
-		9C60E7C021F6525F00C332ED /* StatusValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7AC21F6525E00C332ED /* StatusValueTests.swift */; };
-		9C60E7C121F6525F00C332ED /* TitleValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7AD21F6525E00C332ED /* TitleValueTests.swift */; };
-		9C60E7C221F6525F00C332ED /* SeqValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7AE21F6525E00C332ED /* SeqValueTests.swift */; };
-		9C60E7C321F6525F00C332ED /* LineParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7AF21F6525E00C332ED /* LineParserTests.swift */; };
-		9C60E7C421F6525F00C332ED /* DateValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7B021F6525E00C332ED /* DateValueTests.swift */; };
-		9C60E7C521F6525F00C332ED /* StringUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7B121F6525E00C332ED /* StringUtilsTests.swift */; };
-		9C60E7C621F6525F00C332ED /* FileNameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7B221F6525E00C332ED /* FileNameTests.swift */; };
-		9C60E7C721F6525F00C332ED /* FieldDefinitionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7B321F6525E00C332ED /* FieldDefinitionTests.swift */; };
-		9C60E7C821F6525F00C332ED /* StringValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7B421F6525F00C332ED /* StringValueTests.swift */; };
-		9C60E7C921F6525F00C332ED /* RecursValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7B521F6525F00C332ED /* RecursValueTests.swift */; };
-		9C60E7CA21F6525F00C332ED /* FieldLabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E7B621F6525F00C332ED /* FieldLabelTests.swift */; };
 		9C617AE227DBDC4300ACEC8A /* NotePicker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C617AE127DBDC4300ACEC8A /* NotePicker.storyboard */; };
 		9C617AE427DBDE4100ACEC8A /* NotePickerWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C617AE327DBDE4100ACEC8A /* NotePickerWindowController.swift */; };
 		9C617AE627DBDEA400ACEC8A /* NotePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C617AE527DBDEA400ACEC8A /* NotePickerViewController.swift */; };
@@ -250,14 +227,12 @@
 		9CAE23F526D1659B0002FCCD /* LookupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAE23F426D1659B0002FCCD /* LookupView.swift */; };
 		9CAE23F726D166CB0002FCCD /* LookupDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAE23F626D166CB0002FCCD /* LookupDataSource.swift */; };
 		9CB1487A28C95F6500AF6D69 /* NoteLinkResolverCocoa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB1487928C95F6500AF6D69 /* NoteLinkResolverCocoa.swift */; };
-		9CB37ED52407189700C2AC1F /* MkdownParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB37ED42407189700C2AC1F /* MkdownParserTests.swift */; };
 		9CB60BC0226509B2003B5655 /* Share.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CB60BBF226509B2003B5655 /* Share.storyboard */; };
 		9CB60BC1226509B2003B5655 /* Share.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CB60BBF226509B2003B5655 /* Share.storyboard */; };
 		9CB60BC322650A89003B5655 /* ShareWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB60BC222650A89003B5655 /* ShareWindowController.swift */; };
 		9CB60BC422650A89003B5655 /* ShareWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB60BC222650A89003B5655 /* ShareWindowController.swift */; };
 		9CB60BC622651074003B5655 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB60BC522651074003B5655 /* ShareViewController.swift */; };
 		9CB60BC722651074003B5655 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB60BC522651074003B5655 /* ShareViewController.swift */; };
-		9CB761DF25E1D44B0059D7CE /* CollectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB761DE25E1D44B0059D7CE /* CollectionsViewController.swift */; };
 		9CB8876C2862281100AA91DB /* CocoaFontPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB8876B2862281100AA91DB /* CocoaFontPrefs.swift */; };
 		9CB8876E28625D1300AA91DB /* CocoaFontUsage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CB8876D28625D1300AA91DB /* CocoaFontUsage.swift */; };
 		9CBC386621FFA94800BA7900 /* NoteTagsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CBC386521FFA94800BA7900 /* NoteTagsViewController.swift */; };
@@ -275,7 +250,6 @@
 		9CC78E6F228358A400640477 /* DisplayPrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC78E6E228358A400640477 /* DisplayPrefsViewController.swift */; };
 		9CC78E70228358A400640477 /* DisplayPrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC78E6E228358A400640477 /* DisplayPrefsViewController.swift */; };
 		9CC7E7ED295CCFC6008B152B /* NoteToPick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC7E7EC295CCFC6008B152B /* NoteToPick.swift */; };
-		9CC8336E22B3F65B0006AAE0 /* MarkedupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC8336D22B3F65B0006AAE0 /* MarkedupTests.swift */; };
 		9CC902692AE074340004101B /* TagsAssign.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CC902682AE074340004101B /* TagsAssign.storyboard */; };
 		9CC9026B2AE075A90004101B /* TagsAssignWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC9026A2AE075A90004101B /* TagsAssignWindowController.swift */; };
 		9CC9026D2AE075C90004101B /* TagsAssignViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC9026C2AE075C90004101B /* TagsAssignViewController.swift */; };
@@ -284,7 +258,6 @@
 		9CCE7C65264AEB1E003818DF /* QuickActionWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCE7C64264AEB1E003818DF /* QuickActionWindowController.swift */; };
 		9CCE7C67264AEB47003818DF /* QuickActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCE7C66264AEB47003818DF /* QuickActionViewController.swift */; };
 		9CCE7C69264B1FA7003818DF /* QuickActionFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCE7C68264B1FA7003818DF /* QuickActionFolder.swift */; };
-		9CCFD62C22AEE0DD00C64D37 /* StringConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCFD62B22AEE0DD00C64D37 /* StringConverterTests.swift */; };
 		9CD326202233068F00D06B77 /* MacEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD3261F2233068F00D06B77 /* MacEditView.swift */; };
 		9CD326222233068F00D06B77 /* MacEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD3261F2233068F00D06B77 /* MacEditView.swift */; };
 		9CD32624223308C400D06B77 /* StringView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD32623223308C400D06B77 /* StringView.swift */; };
@@ -324,17 +297,11 @@
 		9CE3250E224D5A4D0051CA1F /* LogWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3250C224D5A4D0051CA1F /* LogWindowController.swift */; };
 		9CE32510224D5E180051CA1F /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3250F224D5E180051CA1F /* LogViewController.swift */; };
 		9CE32511224D5E180051CA1F /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3250F224D5E180051CA1F /* LogViewController.swift */; };
-		9CE3DB5725E0580A006938D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3DB5625E0580A006938D3 /* AppDelegate.swift */; };
-		9CE3DB5925E0580A006938D3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE3DB5825E0580A006938D3 /* SceneDelegate.swift */; };
-		9CE3DB5E25E0580A006938D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CE3DB5C25E0580A006938D3 /* Main.storyboard */; };
-		9CE3DB6025E0580B006938D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CE3DB5F25E0580B006938D3 /* Assets.xcassets */; };
-		9CE3DB6325E0580B006938D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CE3DB6125E0580B006938D3 /* LaunchScreen.storyboard */; };
 		9CE5750125D19E2D000C102C /* NewFieldsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE5750025D19E2D000C102C /* NewFieldsViewController.swift */; };
 		9CE771A62B952BAF00669088 /* DurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE771A52B952BAF00669088 /* DurationView.swift */; };
 		9CE8340527ECD4C500724931 /* AppAddNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE8340427ECD4C500724931 /* AppAddNote.swift */; };
 		9CE8D96D2906179C000F7EEA /* RankDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE8D96C2906179C000F7EEA /* RankDataSource.swift */; };
 		9CEAB6FB27F35DEB003866EA /* AppGetSelectedNoteFilePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEAB6FA27F35DEB003866EA /* AppGetSelectedNoteFilePath.swift */; };
-		9CEBB2A925E5815200EEA83D /* NotesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEBB2A825E5815200EEA83D /* NotesListViewController.swift */; };
 		9CED2810224EB39900798621 /* LongTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED280F224EB39900798621 /* LongTextView.swift */; };
 		9CED2811224EB39900798621 /* LongTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CED280F224EB39900798621 /* LongTextView.swift */; };
 		9CF1193B225822870015AE91 /* CollectionPrefsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF1193A225822870015AE91 /* CollectionPrefsWindowController.swift */; };
@@ -351,7 +318,6 @@
 		9CF435CA24805C2F00DD7C33 /* CountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF435C924805C2F00DD7C33 /* CountsViewController.swift */; };
 		9CF435CB24805C2F00DD7C33 /* CountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF435C924805C2F00DD7C33 /* CountsViewController.swift */; };
 		9CFA1A522A420105001A4555 /* DirectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFA1A512A420105001A4555 /* DirectionsView.swift */; };
-		9CFC28A725E08C560094B4CB /* intro-ios in Resources */ = {isa = PBXBuildFile; fileRef = 9CFC28A625E08C560094B4CB /* intro-ios */; };
 		9CFCB047226BC7FF00443FFA /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C02D2AD2267D46000587EDF /* DateView.swift */; };
 		9CFCB9E9293A5A04008D53E7 /* ComboItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFCB9E8293A5A04008D53E7 /* ComboItem.swift */; };
 		9CFCB9EB293A65F3008D53E7 /* ComboData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CFCB9EA293A65F3008D53E7 /* ComboData.swift */; };
@@ -461,7 +427,6 @@
 		9C5BE16B277166E60013C0D3 /* SeqModWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeqModWindowController.swift; sourceTree = "<group>"; };
 		9C5BE16D277167070013C0D3 /* SeqModViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeqModViewController.swift; sourceTree = "<group>"; };
 		9C5DE002288E03870099EC9A /* AddNoteFromTextIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteFromTextIntentHandler.swift; sourceTree = "<group>"; };
-		9C60B51F25E6D7C300371023 /* DisplayNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayNoteViewController.swift; sourceTree = "<group>"; };
 		9C60E6CE21F64B3B00C332ED /* Notenik.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notenik.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C60E6D121F64B3B00C332ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9C60E6D521F64B3C00C332ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -469,31 +434,7 @@
 		9C60E6DA21F64B3C00C332ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C60E6DB21F64B3C00C332ED /* Notenik.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Notenik.entitlements; sourceTree = "<group>"; };
 		9C60E6E021F64B3C00C332ED /* NotenikTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotenikTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C60E6E421F64B3C00C332ED /* NotenikTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotenikTests.swift; sourceTree = "<group>"; };
-		9C60E6E621F64B3C00C332ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C60E6EB21F64B3C00C332ED /* NotenikUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotenikUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C60E6EF21F64B3C00C332ED /* NotenikUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotenikUITests.swift; sourceTree = "<group>"; };
-		9C60E6F121F64B3C00C332ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9C60E7A321F6525D00C332ED /* FileUtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileUtilsTests.swift; sourceTree = "<group>"; };
-		9C60E7A421F6525D00C332ED /* BigStringReaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BigStringReaderTests.swift; sourceTree = "<group>"; };
-		9C60E7A521F6525D00C332ED /* LinkValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkValueTests.swift; sourceTree = "<group>"; };
-		9C60E7A621F6525D00C332ED /* FileIOTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileIOTests.swift; sourceTree = "<group>"; };
-		9C60E7A721F6525E00C332ED /* LongTextValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LongTextValueTests.swift; sourceTree = "<group>"; };
-		9C60E7A821F6525E00C332ED /* AuthorValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorValueTests.swift; sourceTree = "<group>"; };
-		9C60E7A921F6525E00C332ED /* DateUtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateUtilsTests.swift; sourceTree = "<group>"; };
-		9C60E7AA21F6525E00C332ED /* TagsValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsValueTests.swift; sourceTree = "<group>"; };
-		9C60E7AB21F6525E00C332ED /* StatusValueConfigTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusValueConfigTests.swift; sourceTree = "<group>"; };
-		9C60E7AC21F6525E00C332ED /* StatusValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusValueTests.swift; sourceTree = "<group>"; };
-		9C60E7AD21F6525E00C332ED /* TitleValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleValueTests.swift; sourceTree = "<group>"; };
-		9C60E7AE21F6525E00C332ED /* SeqValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeqValueTests.swift; sourceTree = "<group>"; };
-		9C60E7AF21F6525E00C332ED /* LineParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineParserTests.swift; sourceTree = "<group>"; };
-		9C60E7B021F6525E00C332ED /* DateValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateValueTests.swift; sourceTree = "<group>"; };
-		9C60E7B121F6525E00C332ED /* StringUtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtilsTests.swift; sourceTree = "<group>"; };
-		9C60E7B221F6525E00C332ED /* FileNameTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileNameTests.swift; sourceTree = "<group>"; };
-		9C60E7B321F6525E00C332ED /* FieldDefinitionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FieldDefinitionTests.swift; sourceTree = "<group>"; };
-		9C60E7B421F6525F00C332ED /* StringValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringValueTests.swift; sourceTree = "<group>"; };
-		9C60E7B521F6525F00C332ED /* RecursValueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecursValueTests.swift; sourceTree = "<group>"; };
-		9C60E7B621F6525F00C332ED /* FieldLabelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FieldLabelTests.swift; sourceTree = "<group>"; };
 		9C617AE127DBDC4300ACEC8A /* NotePicker.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NotePicker.storyboard; sourceTree = "<group>"; };
 		9C617AE327DBDE4100ACEC8A /* NotePickerWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotePickerWindowController.swift; sourceTree = "<group>"; };
 		9C617AE527DBDEA400ACEC8A /* NotePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotePickerViewController.swift; sourceTree = "<group>"; };
@@ -560,11 +501,9 @@
 		9CAE23F426D1659B0002FCCD /* LookupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookupView.swift; sourceTree = "<group>"; };
 		9CAE23F626D166CB0002FCCD /* LookupDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookupDataSource.swift; sourceTree = "<group>"; };
 		9CB1487928C95F6500AF6D69 /* NoteLinkResolverCocoa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteLinkResolverCocoa.swift; sourceTree = "<group>"; };
-		9CB37ED42407189700C2AC1F /* MkdownParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MkdownParserTests.swift; sourceTree = "<group>"; };
 		9CB60BBF226509B2003B5655 /* Share.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Share.storyboard; sourceTree = "<group>"; };
 		9CB60BC222650A89003B5655 /* ShareWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareWindowController.swift; sourceTree = "<group>"; };
 		9CB60BC522651074003B5655 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
-		9CB761DE25E1D44B0059D7CE /* CollectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsViewController.swift; sourceTree = "<group>"; };
 		9CB8876B2862281100AA91DB /* CocoaFontPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoaFontPrefs.swift; sourceTree = "<group>"; };
 		9CB8876D28625D1300AA91DB /* CocoaFontUsage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoaFontUsage.swift; sourceTree = "<group>"; };
 		9CBC386521FFA94800BA7900 /* NoteTagsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTagsViewController.swift; sourceTree = "<group>"; };
@@ -578,7 +517,6 @@
 		9CC78E6B2283587300640477 /* DisplayPrefsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPrefsWindowController.swift; sourceTree = "<group>"; };
 		9CC78E6E228358A400640477 /* DisplayPrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPrefsViewController.swift; sourceTree = "<group>"; };
 		9CC7E7EC295CCFC6008B152B /* NoteToPick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteToPick.swift; sourceTree = "<group>"; };
-		9CC8336D22B3F65B0006AAE0 /* MarkedupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkedupTests.swift; sourceTree = "<group>"; };
 		9CC902682AE074340004101B /* TagsAssign.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TagsAssign.storyboard; sourceTree = "<group>"; };
 		9CC9026A2AE075A90004101B /* TagsAssignWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsAssignWindowController.swift; sourceTree = "<group>"; };
 		9CC9026C2AE075C90004101B /* TagsAssignViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsAssignViewController.swift; sourceTree = "<group>"; };
@@ -587,7 +525,6 @@
 		9CCE7C64264AEB1E003818DF /* QuickActionWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionWindowController.swift; sourceTree = "<group>"; };
 		9CCE7C66264AEB47003818DF /* QuickActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionViewController.swift; sourceTree = "<group>"; };
 		9CCE7C68264B1FA7003818DF /* QuickActionFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionFolder.swift; sourceTree = "<group>"; };
-		9CCFD62B22AEE0DD00C64D37 /* StringConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConverterTests.swift; sourceTree = "<group>"; };
 		9CD3261F2233068F00D06B77 /* MacEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacEditView.swift; sourceTree = "<group>"; };
 		9CD32623223308C400D06B77 /* StringView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringView.swift; sourceTree = "<group>"; };
 		9CD3262722330C8A00D06B77 /* ViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFactory.swift; sourceTree = "<group>"; };
@@ -617,19 +554,11 @@
 		9CE3250C224D5A4D0051CA1F /* LogWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogWindowController.swift; sourceTree = "<group>"; };
 		9CE3250F224D5E180051CA1F /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
 		9CE3DB5425E0580A006938D3 /* Notenik-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Notenik-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9CE3DB5625E0580A006938D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9CE3DB5825E0580A006938D3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		9CE3DB5D25E0580A006938D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		9CE3DB5F25E0580B006938D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		9CE3DB6225E0580B006938D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		9CE3DB6425E0580B006938D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9CE5750025D19E2D000C102C /* NewFieldsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFieldsViewController.swift; sourceTree = "<group>"; };
 		9CE771A52B952BAF00669088 /* DurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationView.swift; sourceTree = "<group>"; };
 		9CE8340427ECD4C500724931 /* AppAddNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAddNote.swift; sourceTree = "<group>"; };
 		9CE8D96C2906179C000F7EEA /* RankDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankDataSource.swift; sourceTree = "<group>"; };
 		9CEAB6FA27F35DEB003866EA /* AppGetSelectedNoteFilePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGetSelectedNoteFilePath.swift; sourceTree = "<group>"; };
-		9CEBB2A825E5815200EEA83D /* NotesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesListViewController.swift; sourceTree = "<group>"; };
-		9CEBB2B225E593D000EEA83D /* Notenik-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Notenik-iOS.entitlements"; sourceTree = "<group>"; };
 		9CED280F224EB39900798621 /* LongTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongTextView.swift; sourceTree = "<group>"; };
 		9CF1193A225822870015AE91 /* CollectionPrefsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionPrefsWindowController.swift; sourceTree = "<group>"; };
 		9CF1193D225827650015AE91 /* CollectionPrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionPrefsViewController.swift; sourceTree = "<group>"; };
@@ -641,7 +570,6 @@
 		9CF435C924805C2F00DD7C33 /* CountsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountsViewController.swift; sourceTree = "<group>"; };
 		9CF54FA8244A2E07001EF927 /* NotenikLib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = NotenikLib; path = ../NotenikLib; sourceTree = "<group>"; };
 		9CFA1A512A420105001A4555 /* DirectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsView.swift; sourceTree = "<group>"; };
-		9CFC28A625E08C560094B4CB /* intro-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "intro-ios"; sourceTree = "<group>"; };
 		9CFCB9E8293A5A04008D53E7 /* ComboItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboItem.swift; sourceTree = "<group>"; };
 		9CFCB9EA293A65F3008D53E7 /* ComboData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboData.swift; sourceTree = "<group>"; };
 		9CFCC58C2A53A3DD009B7723 /* NoteScroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteScroller.swift; sourceTree = "<group>"; };
@@ -795,9 +723,6 @@
 				9C8FD8D72216302900F16669 /* README.md */,
 				9C65B29F23DE28BC00794C59 /* LICENSE.md */,
 				9C60E6D021F64B3B00C332ED /* Notenik */,
-				9C60E6E321F64B3C00C332ED /* NotenikTests */,
-				9C60E6EE21F64B3C00C332ED /* NotenikUITests */,
-				9CE3DB5525E0580A006938D3 /* Notenik-iOS */,
 				9C60E6CF21F64B3B00C332ED /* Products */,
 				9C65394E21F91EBB00012184 /* Frameworks */,
 			);
@@ -892,47 +817,6 @@
 				9C02117D2CA233F500167707 /* wikiQuote */,
 			);
 			path = Notenik;
-			sourceTree = "<group>";
-		};
-		9C60E6E321F64B3C00C332ED /* NotenikTests */ = {
-			isa = PBXGroup;
-			children = (
-				9C60E7A821F6525E00C332ED /* AuthorValueTests.swift */,
-				9C60E7A421F6525D00C332ED /* BigStringReaderTests.swift */,
-				9C60E7A921F6525E00C332ED /* DateUtilsTests.swift */,
-				9C60E7B021F6525E00C332ED /* DateValueTests.swift */,
-				9C60E7B321F6525E00C332ED /* FieldDefinitionTests.swift */,
-				9C60E7B621F6525F00C332ED /* FieldLabelTests.swift */,
-				9C60E7A621F6525D00C332ED /* FileIOTests.swift */,
-				9C60E7B221F6525E00C332ED /* FileNameTests.swift */,
-				9C60E7A321F6525D00C332ED /* FileUtilsTests.swift */,
-				9C60E6E621F64B3C00C332ED /* Info.plist */,
-				9C60E7AF21F6525E00C332ED /* LineParserTests.swift */,
-				9C60E7A521F6525D00C332ED /* LinkValueTests.swift */,
-				9C60E7A721F6525E00C332ED /* LongTextValueTests.swift */,
-				9CC8336D22B3F65B0006AAE0 /* MarkedupTests.swift */,
-				9CB37ED42407189700C2AC1F /* MkdownParserTests.swift */,
-				9C60E6E421F64B3C00C332ED /* NotenikTests.swift */,
-				9C60E7B521F6525F00C332ED /* RecursValueTests.swift */,
-				9C60E7AE21F6525E00C332ED /* SeqValueTests.swift */,
-				9C60E7AB21F6525E00C332ED /* StatusValueConfigTests.swift */,
-				9C60E7AC21F6525E00C332ED /* StatusValueTests.swift */,
-				9CCFD62B22AEE0DD00C64D37 /* StringConverterTests.swift */,
-				9C60E7B121F6525E00C332ED /* StringUtilsTests.swift */,
-				9C60E7B421F6525F00C332ED /* StringValueTests.swift */,
-				9C60E7AA21F6525E00C332ED /* TagsValueTests.swift */,
-				9C60E7AD21F6525E00C332ED /* TitleValueTests.swift */,
-			);
-			path = NotenikTests;
-			sourceTree = "<group>";
-		};
-		9C60E6EE21F64B3C00C332ED /* NotenikUITests */ = {
-			isa = PBXGroup;
-			children = (
-				9C60E6EF21F64B3C00C332ED /* NotenikUITests.swift */,
-				9C60E6F121F64B3C00C332ED /* Info.plist */,
-			);
-			path = NotenikUITests;
 			sourceTree = "<group>";
 		};
 		9C60E70E21F6518400C332ED /* logging */ = {
@@ -1281,24 +1165,6 @@
 			path = bulkEdit;
 			sourceTree = "<group>";
 		};
-		9CE3DB5525E0580A006938D3 /* Notenik-iOS */ = {
-			isa = PBXGroup;
-			children = (
-				9CEBB2B225E593D000EEA83D /* Notenik-iOS.entitlements */,
-				9CE3DB5C25E0580A006938D3 /* Main.storyboard */,
-				9CE3DB5625E0580A006938D3 /* AppDelegate.swift */,
-				9CE3DB5825E0580A006938D3 /* SceneDelegate.swift */,
-				9CB761DE25E1D44B0059D7CE /* CollectionsViewController.swift */,
-				9CEBB2A825E5815200EEA83D /* NotesListViewController.swift */,
-				9C60B51F25E6D7C300371023 /* DisplayNoteViewController.swift */,
-				9CE3DB5F25E0580B006938D3 /* Assets.xcassets */,
-				9CE3DB6125E0580B006938D3 /* LaunchScreen.storyboard */,
-				9CE3DB6425E0580B006938D3 /* Info.plist */,
-				9CFC28A625E08C560094B4CB /* intro-ios */,
-			);
-			path = "Notenik-iOS";
-			sourceTree = "<group>";
-		};
 		9CF1193522581ABE0015AE91 /* collectionPrefs */ = {
 			isa = PBXGroup;
 			children = (
@@ -1565,10 +1431,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CE3DB6325E0580B006938D3 /* LaunchScreen.storyboard in Resources */,
-				9CFC28A725E08C560094B4CB /* intro-ios in Resources */,
-				9CE3DB6025E0580B006938D3 /* Assets.xcassets in Resources */,
-				9CE3DB5E25E0580A006938D3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1761,36 +1623,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C60E7BA21F6525F00C332ED /* FileIOTests.swift in Sources */,
-				9C60E7C621F6525F00C332ED /* FileNameTests.swift in Sources */,
-				9C60E7C121F6525F00C332ED /* TitleValueTests.swift in Sources */,
-				9C60E7BB21F6525F00C332ED /* LongTextValueTests.swift in Sources */,
-				9C60E7C721F6525F00C332ED /* FieldDefinitionTests.swift in Sources */,
-				9C60E7C921F6525F00C332ED /* RecursValueTests.swift in Sources */,
-				9C60E7C821F6525F00C332ED /* StringValueTests.swift in Sources */,
-				9CB37ED52407189700C2AC1F /* MkdownParserTests.swift in Sources */,
 				9C03629B239AFAAB00C948DB /* MarkdownPrefsViewController.swift in Sources */,
-				9C60E7BD21F6525F00C332ED /* DateUtilsTests.swift in Sources */,
 				9CA4EE89246A143C00059F65 /* PickListView.swift in Sources */,
-				9CCFD62C22AEE0DD00C64D37 /* StringConverterTests.swift in Sources */,
-				9C60E7C321F6525F00C332ED /* LineParserTests.swift in Sources */,
-				9C60E7B721F6525F00C332ED /* FileUtilsTests.swift in Sources */,
-				9C60E7BC21F6525F00C332ED /* AuthorValueTests.swift in Sources */,
-				9C60E7B821F6525F00C332ED /* BigStringReaderTests.swift in Sources */,
-				9C60E7C421F6525F00C332ED /* DateValueTests.swift in Sources */,
 				9C0B25E5224D6548003AAF21 /* LogWindowController.swift in Sources */,
-				9C60E7B921F6525F00C332ED /* LinkValueTests.swift in Sources */,
-				9CC8336E22B3F65B0006AAE0 /* MarkedupTests.swift in Sources */,
 				9C12D49022134970003136B2 /* NoteSelectionSource.swift in Sources */,
 				9CA4EE8D246A15BC00059F65 /* PickListDataSource.swift in Sources */,
-				9C60E7C021F6525F00C332ED /* StatusValueTests.swift in Sources */,
-				9C60E7CA21F6525F00C332ED /* FieldLabelTests.swift in Sources */,
 				9C0B25E6224D654E003AAF21 /* LogViewController.swift in Sources */,
-				9C60E6E521F64B3C00C332ED /* NotenikTests.swift in Sources */,
-				9C60E7C221F6525F00C332ED /* SeqValueTests.swift in Sources */,
-				9C60E7C521F6525F00C332ED /* StringUtilsTests.swift in Sources */,
-				9C60E7BF21F6525F00C332ED /* StatusValueConfigTests.swift in Sources */,
-				9C60E7BE21F6525F00C332ED /* TagsValueTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1853,7 +1691,6 @@
 				9C29DD2A226286A100928180 /* CollectionWindow.swift in Sources */,
 				9CB60BC422650A89003B5655 /* ShareWindowController.swift in Sources */,
 				9CA4EE8A246A143C00059F65 /* PickListView.swift in Sources */,
-				9C60E6F021F64B3C00C332ED /* NotenikUITests.swift in Sources */,
 				9C45E8BC2298B87C003F6589 /* BodyView.swift in Sources */,
 				9C02D2B72267F5E700587EDF /* CalendarViewController.swift in Sources */,
 				9C822B9F22D6D5D6008EF106 /* TagsView.swift in Sources */,
@@ -1868,11 +1705,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CB761DF25E1D44B0059D7CE /* CollectionsViewController.swift in Sources */,
-				9CEBB2A925E5815200EEA83D /* NotesListViewController.swift in Sources */,
-				9C60B52025E6D7C300371023 /* DisplayNoteViewController.swift in Sources */,
-				9CE3DB5725E0580A006938D3 /* AppDelegate.swift in Sources */,
-				9CE3DB5925E0580A006938D3 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1898,22 +1730,6 @@
 				9C60E6D821F64B3C00C332ED /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		9CE3DB5C25E0580A006938D3 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9CE3DB5D25E0580A006938D3 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		9CE3DB6125E0580B006938D3 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9CE3DB6225E0580B006938D3 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -2048,7 +1864,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 759;
+				CURRENT_PROJECT_VERSION = 762;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2062,7 +1878,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MARKETING_VERSION = 15.9.0;
+				MARKETING_VERSION = 15.9.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2078,7 +1894,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 759;
+				CURRENT_PROJECT_VERSION = 762;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2092,7 +1908,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MARKETING_VERSION = 15.9.0;
+				MARKETING_VERSION = 15.9.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2103,7 +1919,6 @@
 		9C60E6F821F64B3C00C332ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -2126,7 +1941,6 @@
 		9C60E6F921F64B3C00C332ED /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -2149,7 +1963,6 @@
 		9C60E6FB21F64B3C00C332ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
@@ -2171,7 +1984,6 @@
 		9C60E6FC21F64B3C00C332ED /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;

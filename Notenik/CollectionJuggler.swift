@@ -789,14 +789,28 @@ class CollectionJuggler: NSObject {
     func makeCollectionEssential(io: NotenikIO) {
         guard let collection = io.collection else { return }
         guard let collectionURL = collection.fullPathURL else { return }
+        if let oldEssential = appPrefs.essentialURL {
+            for window in windows {
+                guard let windowCollection = window.io?.collection else { continue }
+                guard let windowURL = windowCollection.fullPathURL else { continue }
+                if windowURL == oldEssential && window.window != nil {
+                    window.markEssential(essential: false)
+                    break
+                }
+            }
+        }
         appPrefs.essentialURL = collectionURL
     }
     
     /// Open the Essential Collection, if we have one
     func openEssentialCollection() {
-        guard let essentialURL = appPrefs.essentialURL else { return }
-        notenikFolderList.add(url: essentialURL, type: .ordinaryCollection, location: .undetermined)
-        _ = openFileWithNewWindow(fileURL: essentialURL, readOnly: false)
+        guard let essentialURL = appPrefs.essentialURL else {
+            communicateError("Essential Collection not identified", alert: true)
+            return
+        }
+        _ = open(url: essentialURL)
+        // notenikFolderList.add(url: essentialURL, type: .ordinaryCollection, location: .undetermined)
+        // _ = openFileWithNewWindow(fileURL: essentialURL, readOnly: false)
     }
     
     /// Open the Notenik Knowledge Base.
