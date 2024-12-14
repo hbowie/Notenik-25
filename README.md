@@ -19,7 +19,8 @@ Use these links to obtain more info about the app, and to actually download a wo
 
 This is all of the Swift code written as part of the Notenik application. These are all released under the terms of the MIT License. 
 
-+ [notenik-swift](https://github.com/hbowie/notenik-swift) - The Mac UI, written using AppKit/Cocoa
++ [Notenik-25](https://github.com/hbowie/Notenik-25) - The latest version of the Mac UI, written using AppKit/Cocoa, with commit history starting in 2025
++ [notenik-swift](https://github.com/hbowie/notenik-swift) - The Mac UI, written using AppKit/Cocoa, updated through (nearly) the end of 2024
 + [NotenikLib](https://github.com/hbowie/NotenikLib) - Underlying code that does not need Cocoa
 + [NotenikUtils](https://github.com/hbowie/NotenikUtils) - General-purpose utilities
 + [NotenikTextile](https://github.com/hbowie/NotenikTextile) - A very basic and incomplete parser for Textile
