@@ -269,6 +269,7 @@ class FieldRenameViewController: NSViewController, NSComboBoxDataSource {
         
     /// Returns the object that corresponds to the item at the specified index in the combo box
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
+        guard index >= 0 && index < dict.list.count else { return "" }
         if comboBox == existingFieldLabelCombo {
             return dict.list[index].fieldLabel.properForm
         } else if comboBox == newFieldTypeCombo {

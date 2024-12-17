@@ -1,0 +1,12 @@
+<?output "../includes-gen/blog.html" ?>
+<?nextrec?>
+      <article>
+        <h2>
+          <a href="posts/=$date&yyyy-MM-dd$=-=$title&f$=.html">
+            =$title$=
+          </a>
+        </h2>
+        <p><time datetime="=$date&yyyy-MM-dd$=">=$date&MMM d, yyyy$=</time></p>
+        =$teaser&o$=
+    </article>
+<?loop?>

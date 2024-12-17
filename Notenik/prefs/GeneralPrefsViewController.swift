@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 5/29/19.
-//  Copyright © 2019 - 2023 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2024 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -54,6 +54,8 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
     
     @IBOutlet var inlineLongTextField: NSPopUpButton!
     
+    @IBOutlet var openInNovaButton: NSPopUpButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if appPrefs.confirmDeletes {
@@ -85,6 +87,13 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
             inlineLongTextField.selectItem(at: 0)
         case true:
             inlineLongTextField.selectItem(at: 1)
+        }
+        
+        switch appPrefs.openInNova {
+        case false:
+            openInNovaButton.selectItem(at: 1)
+        case true:
+            openInNovaButton.selectItem(at: 0)
         }
         
         indentSpacesPopUpButton.removeAllItems()
@@ -140,6 +149,16 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
         }
     }
     
+    @IBAction func openInNovaUpdated(_ sender: Any) {
+        switch openInNovaButton.indexOfSelectedItem {
+        case 0:
+            appPrefs.openInNova = true
+        case 1:
+            appPrefs.openInNova = false
+        default:
+            appPrefs.openInNova = false
+        }
+    }
     
     @available(macOS 10.14, *)
     @IBAction func appAppearanceSelected(_ sender: Any) {

@@ -1,22 +1,26 @@
 <?copycss?>
 <?nextrec?>
-<?output "../../web/=$title&f$=.html"?>
+<?output "../../web/=$aka&f$=.html"?>
 <!doctype html>
 <html>
   <head>
 	<meta charset="utf-8">
-	<title>=$header$=</title>
+	<title>=$title$=</title>
 	<link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
 	<header>
 <?clearglobals?>
-<?set =$title&f$=-aria-current = page ?>
+<?set =$aka&f$=-aria-current = page ?>
 <?include "../includes-gen/nav-bar.html" ?>
-	  <h1>=$header$=</h1>
+	  <h1>=$title$=</h1>
 	</header>
 	<main>
+<?if "=$AKA$=" eq "Blog" ?>
+<?include "../includes-gen/blog.html" ?>
+<?else?>
 	  =$body&fo$=
+<?endif?>
 	</main>
 <?copyimages?>
 	<footer>
