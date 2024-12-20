@@ -4,7 +4,7 @@ Title Set by User: false
 
 Link: /Users/hbowie/Xcode/Notenik/Notenik/models/16 - HTML for People demo/content/cv-sections
 
-Sort Parm: 0
+Sort Parm: 1
 
 Sort Descending: false
 
@@ -46,5 +46,5 @@ Hash Tags: notenik-field
 
 Window Numbers: 1159.0;0.0;1246.0;1415.0;455.5;
 
-Column Widths: dateadded: 100, 180, 250; seq: 30, 80, 250; x: 12, 20, 50; author: 100, 200, 1000; tags: 50, 100, 1200; datemod: 100, 180, 250; klass: 60, 80, 150; statusdigit: 20, 30, 50; rank: 50, 80, 250; title: 200, 445, 1500; date: 80, 120, 500; 
+Column Widths: author: 100, 200, 1000; seq: 30, 80, 1500; date: 80, 120, 500; klass: 60, 80, 150; datemod: 100, 180, 250; title: 200, 445, 1500; rank: 50, 80, 250; statusdigit: 20, 30, 50; x: 12, 20, 50; tags: 50, 100, 1200; dateadded: 100, 180, 250; 
 

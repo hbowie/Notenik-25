@@ -2,7 +2,7 @@ module	action	modifier	object	value
 input	open	notenik-defined		#PATH#../../content/pages
 sort	clear			
 sort	add	ascending	Seq	
-sort	add	ascending	AKA	
+sort	add	ascending	Title	
 sort	set		params	
 template	open			#PATH#../templates/chapter 05 - nav template.html
 template	generate			

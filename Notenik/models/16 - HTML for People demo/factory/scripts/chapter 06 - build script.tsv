@@ -12,7 +12,7 @@ template	generate
 input	open	notenik-defined		#PATH#../../content/pages
 sort	clear			
 sort	add	ascending	Seq	
-sort	add	ascending	AKA	
+sort	add	ascending	Title	
 sort	set		params	
 template	webroot			#PATH#../../web
 template	open			#PATH#../templates/chapter 06 - nav template.html

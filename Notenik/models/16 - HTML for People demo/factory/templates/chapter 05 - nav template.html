@@ -4,14 +4,14 @@
   using the merge template named =$template-file-name$=
   and the data at =$parent-folder$=. 
  -------------------------------------------------------------------->
-     <nav>
+ 		<nav>
 <?nextrec?>
 <?set link-text = "=$title$=" ?>
 <?if "=$title$=" eq "Index" ?>
 <?set link-text = "Home" ?>
 <?endif?>
-      <a href="=$title&f$=.html" aria-current="\=\$=$title&f$=-aria-current\$\=">
-        =$link-text$=
-      </a>
+			<a href="=$title&f$=.html" aria-current="\=\$=$title&f$=-aria-current\$\=">
+				=$link-text$=
+			</a>
 <?loop?>
-    </nav>
+		</nav>
