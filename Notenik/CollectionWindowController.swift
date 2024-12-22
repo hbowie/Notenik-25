@@ -3101,6 +3101,27 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         vc.wc = insertDateController
     }
     
+    @IBAction func pasteCSVtoTable(_ sender: Any) {
+        
+        let board = NSPasteboard.general
+        guard let items = board.pasteboardItems else { return }
+        guard !items.isEmpty else { return }
+        let item = items[0]
+        guard let str = item.string(forType: .string) else { return }
+        
+        guard let win = window else { return }
+        guard let first = win.firstResponder else { return }
+        guard let view = first as? NSTextView else { return }
+        
+        let tableMaker = TableMaker(str: str)
+        let table = tableMaker.getTable()
+        
+        board.clearContents()
+        board.setString(table, forType: NSPasteboard.PasteboardType.string)
+        view.pasteAsPlainText(self)
+
+    }
+    
     @IBAction func queryBuilder(_ sender: Any) {
         guard let queryBuilderController = self.queryBuilderStoryboard.instantiateController(withIdentifier: "queryWC") as? QueryBuilderWindowController else {
             Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
