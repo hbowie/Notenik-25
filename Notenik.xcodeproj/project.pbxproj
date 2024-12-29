@@ -378,6 +378,10 @@
 		9C1E0C9122E4F7D00025C99C /* AttachmentWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentWindowController.swift; sourceTree = "<group>"; };
 		9C1E0C9422E4F7FA0025C99C /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		9C1E0C9722E5306B0025C99C /* AttachmentMasterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentMasterController.swift; sourceTree = "<group>"; };
+		9C1FC0402D1B88C30066F2A0 /* - INFO.nnk */ = {isa = PBXFileReference; lastKnownFileType = text; path = "- INFO.nnk"; sourceTree = "<group>"; };
+		9C1FC0412D1B88C30066F2A0 /* - README.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "- README.txt"; sourceTree = "<group>"; };
+		9C1FC0422D1B88C30066F2A0 /* template.mdtext */ = {isa = PBXFileReference; lastKnownFileType = text; path = template.mdtext; sourceTree = "<group>"; };
+		9C1FC0432D1B88C30066F2A0 /* Text Formatting Guidelines.mdtext */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Text Formatting Guidelines.mdtext"; sourceTree = "<group>"; };
 		9C2709C527A1B47200B8FD9B /* LinkCleaner.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LinkCleaner.storyboard; sourceTree = "<group>"; };
 		9C2709C727A1B7D300B8FD9B /* LinkCleanerWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkCleanerWindowController.swift; sourceTree = "<group>"; };
 		9C2709C927A1B7F200B8FD9B /* LinkCleanerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkCleanerViewController.swift; sourceTree = "<group>"; };
@@ -663,6 +667,18 @@
 			path = attachments;
 			sourceTree = "<group>";
 		};
+		9C1FC0442D1B88C30066F2A0 /* notenik-docs-style-guide */ = {
+			isa = PBXGroup;
+			children = (
+				9C1FC0402D1B88C30066F2A0 /* - INFO.nnk */,
+				9C1FC0412D1B88C30066F2A0 /* - README.txt */,
+				9C1FC0422D1B88C30066F2A0 /* template.mdtext */,
+				9C1FC0432D1B88C30066F2A0 /* Text Formatting Guidelines.mdtext */,
+			);
+			name = "notenik-docs-style-guide";
+			path = "../Notenik Docs/notenik-docs-style-guide";
+			sourceTree = "<group>";
+		};
 		9C2709C427A1B43100B8FD9B /* linkCleaner */ = {
 			isa = PBXGroup;
 			children = (
@@ -843,6 +859,7 @@
 		9C65394E21F91EBB00012184 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9C1FC0442D1B88C30066F2A0 /* notenik-docs-style-guide */,
 				9CF54FA8244A2E07001EF927 /* NotenikLib */,
 				9C7410B32436B4CB00ABF9D9 /* NotenikUtils */,
 				9C7965D92436AF1700E1904E /* NotenikMkdown */,
@@ -1864,7 +1881,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 770;
+				CURRENT_PROJECT_VERSION = 773;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1878,7 +1895,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MARKETING_VERSION = 16.0.2;
+				MARKETING_VERSION = 16.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1894,7 +1911,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 770;
+				CURRENT_PROJECT_VERSION = 773;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1908,7 +1925,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
-				MARKETING_VERSION = 16.0.2;
+				MARKETING_VERSION = 16.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
