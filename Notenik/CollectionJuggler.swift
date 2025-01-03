@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 1/26/19.
-//  Copyright © 2019 - 2024 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -366,12 +366,17 @@ class CollectionJuggler: NSObject {
     /// Open a parent realm containing one or more Notenik Collections.
     func openParentRealm(parentURL: URL) -> CollectionWindowController? {
         
+        let parentPath = parentURL.path
         // If the collection is already open, then close it before
         // we re-open it.
         for window in windows {
             guard let windowCollection = window.io?.collection else { continue }
-            guard let windowURL = windowCollection.fullPathURL else { continue }
-            if windowURL == parentURL && window.window != nil {
+            let windowPath = windowCollection.fullPath
+            if windowPath == parentPath && window.window != nil {
+                Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                                  category: "CollectionJuggler",
+                                  level: .info,
+                                  message: "Closing Project Folder at \(windowPath)")
                 window.window!.close()
                 break
             }
