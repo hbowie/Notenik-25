@@ -1112,6 +1112,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 dict.unlock()
                 _ = dict.addDef(newDef!, family: family)
                 dict.lock()
+                if parms.newFieldType.isEmpty {
+                    parms.newFieldType = newDef!.fieldType.typeString
+                }
             }
         }
                 
