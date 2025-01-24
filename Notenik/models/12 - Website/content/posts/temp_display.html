@@ -17,7 +17,13 @@
     --link-visited-color: Purple;
     --link-active-color: Red;
     --background-active-color: #e0e0e0;
-    --highlight-color: Gainsboro
+    --code-color: #d81b60;
+    --preformatted-color: #444;
+    --accent-bg: #f5f7ff;
+    --border: #898EA4;
+    --highlight-color: Gainsboro;
+    --bg: #fff;
+    --accent-bg: #f5f7ff;
 }
 a.ext-link::after {
     content: "";
@@ -40,7 +46,12 @@ a.ext-link::after {
     --link-visited-color: #cab7ff;
     --link-active-color: #94d8ff;
     --background-active-color: #363636;
-    --highlight-color: DimGray
+    --code-color: #f06292;
+    --preformatted-color: #ccc;
+    --accent-bg: #2b2b2b;
+    --highlight-color: DimGray;
+    --bg: #212121;
+    --accent-bg: #2b2b2b;
   }
     a.ext-link::after {
         content: "";
@@ -74,6 +85,10 @@ a:active {
 }
 /* The following CSS comes from the displayCSS method of the
    DisplayPrefs class within Notenik.                        */
+:root {
+    --mono-font: Consolas, Menlo, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    --standard-border-radius: 5px;
+}
 body {
   tab-size: 4;
   margin: 1em;
@@ -81,13 +96,43 @@ body {
   color: var(--text-color);
   line-height: 1.45;
 /* fontCSS insertion starts here */
-font-family: "Concourse 3", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-family: "Equity B", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 15pt;
 /* fontCSS insertion ends here   */
 }
 p {
     margin-top: 0.2em;
     margin-bottom: 0.7em;
+}
+body > footer {
+    margin-top: 4rem;
+    text-align: center;
+}
+/* Consolidate box styling */
+aside, pre, progress {
+  background-color: var(--accent-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--standard-border-radius);
+  margin-bottom: 1rem;
+}
+aside {
+  font-size: 1rem;
+  width: 30%;
+  padding: 0 15px;
+  margin-inline-start: 15px;
+  float: right;
+}
+*[dir="rtl"] aside {
+  float: left;
+}
+
+/* Make aside full-width on mobile */
+@media only screen and (max-width: 720px) {
+  aside {
+    width: 100%;
+    float: none;
+    margin-inline-start: 0;
+  }
 }
 blockquote {
   border-left: 0.4em solid #999;
@@ -239,34 +284,12 @@ a.nav-link:link {
     border-bottom: none;
 }
 
-header {
-    text-align: center;
-}
-
-nav {
-    float: right;
-    font-style: italic;
-}
-
-nav ul {
-    margin-top: 0;
-}
-
-nav ul li {
-    display: inline;
-}
-
-nav ul li a {
-    text-decoration: none;
-    border-bottom: none;
-}
-
 nav ul li a.wiki-link {
     text-decoration: none;
     border-bottom: none;
 }
 
-footer {
+footer.nnk-footer {
     clear: both;
     border-top: 1px dashed var(--text-color);
     margin-top: 1em;
@@ -275,7 +298,7 @@ footer {
     text-align: right;
 }
 
-footer p {
+footer.nnk-footer p {
     padding-top: 0.5em;
 }
 
@@ -352,22 +375,169 @@ summary {
     margin-bottom: 0.5em;
 }
 pre {
-    overflow-x: auto;
+    
+}
+code {
+    font-family: var(--mono-font);
+    color: var(--code-color);
+}
+pre {
+  padding: 1rem 1.4rem;
+  max-width: 100%;
+  overflow-x: auto;
+  color: var(--preformatted-color);
+}
+
+/* Fix embedded code within pre */
+pre code {
+  color: var(--preformatted-color);
+  background: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Classes for notices */
+.notice {
+  background: var(--accent-bg);
+  border: 2px solid var(--border);
+  border-radius: var(--standard-border-radius);
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+article, fieldset, dialog {
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: var(--standard-border-radius);
+  margin-bottom: 1rem;
+}
+
+article h2:first-child,
+section h2:first-child,
+article h3:first-child,
+section h3:first-child {
+  margin-top: 1rem;
+}
+
+/* Make the header bg full width, but the content inline with body */
+body > header {
+  background-color: var(--accent-bg);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+  padding: 0 0.5rem 2rem 0.5rem;
+  grid-column: 1 / -1;
+}
+
+body > header > *:only-child {
+  margin-block-start: 2rem;
+}
+
+body > header h1 {
+  max-width: 1200px;
+  margin: 1rem auto;
+}
+
+body > header p {
+  max-width: 40rem;
+  margin: 1rem auto;
+}
+
+header.nnk-header {
+    background-color: var(--background-color);
+    text-align: center;
+    border-bottom: none;
+    max-width: none;
+    padding: 0 0 0 0;
+}
+
+/* Format navigation */
+header > nav {
+  font-size: 1rem;
+  line-height: 2;
+  padding: 1rem 0 0 0;
+}
+
+/* Use flexbox to allow items to wrap, as needed */
+header > nav ul,
+header > nav ol {
+  align-content: space-around;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* List items are inline elements, make them behave more like blocks */
+header > nav ul li,
+header > nav ol li {
+  display: inline-block;
+}
+
+header > nav a,
+header > nav a:visited {
+  margin: 0 0.5rem 1rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--standard-border-radius);
+  color: var(--text);
+  display: inline-block;
+  padding: 0.1rem 1rem;
+  text-decoration: none;
+}
+
+header > nav a:hover,
+header > nav a.current,
+header > nav a[aria-current="page"],
+header > nav a[aria-current="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+  cursor: pointer;
+}
+
+/* Reduce nav side on mobile */
+@media only screen and (max-width: 720px) {
+  header > nav a {
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+    line-height: 1;
+  }
+}
+
+nav.nnk-nav {
+    float: right;
+    font-style: italic;
+}
+
+nav.nnk-nav ul {
+    margin-top: 0;
+}
+
+nav.nnk-nav ul li {
+    display: inline;
+}
+
+nav.nnk-nav ul li a {
+    text-decoration: none;
+    border-bottom: none;
 }
 /* Generated CSS for headings follows. */
 h1, h2, h3, h4, h5, h6 {
-    font-family: "Equity A", Helvetica, Arial, sans-serif;
+    font-family: "Heliotrope 4", Helvetica, Arial, sans-serif;
     font-weight: 400;
     margin-top: 0.7em;
     margin-bottom: 0.2em;
     font-style: normal;
 }
 h1 {
-    text-align: left;
+    text-align: center;
     font-size: 2.0em;
 }
 h2 {
-    text-align: left;
+    text-align: center;
     font-size: 1.8em;
 }
 h3 {
@@ -392,12 +562,14 @@ h6 {
 <body>
 
 <main>
-<p id="notenik"><strong>Notenik</strong></p><figure>
-<img src="files/Notenik | Notenik on MB Air.png" alt="Notenik app pictured running on a MacBook Air" title="Notenik app pictured running on a MacBook Air" class="notenik-image" /><figcaption>Image Credit: <a href="https://hbowie.net" class="ext-link" target="_blank" rel="noopener">Herb Bowie</a></figcaption></figure>
-<p>Status: 6 - Completed</p><p>Class: post</p><p>Date: 11 Nov 2022 - Friday</p><p>Author: Herb Bowie</p><p>Image Name: Notenik on MB Air</p><p>Image Alt: Notenik app pictured running on a MacBook Air</p><p>Image Credit: Herb Bowie</p><p>Image Credit Link: <a href="https://hbowie.net" class="ext-link" target="_blank" rel="noopener">https://hbowie.net</a></p><p>Teaser: </p><p>A post about the Notenik app. </p><p>Body: </p><p>All about Notenik. </p>
+<p><em><a href="notenik://expand?path=/Users/hbowie/Xcode/Notenik/Notenik/models/12%20-%20Website/content/posts&tag=Software.Groovy" style="text-decoration: none">Software.Groovy</a></em></p><h2 id="notenik">Notenik</h2>
+<p>Date: 14 Dec 2024 - Saturday</p><p>Body: </p><p>A note-taking system cunningly devised by Herb Bowie. </p>
+
+<p>Learn more at <a href="https://notenik.app" class="ext-link">Notenik.app</a>. </p>
+
+<p>You can delete this starting Note after creating one or two of your own, or you may modify it to suit your purposes. </p>
 
 <hr />
-<p>Date Added: 2024-10-10 10:23:46 -0700</p><p>Date Modified: 2024-10-10 10:25:53 -0700</p>
 
 </main>
 </body>

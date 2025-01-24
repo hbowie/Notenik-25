@@ -3,7 +3,11 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 12/11/23.
-//  Copyright © 2023 PowerSurge Publishing. All rights reserved.
+//
+//  Copyright © 2023 - 2025 Herb Bowie (https://hbowie.net)
+//
+//  This programming code is published as open source software under the
+//  terms of the MIT License (https://opensource.org/licenses/MIT).
 //
 
 import Cocoa
@@ -269,11 +273,19 @@ class FieldRenameViewController: NSViewController, NSComboBoxDataSource {
         
     /// Returns the object that corresponds to the item at the specified index in the combo box
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
-        guard index >= 0 && index < dict.list.count else { return "" }
+        
         if comboBox == existingFieldLabelCombo {
-            return dict.list[index].fieldLabel.properForm
+            if index >= 0 && index < dict.list.count {
+                return dict.list[index].fieldLabel.properForm
+            } else {
+                return ""
+            }
         } else if comboBox == newFieldTypeCombo {
-            return fieldTypes[index]
+            if index >= 0 && index < fieldTypes.count {
+                return fieldTypes[index]
+            } else {
+                return ""
+            }
         } else {
             return ""
         }

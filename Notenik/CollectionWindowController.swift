@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 1/26/19.
-//  Copyright © 2019 - 2024 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -11,6 +11,9 @@
 
 import Cocoa
 import StoreKit
+import UniformTypeIdentifiers
+
+import SwiftHTMLtoMarkdown
 
 import NotenikUtils
 import NotenikLib
@@ -1294,9 +1297,10 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         } else {
             savePanel.nameFieldStringValue = NotenikConstants.defaultsKlass + "." + collection.preferredExt
         }
-        var allowedFileTypes: [String] = []
-        allowedFileTypes.append(collection.preferredExt)
-        savePanel.allowedFileTypes = allowedFileTypes
+        // var allowedFileTypes: [String] = []
+        // allowedFileTypes.append(collection.preferredExt)
+        // savePanel.allowedFileTypes = allowedFileTypes
+        // savePanel.allowedContentTypes = allowedFileTypes
         let userChoice = savePanel.runModal()
         guard userChoice == .OK else { return }
         guard let url = savePanel.url else { return }
@@ -2061,7 +2065,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let urlNameType = NSPasteboard.PasteboardType("public.url-name")
         let urlType     = NSPasteboard.PasteboardType("public.url")
         let fileURLType = NSPasteboard.PasteboardType("public.file-url")
-        let vcardType   = NSPasteboard.PasteboardType(kUTTypeVCard as String)
+        let vcardType   = NSPasteboard.PasteboardType(UTType.vCard.identifier)
         // let utf8Type    = NSPasteboard.PasteboardType("public.utf8-plain-text")
         
         // Process each pasteboard item.
@@ -2172,7 +2176,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                         updateExisting = true
                     }
                 } else {
-                    // printprint("  - could not find an existing note with this id")
+                    // print("  - could not find an existing note with this id")
                 }
             }
 
@@ -3125,6 +3129,50 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
 
     }
     
+    @IBAction func pasteFormattedToMarkdown(_ sender: Any) {
+        
+        let board = NSPasteboard.general
+        guard let items = board.pasteboardItems else { return }
+        guard !items.isEmpty else { return }
+        
+        guard let win = window else { return }
+        guard let first = win.firstResponder else { return }
+        guard let view = first as? NSTextView else { return }
+        
+        let item = items[0]
+        var md = ""
+
+        if let rtf = item.string(forType: .rtf) {
+            print("  - rtf = \(rtf)")
+            let richConverter = RTFtoMarkdown()
+            md = richConverter.convert(str: rtf)
+        }
+        
+        if md.isEmpty {
+            if let html = item.string(forType: .html) {
+                // print("  - html = \(html)")
+                var converter: BasicHTML = BasicHTML(rawHTML: html)
+                do {
+                    try converter.parse()
+                    md = try converter.asMarkdown()
+                } catch {
+                    print("  - errors parsing HTML")
+                }
+            }
+        }
+        
+        if md.isEmpty {
+            if let str = item.string(forType: .string) {
+                // print("  - string = \(str)")
+                md = str
+            }
+        }
+        
+        board.clearContents()
+        board.setString(md, forType: NSPasteboard.PasteboardType.string)
+        view.pasteAsPlainText(self)
+    }
+    
     @IBAction func queryBuilder(_ sender: Any) {
         guard let queryBuilderController = self.queryBuilderStoryboard.instantiateController(withIdentifier: "queryWC") as? QueryBuilderWindowController else {
             Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
@@ -4015,8 +4063,10 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     @IBAction func textEditTemplate(_ sender: Any) {
         guard let nnkIO = guardForCollectionAction() else { return }
-        let templatePath = nnkIO.collection!.lib.getPath(type: .template)
-        NSWorkspace.shared.openFile(templatePath)
+        if let templateURL = nnkIO.collection!.lib.getURL(type: .template) {
+            // let templatePath = nnkIO.collection!.lib.getPath(type: .template)
+            NSWorkspace.shared.open(templateURL)
+        }
     }
     
     @IBAction func showFolderInFinder(_ sender: Any) {

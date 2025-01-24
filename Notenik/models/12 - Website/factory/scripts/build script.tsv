@@ -1,0 +1,29 @@
+module	action	modifier	object	value
+input	open	notenik-defined		#PATH#../../content/cv-sections
+sort	clear			
+sort	add	ascending	Seq	
+sort	add	ascending	Title	
+sort	set		params	
+template	open			#PATH#../templates/cv template.html
+template	generate			
+input	open	notenik-defined		#PATH#../../content/posts
+sort	clear			
+sort	add	descending	Date	
+sort	add	ascending	Title	
+sort	set		params	
+template	webroot			#PATH#../../web
+template	open			#PATH#../templates/blog template.html
+template	generate			
+template	open			#PATH#../templates/post template.html
+template	generate			
+input	open	notenik-defined		#PATH#../../content/pages
+sort	clear			
+sort	add	ascending	Seq	
+sort	add	ascending	Title	
+sort	set		params	
+template	webroot			#PATH#../../web
+template	open			#PATH#../templates/nav template.html
+template	generate			
+template	open			#PATH#../templates/page template.html
+template	generate			
+browse	open	url		http://localhost/~hbowie/my-notenik-project/web/

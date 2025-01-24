@@ -1,0 +1,36 @@
+<?copycss?>
+<?copyaddins?>
+<?nextrec?>
+<?output "../../web/=$title&f$=.html"?>
+<!doctype html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<title>=$header$=</title>
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="add-ins/lite-yt-embed.min.css">
+	<script src="add-ins/lite-yt-embed.min.js"></script>
+  </head>
+  <body>
+	<header>
+<?clearglobals?>
+<?set =$title&f$=-aria-current = page ?>
+<?include "../includes-gen/nav-bar.html" ?>
+	  <h1>=$header$=</h1>
+	</header>
+	<main>
+<?if "=$title$=" eq "Blog" ?>
+<?include "../includes-gen/blog.html" ?>
+<?endif?>
+<?if "=$title$=" eq "CV" ?>
+<?include "../includes-gen/cv.html" ?>
+<?endif?>
+	  =$body&fo$=
+	</main>
+<?copyimages?>
+	<footer>
+	  <p>Made with ❤️ and ☕️ by Herb Bowie.</p>
+	</footer>
+  </body>
+</html>
+<?loop?>

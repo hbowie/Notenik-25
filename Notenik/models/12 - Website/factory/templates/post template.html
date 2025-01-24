@@ -1,0 +1,29 @@
+<?nextrec?>
+<?output "../../web/posts/=$date&yyyy-MM-dd$=-=$title&f$=.html"?>
+<!doctype html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<title>=$title$=</title>
+	<link rel="stylesheet" href="=$relative$=css/styles.css">
+  </head>
+  <body>
+	<header>
+<?clearglobals?>
+<?set blog-aria-current = true ?>
+<?include "../includes-gen/nav-bar.html" ?>
+	  <h1>=$title$=</h1>
+	  <p><time datetime="=$date&yyyy-MM-dd$=">=$date&MMM d, yyyy$=</time></p>
+	</header>
+	<main>
+	  =$body&fo$=
+	  
+	  <a href="=$relative$=blog.html" class="button">&larr; Back to the blog</a>
+	</main>
+<?copyimages?>
+	<footer>
+	  <p>&copy; 2024 - 2025 Herb Bowie</p>
+	</footer>
+  </body>
+</html>
+<?loop?>

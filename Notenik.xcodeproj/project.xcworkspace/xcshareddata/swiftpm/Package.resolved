@@ -29,6 +29,15 @@
         }
       },
       {
+        "package": "SwiftHTMLtoMarkdown",
+        "repositoryURL": "https://github.com/ActuallyTaylor/SwiftHTMLToMarkdown",
+        "state": {
+          "branch": null,
+          "revision": "d533b9cb47a8defaa8d9432fad20ecf5964c0668",
+          "version": "1.1.1"
+        }
+      },
+      {
         "package": "SwiftSoup",
         "repositoryURL": "https://github.com/scinfu/SwiftSoup.git",
         "state": {

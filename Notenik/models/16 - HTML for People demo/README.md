@@ -12,4 +12,4 @@ This project folder contains the following files and subfolders.
 + factory - The scripts and templates that can be used to build a website from the content 
 + README.md - This file (the one you are now reading) 
 + resources - Another Notenik collection, this one containing links to various helpful resources on the web
-+ web - The folder that will contain your demo website, as it is built by Notenik.  
++ web - The folder that will contain your demo website, as it is built by Notenik 

@@ -10,6 +10,7 @@
 //
 
 import Cocoa
+import UniformTypeIdentifiers
 
 import NotenikUtils
 import NotenikLib
@@ -70,9 +71,9 @@ class NoteListViewController:   NSViewController,
         // Setup for drag and drop.
         tableView.setDraggingSourceOperationMask(.copy, forLocal: false)
         tableView.registerForDraggedTypes(NSFilePromiseReceiver.readableDraggedTypes.map { NSPasteboard.PasteboardType($0) })
-        tableView.registerForDraggedTypes([NSPasteboard.PasteboardType(kUTTypeBookmark as String),
-                                           NSPasteboard.PasteboardType(kUTTypeURL as String),
-                                           NSPasteboard.PasteboardType(kUTTypeVCard as String),
+        tableView.registerForDraggedTypes([NSPasteboard.PasteboardType(UTType.bookmark.identifier),
+                                           NSPasteboard.PasteboardType(UTType.vCard.identifier),
+                                           NSPasteboard.PasteboardType(UTType.url.identifier),
                                            NSPasteboard.PasteboardType.string])
         
         tableView.target = self

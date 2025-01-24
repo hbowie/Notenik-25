@@ -10,6 +10,7 @@
 //
 
 import Cocoa
+import UniformTypeIdentifiers
 
 import NotenikLib
 import NotenikUtils
@@ -72,9 +73,9 @@ class SeqOutlineViewController: NSViewController,
         // Setup for drag and drop.
         outlineView.setDraggingSourceOperationMask(.copy, forLocal: false)
         outlineView.registerForDraggedTypes(NSFilePromiseReceiver.readableDraggedTypes.map { NSPasteboard.PasteboardType($0) })
-        outlineView.registerForDraggedTypes([NSPasteboard.PasteboardType(kUTTypeBookmark as String),
-                                             NSPasteboard.PasteboardType(kUTTypeURL as String),
-                                             NSPasteboard.PasteboardType(kUTTypeVCard as String),
+        outlineView.registerForDraggedTypes([NSPasteboard.PasteboardType(UTType.bookmark.identifier),
+                                             NSPasteboard.PasteboardType(UTType.url.identifier),
+                                             NSPasteboard.PasteboardType(UTType.vCard.identifier),
                                              NSPasteboard.PasteboardType.string])
         
         if focusNote != nil {

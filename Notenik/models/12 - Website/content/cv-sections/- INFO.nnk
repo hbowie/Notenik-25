@@ -1,10 +1,10 @@
-Title: resources
+Title: content / cv-sections
 
 Title Set by User: false
 
-Link: /Users/hbowie/Xcode/Notenik/Notenik/models/16 - HTML for People demo/resources
+Link: /Users/hbowie/Xcode/Notenik/Notenik/models/12 - Website/content/cv-sections
 
-Sort Parm: 0
+Sort Parm: 1
 
 Sort Descending: false
 
@@ -12,7 +12,7 @@ Sort Blank Dates Last: true
 
 Other Fields Allowed: false
 
-Last Index Selected: 5
+Last Index Selected: 0
 
 Mirror Auto Index: false
 
@@ -20,7 +20,7 @@ Display Body Label: true
 
 Minimum Body Edit View Height: 5.0
 
-Title Display Option: p bold
+Title Display Option: h2
 
 Display Mode: normal
 
@@ -44,7 +44,7 @@ Note File Format: nnk
 
 Hash Tags: notenik-field
 
-Window Numbers: 1042.0;270.0;1246.0;875.0;455.5;
+Window Numbers: 1159.0;0.0;1246.0;1415.0;455.5;
 
-Column Widths: title: 200, 436, 1500; statusdigit: 20, 30, 50; rank: 50, 80, 250; seq: 30, 80, 250; klass: 60, 80, 150; datemod: 100, 180, 250; date: 80, 120, 500; author: 100, 200, 1000; x: 12, 20, 50; tags: 50, 100, 1200; dateadded: 100, 180, 250; 
+Column Widths: title: 200, 445, 1500; klass: 60, 80, 150; tags: 50, 100, 1200; x: 12, 20, 50; dateadded: 100, 180, 250; datemod: 100, 180, 250; statusdigit: 20, 30, 50; date: 80, 120, 500; author: 100, 200, 1000; rank: 50, 80, 250; seq: 30, 80, 1500; 
 
