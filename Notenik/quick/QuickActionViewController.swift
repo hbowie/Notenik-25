@@ -46,6 +46,10 @@ class QuickActionViewController: NSViewController, NSComboBoxDataSource {
         shortcutComboBox.dataSource = self
         noteTitleComboBox.usesDataSource = true
         noteTitleComboBox.dataSource = self
+        
+        AppPrefsCocoa.shared.setTextEditingFont(object: shortcutComboBox)
+        AppPrefsCocoa.shared.setTextEditingFont(object: noteTitleComboBox)
+        AppPrefsCocoa.shared.setTextEditingFont(object: bodyTextView)
     }
     
     /// Reload the data to make sure it is up-to-date.
