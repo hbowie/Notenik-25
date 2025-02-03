@@ -2015,6 +2015,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                     row: Int,
                     dropOperation: NSTableView.DropOperation) -> Int {
         
+        // print("CollectionWindowController.pasteItems row = \(row), drop? \(dropOperation)")
+        
         // Make sure we're ready to do stuff.
         guard let noteIO = guardForCollectionAction() else { return 0 }
         guard let collection = noteIO.collection else { return 0 }
@@ -2109,6 +2111,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 let likelyText = ResourceFileSys.isLikelyNoteFile(fileURL: fileURL, preferredNoteExt: collection.preferredExt)
                 let fileName = fileURL.deletingPathExtension().lastPathComponent
                 let ext = fileURL.pathExtension
+                // print("  - file ext = \(ext)")
+                // print("  - likely text? \(likelyText)")
                 if ext == "opml" {
                     let defaultTitle = StringUtils.wordDemarcation(fileName,
                                                                    caseMods: ["u", "u", "l"],
@@ -3143,7 +3147,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         var md = ""
 
         if let rtf = item.string(forType: .rtf) {
-            print("  - rtf = \(rtf)")
+            // print("  - rtf = \(rtf)")
             let richConverter = RTFtoMarkdown()
             md = richConverter.convert(str: rtf)
         }
@@ -3156,7 +3160,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                     try converter.parse()
                     md = try converter.asMarkdown()
                 } catch {
-                    print("  - errors parsing HTML")
+                    communicateError("Errors parsing HTML using SwiftHTMLtoMarkdown")
                 }
             }
         }

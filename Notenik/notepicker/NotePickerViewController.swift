@@ -156,7 +156,9 @@ class NotePickerViewController: NSViewController,
     
     /// See what the user has entered in the Collection Shortcut field, and respond appropriately. 
     @IBAction func shortcutComboBoxAction(_ sender: NSComboBox) {
-        guard let io = noteIO else { return }
+        guard let io = noteIO else {
+            return
+        }
         let str = sender.stringValue
         let i = indexForFolderShortcut(str)
         guard i != NSNotFound else { return }
@@ -164,7 +166,9 @@ class NotePickerViewController: NSViewController,
             setTargetCollection(targetShortcut: initalFolderShortcut, targetIO: io)
         } else {
             let (multiCollection, multiIO) = multi.provision(shortcut: str, inspector: nil, readOnly: false)
-            if multiCollection != nil {
+            if multiCollection == nil {
+                print("  - could not obtain collection from MultiFileIO!")
+            } else {
                 setTargetCollection(targetShortcut: str, targetIO: multiIO)
             }
         }
@@ -195,7 +199,7 @@ class NotePickerViewController: NSViewController,
         var i = 0
         while i < folders.count {
             if folders[i].shortcut == lower {
-                return i + 1
+                return i + 1 
             }
             i += 1
         }
