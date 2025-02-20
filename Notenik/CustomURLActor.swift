@@ -4,7 +4,7 @@
 //
 //  Created by Herb Bowie on 5/21/21.
 //
-//  Copyright © 2021 - 2024 Herb Bowie (https://hbowie.net)
+//  Copyright © 2021 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -243,15 +243,7 @@ class CustomURLActor {
             guard note != nil else { return }
             controller.openAttachment(titled: value)
         case "select":
-            guard value == "random" else {
-                communicateError("open select value of '\(value)' is not recognized")
-                return
-            }
-            guard let controller = cwc else {
-                communicateError("Unable to open desired Collection")
-                return
-            }
-            controller.goToRandomNote(self)
+            processOpenSelect(value: value, cwc: &cwc)
         case "mode":
             guard value == "quotes" else {
                 communicateError("open mode value of '\(value)' is not recognized")
@@ -264,6 +256,22 @@ class CustomURLActor {
             controller.ensureQuotesMode()
         default:
             communicateError("Open Query Parameter of '\(label)' not recognized")
+        }
+    }
+    
+    func processOpenSelect(value: String,
+                           cwc:   inout CollectionWindowController?) {
+        guard let controller = cwc else {
+            communicateError("Unable to open desired Collection")
+            return
+        }
+        switch value {
+        case "random":
+            controller.goToRandomNote(self)
+        case "action":
+            controller.selectNote(self)
+        default:
+            communicateError("open select value of '\(value)' is not recognized")
         }
     }
     

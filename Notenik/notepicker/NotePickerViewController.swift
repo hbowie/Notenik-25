@@ -4,7 +4,7 @@
 //
 //  Created by Herb Bowie on 3/11/22.
 //
-//  Copyright © 2022 - 2024 Herb Bowie (https://hbowie.net)
+//  Copyright © 2022 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -96,11 +96,6 @@ class NotePickerViewController: NSViewController,
         actionList.addItem(withTitle: goToAction)
         actionList.addItem(withTitle: launchAction)
         
-        let lastAction = AppPrefs.shared.noteAction
-        if !lastAction.isEmpty {
-            actionList.selectItem(withTitle: lastAction)
-        }
-        
         NSEvent.addLocalMonitorForEvents(matching: .keyDown) {
             if self.myKeyDown(with: $0) {
                 return nil
@@ -186,6 +181,11 @@ class NotePickerViewController: NSViewController,
         matchingNotes = []
         lastTitleTextLength = 0
         titleTextField.becomeFirstResponder()
+        if let lastAction = ioToUse?.collection?.notePickerAction {
+            if !lastAction.isEmpty {
+                actionList.selectItem(withTitle: lastAction)
+            }
+        }
     }
     
     /// Return the index of the folder with the passed shortcut.
@@ -373,6 +373,7 @@ class NotePickerViewController: NSViewController,
     func myKeyDown(with event: NSEvent) -> Bool {
         guard let locWindow = self.view.window,
               NSApplication.shared.keyWindow === locWindow else { return false }
+        guard let collection = ioToUse?.collection else { return false }
         
         var chars = " "
         if event.charactersIgnoringModifiers != nil {
@@ -385,32 +386,32 @@ class NotePickerViewController: NSViewController,
             switch chars {
             case "c":
                 if event.modifierFlags.contains(.option) {
-                    AppPrefs.shared.noteAction = copyLink
+                    collection.notePickerAction = copyLink
                     copyNoteTitleWithBrackets(title: noteToPick.basis.original)
                     return true
                 } else {
-                    AppPrefs.shared.noteAction = copyTitle
+                    collection.notePickerAction = copyTitle
                     copyNoteTitle(title: noteToPick.basis.original)
                     return true
                 }
             case "g":
-                AppPrefs.shared.noteAction = goToAction
+                collection.notePickerAction = goToAction
                 goTo(title: noteToPick.basis.original)
                 return true
             case "i":
                 copyPasteInclude(title: noteToPick.basis.original)
                 return true
             case "l":
-                AppPrefs.shared.noteAction = launchAction
+                collection.notePickerAction = launchAction
                 launchLink(title: noteToPick.basis.original)
                 return true
             case "t":
-                AppPrefs.shared.noteAction = copyTimestamp
+                collection.notePickerAction = copyTimestamp
                 copyNoteTimestamp(title: noteToPick.basis.original)
                 return true
             case "v":
                 if event.modifierFlags.contains(.option) {
-                    AppPrefs.shared.noteAction = copyPasteLink
+                    collection.notePickerAction = copyPasteLink
                     // if targetingAnotherCollection {
                     //    copyPasteNotenikURLasMDlink(title: noteToPick.basis.original)
                     // } else {
@@ -418,7 +419,7 @@ class NotePickerViewController: NSViewController,
                     // }
                     return true
                 } else {
-                    AppPrefs.shared.noteAction = copyPasteTitle
+                    collection.notePickerAction = copyPasteTitle
                     copyPasteNoteTitle(title: noteToPick.basis.original)
                     return true
                 }
@@ -457,7 +458,10 @@ class NotePickerViewController: NSViewController,
     @IBAction func ok(_ sender: Any) {
   
         guard let selectedAction = actionList.selectedItem else { return }
-        AppPrefs.shared.noteAction = selectedAction.title
+        guard let collection = ioToUse?.collection else {
+            return
+        }
+        collection.notePickerAction = selectedAction.title
         let row = noteTableView.selectedRow
         guard row >= 0 && row < matchingNotes.count else { return }
         let noteToPick = matchingNotes[row]

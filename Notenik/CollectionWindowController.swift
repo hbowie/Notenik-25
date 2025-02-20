@@ -4451,6 +4451,12 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     var importParms = ImportParms()
     
+    @IBAction func importAppFolder(_ sender: Any) {
+        importParms = ImportParms()
+        importParms.format = .apps
+        importWithParms()
+    }
+    
     /// Import additional notes from a comma- or tab-separated text file.
     @IBAction func importDelimited(_ sender: Any) {
         
@@ -4486,6 +4492,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     func importSettingsObtained() {
         if importParms.userOkToSettings {
             switch importParms.format {
+            case .apps:
+                importAppsOK()
             case .delim:
                 importDelimitedOK()
             case .notenik:
@@ -4494,6 +4502,48 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 break
             }
         }
+    }
+    
+    func importAppsOK() {
+        
+        guard let noteIO = guardForCollectionAction() else { return }
+        
+        let openPanel = NSOpenPanel()
+        openPanel.title = "Select Applications Folder"
+        openPanel.directoryURL = noteIO.collection!.lib.getURL(type: .parent)
+        openPanel.showsResizeIndicator = true
+        openPanel.showsHiddenFiles = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = false
+        openPanel.allowsMultipleSelection = false
+        openPanel.prompt = "Select Applications folder"
+        let userChoice = openPanel.runModal()
+        guard userChoice == .OK else { return }
+        guard let importURL = openPanel.url else { return }
+        
+        let importer = AppsReader()
+        
+        if importParms.columnParm != .ignore {
+            importer.prepDict(collection: noteIO.collection!)
+            noteIO.persistCollectionInfo()
+        }
+        
+        let (imports, mods) = noteIO.importRows(importer: importer, fileURL: importURL, importParms: importParms)
+        Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                          category: "CollectionWindowController",
+                          level: .info,
+                          message: "Imported \(imports) notes, modified \(mods) notes, from \(importURL.path)")
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = "Imported \(imports) notes, modified \(mods) notes, from \(importURL.path)"
+        alert.addButton(withTitle: "OK")
+        _ = alert.runModal()
+        newNoteRequested = false
+        pendingEdits = false
+        editVC!.io = noteIO
+        finishBatchOperation()
+        
     }
     
     /// User said to go ahead and import. 
@@ -5767,14 +5817,12 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     /// Finish up batch operations by reloading the lists and selecting the first note
     func finishBatchOperation() {
-        // reloadViews()
         let (note, position) = io!.firstNote()
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     note: note,
                                     position: position,
                                     row: -1, searchPhrase: nil,
                                     withUpdates: true)
-        // select(note: note, position: position, source: .action, andScroll: true)
     }
     
 }
