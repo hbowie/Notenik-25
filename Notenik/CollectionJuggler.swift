@@ -37,8 +37,6 @@ class CollectionJuggler: NSObject {
     var showHideOutline: NSMenuItem!
     
     let modelsPath = "/models"
-    let notenikSupport = "com.powersurgepub.notenik.macos"
-    let styleSheets = "Style Sheets"
     let introModelPath = "/02 - Notenik Intro"
     var introModelFullPath = ""
 
@@ -86,23 +84,6 @@ class CollectionJuggler: NSObject {
                               message: "Couldn't get a Log Window Controller! at startup")
         }
         notenikFolderList = NotenikFolderList.shared
-    }
-    
-    func appSupport() {
-        
-        let appSupportURL = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let notenikSupportURL = appSupportURL.appendingPathComponent(notenikSupport)
-        let styleSheetsURL = notenikSupportURL.appendingPathComponent(styleSheets)
-        let styleSheetsPath = styleSheetsURL.relativePath
-        if fm.fileExists(atPath: styleSheetsPath) {
-            
-        } else {
-            do {
-                try fm.createDirectory(atPath: styleSheetsPath, withIntermediateDirectories: true)
-            } catch {
-                print("error creating directory")
-            }
-        }
     }
     
     func makeRecentDocsKnown(_ recentDocumentURLs: [URL]) {
@@ -675,6 +656,59 @@ class CollectionJuggler: NSObject {
         }
         
         return nil
+    }
+    
+    /// Clone one project/collection to a new location, dropping data but keeping structure.
+    func clone() {
+        
+        let openPanel = NSOpenPanel();
+        openPanel.title = "Identify Folder to Clone"
+        openPanel.prompt = "Choose Input Folder"
+        openPanel.message = "Identify Folder to Clone"
+        openPanel.showsResizeIndicator = true
+        openPanel.showsHiddenFiles = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = false
+        openPanel.allowsMultipleSelection = false
+        let result = openPanel.runModal()
+        guard result == .OK else { return }
+        guard let source = openPanel.url else { return }
+        
+        let openPanel2 = NSOpenPanel();
+        openPanel2.title = "Identify Destination Folder"
+        openPanel2.prompt = "Choose Output Folder"
+        openPanel2.message = "Identify Output Folder"
+        openPanel2.showsResizeIndicator = true
+        openPanel2.showsHiddenFiles = false
+        openPanel2.canChooseDirectories = true
+        openPanel2.canCreateDirectories = true
+        openPanel2.canChooseFiles = false
+        openPanel2.allowsMultipleSelection = false
+        let result2 = openPanel2.runModal()
+        guard result2 == .OK else { return }
+        guard let destination = openPanel2.url else { return }
+        
+        let parms = CloneParms()
+        
+        let creator = CloneCreator()
+        
+        let (msg, fileCount) = creator.clone(source: source,
+                                             destination: destination,
+                                             parms: parms)
+        
+        if !msg.isEmpty {
+            communicateError(msg, alert: true)
+        }
+        
+        if fileCount > 0 {
+            let dialog = NSAlert()
+            dialog.alertStyle = .informational
+            dialog.messageText = "\(fileCount) files copied to output clone"
+            dialog.addButton(withTitle: "OK")
+            let _ = dialog.runModal()
+        }
+
     }
     
     

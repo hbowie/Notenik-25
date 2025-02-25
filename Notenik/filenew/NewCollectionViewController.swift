@@ -20,6 +20,10 @@ class NewCollectionViewController: NSTabViewController {
     
     let fm = FileManager.default
     
+    var starterPacks: StarterPackMgr?
+    
+    var packToUse: StarterPack?
+    
     let location = "Location"
     let name     = "Name"
     let fields   = "Fields"
@@ -53,6 +57,13 @@ class NewCollectionViewController: NSTabViewController {
         
         fieldsVC = (tabViewItems[2].viewController as! NewFieldsViewController)
         fieldsVC.tabsVC = self
+        
+        if fieldsVC.starterPacks == nil {
+            starterPacks = StarterPackMgr()
+            fieldsVC.starterPacks = starterPacks
+        } else {
+            starterPacks = fieldsVC.starterPacks
+        }
         
         self.selectedTabViewItemIndex = 0
     }
@@ -198,7 +209,7 @@ class NewCollectionViewController: NSTabViewController {
     }
     
     /// Collect the info gathered on the third tab, and now take action.
-    func setFields(_ modelName: String, modelURL: URL) {
+    func setFields(starterPack: StarterPack) {
         
         guard let toURL = collectionURL else {
             communicateError("Name for new Collection must be specified first", alert: true)
@@ -206,40 +217,21 @@ class NewCollectionViewController: NSTabViewController {
             return
         }
         
-        var ok = true
-        var projectFolder = false
-        var primaryFolder = ""
-        switch modelName {
-        case "11 - Commonplace with Lookups":
-            projectFolder = true
-            primaryFolder = "book"
-        case "12 - Website":
-            projectFolder = true
-            primaryFolder = "content"
-        case "16 - HTML for People demo":
-            projectFolder = true
-            primaryFolder = "content"
-        default:
-            break
-        }
+        self.packToUse = starterPack
         
-        if projectFolder {
-            ok = copyFolders(fromURL: modelURL, toURL: toURL)
-            logInfo(msg: "Copying folders")
-        } else {
-            logInfo(msg: "Relocating Collection")
-            let relo = CollectionRelocation()
-            ok = relo.copyOrMoveCollection(from: modelURL.path, to: toURL.path, move: false)
-        }
+        var ok = true
+        
+        ok = packToUse!.create(toURL: toURL)
+        
         guard ok else {
-            communicateError("Could not populate new Collection with model folder", alert: true)
+            communicateError("Could not populate new Collection with model folder")
             closeWindow()
             return
         }
         
         var wc: CollectionWindowController?
         let notesURL: URL? = toURL
-        if projectFolder {
+        if packToUse!.projectFolder {
             logInfo(msg: "Opening project folder")
             _ = juggler.openParentRealm(parentURL: toURL)
             /* notesURL = URL(string: primaryFolder, relativeTo: toURL)
@@ -268,24 +260,6 @@ class NewCollectionViewController: NSTabViewController {
         }
         
         closeWindow()
-    }
-    
-    func copyFolders(fromURL: URL, toURL: URL) -> Bool {
-        var ok = FileUtils.ensureFolder(forURL: toURL)
-        if ok {
-            do {
-                let items = try fm.contentsOfDirectory(at: fromURL, includingPropertiesForKeys: nil)
-                for item in items {
-                    let itemName = item.lastPathComponent
-                    guard let toURL = URL(string: itemName, relativeTo: toURL) else { continue }
-                    try fm.copyItem(at: item, to: toURL)
-                }
-            } catch {
-                communicateError("Errors copying folder from \(fromURL) to \(toURL)")
-                ok = false
-            }
-        }
-        return ok
     }
     
     func closeWindow() {
