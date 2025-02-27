@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="IeO-vT-3EJ">
+            <objects>
+                <windowController storyboardIdentifier="clonerWC" id="gqB-do-URv" customClass="ClonerWindowController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Clone a Collection" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="ebt-dd-bkx">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="320" y="343" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="2048" height="1127"/>
+                        <view key="contentView" id="XmN-8G-SdD">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="gqB-do-URv" id="nPT-iT-131"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="tcB-8J-eQS" kind="relationship" relationship="window.shadowedContentViewController" id="P6J-CK-QvM"/>
+                    </connections>
+                </windowController>
+                <customObject id="al6-Ub-QP7" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-10" y="-65"/>
+        </scene>
+        <!--Cloner View Controller-->
+        <scene sceneID="f6F-qX-cWA">
+            <objects>
+                <viewController id="tcB-8J-eQS" customClass="ClonerViewController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="V7O-WZ-UOl">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="283"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HHH-yp-zt9">
+                                <rect key="frame" x="13" y="236" width="155" height="32"/>
+                                <buttonCell key="cell" type="push" title="Pick the Source" bezelStyle="rounded" alignment="left" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dd8-xG-nYX">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="pickSource:" target="tcB-8J-eQS" id="DY4-L8-uEp"/>
+                                </connections>
+                            </button>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Wfp-nC-MhE">
+                                <rect key="frame" x="20" y="179" width="442" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="aWr-gg-5Yr"/>
+                                </constraints>
+                                <textFieldCell key="cell" selectable="YES" title="/Users" id="tBu-XB-6uP">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="N66-nr-tTG">
+                                <rect key="frame" x="13" y="131" width="155" height="32"/>
+                                <buttonCell key="cell" type="push" title="Pick the Destination" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="d7s-1R-ops">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="pickDestination:" target="tcB-8J-eQS" id="zb5-Jj-xOd"/>
+                                </connections>
+                            </button>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="NV7-9X-G7P">
+                                <rect key="frame" x="20" y="55" width="440" height="68"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="68" id="lH8-I3-Brd"/>
+                                </constraints>
+                                <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="mm3-uc-sEK">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ajV-yf-KY6">
+                                <rect key="frame" x="15" y="13" width="76" height="32"/>
+                                <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wJO-cF-Wxd">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="cancel:" target="tcB-8J-eQS" id="xYe-0s-Kq4"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Z5g-rz-8q2">
+                                <rect key="frame" x="398" y="13" width="69" height="32"/>
+                                <buttonCell key="cell" type="push" title="Clone" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6EG-zJ-7ue">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="clone:" target="tcB-8J-eQS" id="f03-cd-VY2"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="N66-nr-tTG" firstAttribute="leading" secondItem="NV7-9X-G7P" secondAttribute="leading" id="6Hf-kz-xhb"/>
+                            <constraint firstItem="ajV-yf-KY6" firstAttribute="top" secondItem="NV7-9X-G7P" secondAttribute="bottom" constant="15" id="7gg-cw-bA7"/>
+                            <constraint firstItem="HHH-yp-zt9" firstAttribute="trailing" secondItem="N66-nr-tTG" secondAttribute="trailing" id="8jC-jQ-lZX"/>
+                            <constraint firstItem="HHH-yp-zt9" firstAttribute="top" secondItem="V7O-WZ-UOl" secondAttribute="top" constant="20" symbolic="YES" id="Adx-IY-YgU"/>
+                            <constraint firstItem="Wfp-nC-MhE" firstAttribute="trailing" secondItem="NV7-9X-G7P" secondAttribute="trailing" id="AlC-yB-7Gg"/>
+                            <constraint firstItem="Wfp-nC-MhE" firstAttribute="leading" secondItem="ajV-yf-KY6" secondAttribute="leading" id="EeY-jm-PHG"/>
+                            <constraint firstItem="NV7-9X-G7P" firstAttribute="top" secondItem="N66-nr-tTG" secondAttribute="bottom" constant="15" id="IOw-pT-Ilj"/>
+                            <constraint firstItem="Wfp-nC-MhE" firstAttribute="top" secondItem="HHH-yp-zt9" secondAttribute="bottom" constant="8" symbolic="YES" id="Ka7-8Q-jnL"/>
+                            <constraint firstItem="HHH-yp-zt9" firstAttribute="leading" secondItem="V7O-WZ-UOl" secondAttribute="leading" constant="20" symbolic="YES" id="PeE-gu-8ab"/>
+                            <constraint firstAttribute="trailing" secondItem="Wfp-nC-MhE" secondAttribute="trailing" constant="20" symbolic="YES" id="RTT-N5-9Rf"/>
+                            <constraint firstItem="HHH-yp-zt9" firstAttribute="leading" secondItem="N66-nr-tTG" secondAttribute="leading" id="a87-O2-Ph3"/>
+                            <constraint firstAttribute="bottom" secondItem="ajV-yf-KY6" secondAttribute="bottom" constant="20" symbolic="YES" id="eHb-WC-2vy"/>
+                            <constraint firstItem="NV7-9X-G7P" firstAttribute="trailing" secondItem="Z5g-rz-8q2" secondAttribute="trailing" id="o59-We-NHC"/>
+                            <constraint firstItem="ajV-yf-KY6" firstAttribute="baseline" secondItem="Z5g-rz-8q2" secondAttribute="baseline" id="sfi-P5-hiY"/>
+                            <constraint firstItem="Wfp-nC-MhE" firstAttribute="leading" secondItem="V7O-WZ-UOl" secondAttribute="leading" constant="22" id="wbe-Jf-o7v"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="destinationText" destination="NV7-9X-G7P" id="h8F-ex-83r"/>
+                        <outlet property="sourceText" destination="Wfp-nC-MhE" id="jry-3F-fGI"/>
+                    </connections>
+                </viewController>
+                <customObject id="v5G-lS-4T6" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-10" y="410.5"/>
+        </scene>
+    </scenes>
+</document>

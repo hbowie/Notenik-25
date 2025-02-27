@@ -48,6 +48,7 @@ class CollectionJuggler: NSObject {
     let collectionPrefsStoryboard: NSStoryboard = NSStoryboard(name: "CollectionPrefs", bundle: nil)
     let navStoryboard:             NSStoryboard = NSStoryboard(name: "Navigator", bundle: nil)
     let quickActionStoryBoard:     NSStoryboard = NSStoryboard(name: "QuickAction", bundle: nil)
+    let clonerStoryBoard:          NSStoryboard = NSStoryboard(name: "Cloner", bundle: nil)
     
     let scriptStoryboard: NSStoryboard = NSStoryboard(name: "Script", bundle: nil)
     var scriptWindowController: ScriptWindowController?
@@ -64,6 +65,7 @@ class CollectionJuggler: NSObject {
     
     var navController: NavigatorWindowController?
     var quickActionController: QuickActionWindowController?
+    var clonerWindowController: ClonerWindowController?
     
     var lastSelectedNoteTitle = ""
     var lastSelectedNoteCustomURL = ""
@@ -661,52 +663,13 @@ class CollectionJuggler: NSObject {
     /// Clone one project/collection to a new location, dropping data but keeping structure.
     func clone() {
         
-        let openPanel = NSOpenPanel();
-        openPanel.title = "Identify Folder to Clone"
-        openPanel.prompt = "Choose Input Folder"
-        openPanel.message = "Identify Folder to Clone"
-        openPanel.showsResizeIndicator = true
-        openPanel.showsHiddenFiles = false
-        openPanel.canChooseDirectories = true
-        openPanel.canCreateDirectories = false
-        openPanel.canChooseFiles = false
-        openPanel.allowsMultipleSelection = false
-        let result = openPanel.runModal()
-        guard result == .OK else { return }
-        guard let source = openPanel.url else { return }
-        
-        let openPanel2 = NSOpenPanel();
-        openPanel2.title = "Identify Destination Folder"
-        openPanel2.prompt = "Choose Output Folder"
-        openPanel2.message = "Identify Output Folder"
-        openPanel2.showsResizeIndicator = true
-        openPanel2.showsHiddenFiles = false
-        openPanel2.canChooseDirectories = true
-        openPanel2.canCreateDirectories = true
-        openPanel2.canChooseFiles = false
-        openPanel2.allowsMultipleSelection = false
-        let result2 = openPanel2.runModal()
-        guard result2 == .OK else { return }
-        guard let destination = openPanel2.url else { return }
-        
-        let parms = CloneParms()
-        
-        let creator = CloneCreator()
-        
-        let (msg, fileCount) = creator.clone(source: source,
-                                             destination: destination,
-                                             parms: parms)
-        
-        if !msg.isEmpty {
-            communicateError(msg, alert: true)
-        }
-        
-        if fileCount > 0 {
-            let dialog = NSAlert()
-            dialog.alertStyle = .informational
-            dialog.messageText = "\(fileCount) files copied to output clone"
-            dialog.addButton(withTitle: "OK")
-            let _ = dialog.runModal()
+        if let cloneWC = self.clonerStoryBoard.instantiateController(withIdentifier: "clonerWC") as? ClonerWindowController {
+            cloneWC.juggler = self
+            cloneWC.collectionWC = lastWC
+            cloneWC.showWindow(self)
+            clonerWindowController = cloneWC
+        } else {
+            communicateError("Couldn't get a Cloner Window Controller", alert: true)
         }
 
     }

@@ -23,8 +23,6 @@ class NewFieldsViewController: NSViewController {
     
     var starterPacks: StarterPackMgr?
     
-    var packToUse: StarterPack?
-    
     var tabsVC: NewCollectionViewController?
 
     @IBOutlet var listOfModels: NSPopUpButton!
@@ -54,44 +52,17 @@ class NewFieldsViewController: NSViewController {
         tabsVC!.selectTab(index: 1)
     }
     
-    @IBAction func initFromClone(_ sender: Any) {
-        
-        packToUse = nil
-        let openPanel = NSOpenPanel();
-        openPanel.title = "Identify Clone to Use"
-        openPanel.prompt = "Choose Starter Clone"
-        openPanel.message = "Identify Starter Clone"
-        openPanel.showsResizeIndicator = true
-        openPanel.showsHiddenFiles = false
-        openPanel.canChooseDirectories = true
-        openPanel.canCreateDirectories = false
-        openPanel.canChooseFiles = false
-        openPanel.allowsMultipleSelection = false
-        let result = openPanel.runModal()
-        guard result == .OK else { return }
-        guard let source = openPanel.url else { return }
-        packToUse = StarterPack(location: source)
-        packToUse!.loadInfo()
-    }
-    
     @IBAction func nextButtonClicked(_ sender: Any) {
         guard tabsVC != nil else { return }
         
-        if packToUse == nil {
-            let selectedItem = listOfModels.selectedItem
-            guard selectedItem != nil else {
-                tabsVC!.communicateError("You must first make a selection from the list of Collection types", alert: true)
-                return
-            }
-            let selection = selectedItem!.title
-            if let selPack = starterPacks!.get(description: selection) {
-                packToUse = selPack
-            }
-            if packToUse != nil {
-                tabsVC!.setFields(starterPack: packToUse!)
-            }
-        } else {
-            tabsVC!.setFields(starterPack: packToUse!)
+        let selectedItem = listOfModels.selectedItem
+        guard selectedItem != nil else {
+            tabsVC!.communicateError("You must first make a selection from the list of Collection types", alert: true)
+            return
+        }
+        let selection = selectedItem!.title
+        if let selPack = starterPacks!.get(description: selection) {
+            tabsVC!.setFields(starterPack: selPack)
         }
     }
     
