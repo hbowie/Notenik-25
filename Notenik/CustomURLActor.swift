@@ -267,7 +267,9 @@ class CustomURLActor {
         }
         switch value {
         case "random":
-            controller.goToRandomNote(self)
+            controller.randomNote(logSelection: false)
+        case "randompick":
+            controller.randomNote(logSelection: true)
         case "action":
             controller.selectNote(self)
         default:

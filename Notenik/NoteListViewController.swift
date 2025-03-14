@@ -599,6 +599,8 @@ class NoteListViewController:   NSViewController,
                 modifyCellView(cellView: cellView, value: note.dateAddedValue, mono: true)
             } else if tableColumn?.title == "Date Mod" {
                 modifyCellView(cellView: cellView, value: note.dateModifiedValue, mono: true)
+            } else if tableColumn?.title == "Date Picked" {
+                modifyCellView(cellView: cellView, value: note.datePickedValue, mono: true)
             } else if notenikIO != nil && notenikIO!.collection != nil {
                 if tableColumn?.title == notenikIO!.collection!.titleFieldDef.fieldLabel.properForm {
                     modifyCellView(cellView: cellView, value: note.title.value)
@@ -752,6 +754,10 @@ class NoteListViewController:   NSViewController,
             trimColumns(to: 2)
         case .dateModified:
             addDateModifiedColumn(at: 0)
+            _ = addTitleColumn(at: 1)
+            trimColumns(to: 2)
+        case .datePicked:
+            addDatePickedColumn(at: 0)
             _ = addTitleColumn(at: 1)
             trimColumns(to: 2)
         case .datePlusSeq:
@@ -962,6 +968,14 @@ class NoteListViewController:   NSViewController,
             col = collection.columnWidths.getColumn(withTitle: "Date Mod")
         }
         addColumn(title: "Date Mod", strID: "date-mod-column", at: desiredIndex, min: col.min, width: col.pref, max: col.max)
+    }
+    
+    func addDatePickedColumn(at desiredIndex: Int) {
+        var col = ColumnWidth(title: "Date Picked", min: 100, pref: 260, max: 400)
+        if let collection = notenikIO?.collection {
+            col = collection.columnWidths.getColumn(withTitle: "Date Picked")
+        }
+        addColumn(title: "Date Picked", strID: "date-picked-column", at: desiredIndex, min: col.min, width: col.pref, max: col.max)
     }
     
     /// Add a column, or make sure it already exists, and position it appropriately.

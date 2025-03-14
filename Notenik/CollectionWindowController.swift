@@ -2988,8 +2988,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     }
     
     @IBAction func goToRandomNote(_ sender: Any) {
+        randomNote()
+    }
+    
+    func randomNote(logSelection: Bool = false) {
         let (nio, _) = guardForNoteAction()
         guard let noteIO = nio else { return }
+        guard let collection = noteIO.collection else { return }
         var (randomNote, randomPosition) = noteIO.getSelectedNote()
         guard randomNote != nil else { return }
         let lastTitle = randomNote!.title.value
@@ -3007,11 +3012,66 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             guard randomNote != nil else { return }
         }
         
+        if logSelection {
+            if collection.datePickedFieldDef != nil {
+                let modNote = randomNote!.copy() as! Note
+                modNote.setDatePickedNow()
+                let modOK = recordMods(noteIO: noteIO, note: randomNote!, modNote: modNote)
+                if modOK {
+                    randomNote = modNote
+                    randomPosition = NotePosition(index: -1)
+                }
+            }
+        }
+        
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     note: randomNote,
                                     position: randomPosition,
                                     row: -1, searchPhrase: nil)
-        // select(note: randomNote, position: randomPosition, source: .nav, andScroll: true)
+    }
+    
+    @IBAction func clearAllPicks(_ sender: Any) {
+        guard let noteIO = guardForCollectionAction() else { return }
+        guard let collection = noteIO.collection else { return }
+        guard collection.datePickedFieldDef != nil else { return }
+        
+        var (note, position) = noteIO.firstNote()
+        var notesToUpdate: [Note] = []
+        while note != nil {
+            if note!.hasDatePicked() {
+                notesToUpdate.append(note!)
+            }
+            (note, position) = io!.nextNote(position)
+        }
+        for noteToUpdate in notesToUpdate {
+            let modNote = noteToUpdate.copy() as! Note
+            modNote.clearDatePicked()
+            _ = io!.modNote(oldNote: noteToUpdate, newNote: modNote)
+        }
+        finishBatchOperation()
+        reportNumberOfNotesUpdated(notesToUpdate.count)
+    }
+    
+    @IBAction func pickNote(_ sender: Any) {
+        let (nio, sel) = guardForNoteAction()
+        guard let noteIO = nio, let selNote = sel else { return }
+        guard let collection = noteIO.collection else { return }
+        guard collection.datePickedFieldDef != nil else {
+            communicateError("In order to pick a note, the collection must have a field of type 'Date Picked'.",
+                             alert: true)
+            return
+        }
+        let modNote = selNote.copy() as! Note
+        modNote.setDatePickedNow()
+        let _ = recordMods(noteIO: noteIO, note: selNote, modNote: modNote)
+    }
+    
+    @IBAction func unpickNote(_ sender: Any) {
+        let (nio, sel) = guardForNoteAction()
+        guard let noteIO = nio, let selNote = sel else { return }
+        let modNote = selNote.copy() as! Note
+        modNote.clearDatePicked()
+        let _ = recordMods(noteIO: noteIO, note: selNote, modNote: modNote)
     }
     
     @IBAction func backwardInHistory(_ sender: Any) {
@@ -4210,6 +4270,12 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     @IBAction func sortByDateModified(_ sender: Any) {
         setSortParm(.dateModified)
+    }
+    
+    @IBAction func sortByDatePicked(_ sender: Any) {
+        setSortParm(.datePicked)
+        setSortDescending(true)
+        setSortBlankDatesLast(true)
     }
     
     @IBAction func sortByDateAndSeq(_ sender: Any) {
