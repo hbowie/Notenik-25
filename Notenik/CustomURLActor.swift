@@ -81,6 +81,8 @@ class CustomURLActor {
             processOpenCommand(labels: labels, values: values)
         case "prefs", "settings":
             processPrefsCommand()
+        case "run":
+            processRunCommand(labels: labels, values: values)
         default:
             communicateError("Invalid Command: \(command)")
             return false
@@ -376,6 +378,62 @@ class CustomURLActor {
     
     func processPrefsCommand() {
         juggler.showAppPreferences()
+    }
+    
+    func processRunCommand(labels: [String], values: [String]) {
+        var i = 0
+        while i < labels.count {
+            processRunParm(label: labels[i],
+                            value: values[i])
+            i += 1
+        }
+        if let scriptURL = runFileURL {
+            CollectionJuggler.shared.launchScript(fileURL: scriptURL, goNow: goNow)
+        }
+    }
+    
+    var goNow = false
+    var runFileURL: URL?
+    
+    func processRunParm(label: String,
+                         value: String) {
+        switch label {
+        case "go":
+            processRunGo(value: value)
+        case "path":
+            processRunPath(value: value)
+        default:
+            communicateError("Run Query Parameter of '\(label)' not recognized")
+        }
+    }
+    
+    func processRunPath(value: String) {
+        var link: NotenikLink?
+        var fileURLstr = value
+        if !fileURLstr.starts(with: "file://") {
+            fileURLstr = "file://" + value
+        }
+        link = NotenikLink(str: fileURLstr, assume: .assumeFile)
+        if link == nil {
+            communicateError("Run path of '\(value)' could not be resolved")
+        } else if link!.type != .script {
+            communicateError("Run path of '\(value)' does not point to a valid script file")
+        } else if let fileURL = URL(string: fileURLstr) {
+            runFileURL = fileURL
+        } else {
+            communicateError("Could not create URL from \(fileURLstr)")
+        }
+    }
+    
+    func processRunGo(value: String) {
+        switch value {
+        case "now":
+            goNow = true
+        case "wait":
+            goNow = false
+        default:
+            communicateError("'\(value)' is not a valid value for the run go parameter")
+        }
     }
     
     /// Send an informational message to the log.

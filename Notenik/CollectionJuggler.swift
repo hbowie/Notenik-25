@@ -223,10 +223,12 @@ class CollectionJuggler: NSObject {
             communicateError("You will need to explicitly open this folder since Notenik does not currently have access to it.", alert: true)
             link = explicitFolderOpen(requestedParent: folderURL!.deletingLastPathComponent())
         }
-        guard link != nil else { return false }
+        guard link != nil else {
+            communicateError("NotenikLink could not be formed from the url")
+            return false
+        }
         // link!.determineCollectionType()
         let wc = open(link: link!)
-        guard wc != nil else { return false }
         return true
     }
     
@@ -1173,13 +1175,13 @@ class CollectionJuggler: NSObject {
     }
     
     /// Launch a script to be played.
-    func launchScript(fileURL: URL) {
+    func launchScript(fileURL: URL, goNow: Bool = false) {
         AppPrefs.shared.scriptFolderURL = fileURL.deletingLastPathComponent()
         ensureScriptController()
         guard scriptWindowController != nil else { return }
         scriptWindowController!.showWindow(self)
         lastScript = fileURL
-        scriptWindowController!.scriptOpenInput(fileURL)
+        scriptWindowController!.scriptOpenInput(fileURL, goNow: goNow)
     }
     
     func showScriptWindow() {
