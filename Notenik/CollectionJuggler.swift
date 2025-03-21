@@ -140,6 +140,7 @@ class CollectionJuggler: NSObject {
             if collection != nil && !collection!.readOnly {
                 if collection!.startupToday {
                     if appPrefs.networkAvailable {
+                        collector.sort()
                         wc!.launchLinks(collector)
                         collection!.startedUp()
                         io.persistCollectionInfo()
