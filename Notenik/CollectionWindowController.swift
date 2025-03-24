@@ -3019,7 +3019,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 let modOK = recordMods(noteIO: noteIO, note: randomNote!, modNote: modNote)
                 if modOK {
                     randomNote = modNote
-                    randomPosition = NotePosition(index: -1)
+                    randomPosition = noteIO.positionOfNote(randomNote!)
                 }
             }
         }
