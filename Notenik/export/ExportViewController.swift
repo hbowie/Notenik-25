@@ -4,7 +4,7 @@
 //
 //  Created by Herb Bowie on 7/18/19.
 //
-//  Copyright © 2019-2022 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -54,6 +54,7 @@ class ExportViewController: NSViewController {
     @IBOutlet var splitTagsCheckBox: NSButton!
     @IBOutlet var addWebExtensionsCheckBox: NSButton!
     
+    @IBOutlet var tocDepthSelector: NSPopUpButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,6 +72,12 @@ class ExportViewController: NSViewController {
         fileExtCombo.addItem(withObjectValue: opml)
         fileExtCombo.addItem(withObjectValue: xhtml)
         fileExtCombo.selectItem(at: 0)
+        
+        tocDepthSelector.removeAllItems()
+        for i in 1...9 {
+            tocDepthSelector.addItem(withTitle: String(i))
+        }
+        tocDepthSelector.selectItem(at: 0)
     }
     
     var io: NotenikIO? {
@@ -80,6 +87,7 @@ class ExportViewController: NSViewController {
         set {
             _io = newValue
             loadFormatPopup()
+            loadDepthSelector()
         }
     }
     var _io: NotenikIO?
@@ -107,7 +115,18 @@ class ExportViewController: NSViewController {
         for script in noteIO.exportScripts {
             formatPopup.addItem(withTitle: script.scriptName)
         }
-        
+    }
+    
+    func loadDepthSelector() {
+        if let collection = _io?.collection {
+            if collection.tocDepth > 0 && collection.tocDepth < 10 {
+                tocDepthSelector.selectItem(at: collection.tocDepth - 1)
+            }
+        }
+    }
+    
+    @IBAction func depthSelected(_ sender: Any) {
+
     }
     
     @IBAction func formatAction(_ sender: Any) {
@@ -157,6 +176,19 @@ class ExportViewController: NSViewController {
     
     /// The user clicked ok -- let's go ahead and export now. 
     @IBAction func okButtonPressed(_ sender: Any) {
+        
+        // Get desired Table of Contents Depth
+        print("Getting desired toc depth")
+        if tocDepthSelector.selectedItem != nil {
+            print("  - selected item not nil")
+            let depth = tocDepthSelector.indexOfSelectedItem + 1
+            print("  - depth = \(depth)")
+            if depth > 0 && depth < 10 {
+                print("  - setting depth for collection")
+                io!.collection!.tocDepth = depth
+                io!.persistCollectionInfo()
+            }
+        }
         
         // Figure out the desired output format.
         var formatTitle = commaSep

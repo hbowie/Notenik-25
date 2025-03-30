@@ -507,11 +507,30 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
-                                        <menuItem title="Show/Hide Outline" id="OJc-j0-OYm">
+                                        <menuItem title="Outline Tab" id="lo9-EE-V06" userLabel="Outline Tab">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="toggleOutlineTab:" target="Ady-hI-5gd" id="ZpA-9I-KaT"/>
-                                            </connections>
+                                            <menu key="submenu" title="Outline Tab" id="Apq-II-tR6">
+                                                <items>
+                                                    <menuItem title="No Outline Tab" id="MF1-vy-dck">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setOutlineTab:" target="Ady-hI-5gd" id="yCb-Ty-Ejr"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Outline With Seq" id="Jk2-vt-E05">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setOutlineTab:" target="Ady-hI-5gd" id="jkw-t0-Us2"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Outline No Seq" id="Sgx-3h-15A" userLabel="Outline - no Seq">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setOutlineTab:" target="Ady-hI-5gd" id="fAW-09-oAr"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="6aQ-3d-Opo"/>
                                         <menuItem title="Copy Notenik URL for Collection..." id="Fbs-oD-G8K">
@@ -1371,7 +1390,7 @@ CA
                         <outlet property="navAdvSearchItem" destination="dRa-3A-SnJ" id="lvV-93-h5d"/>
                         <outlet property="navFindAgainItem" destination="Sis-fg-Ibk" id="tld-89-TWt"/>
                         <outlet property="navFindItem" destination="O5R-wR-C3l" id="z0E-Y5-3Qu"/>
-                        <outlet property="showHideOutline" destination="OJc-j0-OYm" id="MEr-RN-79t"/>
+                        <outlet property="outlineTabMenu" destination="Apq-II-tR6" id="d2n-0N-bWh"/>
                         <outlet property="sortMenu" destination="LhB-sl-AeY" id="YbX-M5-rEM"/>
                     </connections>
                 </customObject>
@@ -1618,13 +1637,13 @@ CA
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="RC8-4f-YSE">
-                                <rect key="frame" x="0.0" y="0.0" width="110" height="53"/>
+                                <rect key="frame" x="0.0" y="0.0" width="70" height="53"/>
                                 <clipView key="contentView" id="gLb-hh-RZf">
-                                    <rect key="frame" x="1" y="1" width="108" height="36"/>
+                                    <rect key="frame" x="1" y="1" width="68" height="36"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" typeSelect="NO" rowSizeStyle="automatic" headerView="08a-mn-sim" viewBased="YES" id="5Qb-62-xdU">
-                                            <rect key="frame" x="0.0" y="0.0" width="1457" height="11"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="1457" height="19"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2108,11 +2127,11 @@ CA
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="CTE-sV-ET2">
-                                    <rect key="frame" x="1" y="37" width="108" height="15"/>
+                                    <rect key="frame" x="1" y="37" width="68" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="pSI-dZ-vUM">
-                                    <rect key="frame" x="114" y="26" width="15" height="11"/>
+                                    <rect key="frame" x="74" y="26" width="15" height="11"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" wantsLayer="YES" id="08a-mn-sim">
@@ -2146,13 +2165,13 @@ CA
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTK-bV-70K">
-                                <rect key="frame" x="0.0" y="0.0" width="479" height="143"/>
+                                <rect key="frame" x="0.0" y="0.0" width="479" height="139"/>
                                 <clipView key="contentView" id="caU-8Q-uow">
-                                    <rect key="frame" x="1" y="1" width="477" height="141"/>
+                                    <rect key="frame" x="1" y="1" width="477" height="137"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="fwC-s0-qs1" id="Zqh-F5-OQn">
-                                            <rect key="frame" x="0.0" y="0.0" width="477" height="141"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="477" height="137"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>

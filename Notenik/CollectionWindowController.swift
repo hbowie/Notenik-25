@@ -191,10 +191,10 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             
             if notenikIO != nil {
                 if let collection = notenikIO!.collection {
-                    if collection.outlineTab {
+                    if collection.outlineTabSetting.isEnabled {
                         let enabled = enableOutlineTab(nio: notenikIO!)
                         if !enabled {
-                            collection.outlineTab = false
+                            collection.outlineTabSetting = .none
                         }
                     }
                 }
@@ -456,24 +456,50 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         window!.setFrame(newRect, display: true, animate: true)
     }
     
-    @IBAction func toggleOutlineTab(_ sender: Any) {
-        var success = false
+    @IBAction func setOutlineTab(_ sender: Any) {
+
+        // See if we're ready to proceed.
         guard let io = notenikIO else { return }
         guard io.collectionOpen else { return }
         guard let collection = io.collection else { return }
-        if collection.outlineTab {
+        guard let menuItem = sender as? NSMenuItem else { return }
+        
+        // Determine which setting is being requested.
+        var newOutlineTabSetting: OutlineTabSetting = .none
+        switch menuItem.title {
+        case "No Outline Tab":
+            newOutlineTabSetting = .none
+        case "Outline With Seq":
+            newOutlineTabSetting = .withSeq
+        case "Outline No Seq", "Outline - no Seq":
+            newOutlineTabSetting = .sansSeq
+        default:
+            print("Unrecognized Outline Tab Menu Item Title of \(menuItem.title)")
+            return
+        }
+        
+        var success = false
+        if collection.outlineTabSetting.isEnabled && newOutlineTabSetting.notEnabled {
             let disabled = disableOutlineTab()
             if disabled {
-                collection.outlineTab = false
+                collection.outlineTabSetting = .none
+                success = true
+            }
+        } else if collection.outlineTabSetting.notEnabled && newOutlineTabSetting.isEnabled {
+            let enabled = enableOutlineTab(nio: io)
+            if enabled {
+                collection.outlineTabSetting = newOutlineTabSetting
                 success = true
             }
         } else {
-            let enabled = enableOutlineTab(nio: io)
-            if enabled {
-                collection.outlineTab = true
-                success = true
-            }
+            collection.outlineTabSetting = newOutlineTabSetting
+            success = true
         }
+        
+        if success && newOutlineTabSetting.isEnabled {
+            seqOutlineVC!.setSeqOption(outlineTabSetting: newOutlineTabSetting)
+        }
+        
         if success {
             io.persistCollectionInfo()
             reloadCollection(self)
@@ -500,6 +526,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         if let seqOutlineController = self.seqOutlineStoryboard.instantiateController(withIdentifier: "seqOutlineVC") as? SeqOutlineViewController {
             seqOutlineController.collectionWindowController = self
             seqOutlineController.io = nio
+            seqOutlineController.setSeqOption(outlineTabSetting: collection.outlineTabSetting)
             seqOutlineVC = seqOutlineController
             let outlineTab = NSTabViewItem(viewController: seqOutlineController)
             outlineTab.label = "Outline"
@@ -4159,8 +4186,17 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     @IBAction func textEditNote(_ sender: Any) {
         let (_, sel) = guardForNoteAction()
         guard let noteToUse = sel else { return }
+        var ok = true
         if noteToUse.noteID.hasData {
-            NSWorkspace.shared.openFile(noteToUse.noteID.getFullPath(note: noteToUse)!)
+            if #available(macOS 11.0, *) {
+                ok = NSWorkspace.shared.open(noteToUse.noteID.getURL(note: noteToUse)!)
+            } else {
+                ok = NSWorkspace.shared.openFile(noteToUse.noteID.getFullPath(note: noteToUse)!)
+            }
+        }
+        if !ok {
+            communicateError("File at '\(noteToUse.noteID.getFullPath(note: noteToUse)!)' could not be opened",
+                             alert: true)
         }
     }
     

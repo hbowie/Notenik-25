@@ -425,7 +425,10 @@ class NoteListViewController:   NSViewController,
         guard let clickedNote = io.getNote(at: row) else { return }
         let folderPath = io.collection!.lib.getPath(type: .collection)
         let filePath = clickedNote.noteID.getFullPath(note: clickedNote)
-        NSWorkspace.shared.selectFile(filePath, inFileViewerRootedAtPath: folderPath)
+        let ok = NSWorkspace.shared.selectFile(filePath, inFileViewerRootedAtPath: folderPath)
+        if !ok {
+            communicateError("Could not reveal file at '\(folderPath)'", alert: true)
+        }
     }
     
     /// Respond to double-click.
@@ -1098,6 +1101,23 @@ class NoteListViewController:   NSViewController,
                           category: "NotesListViewController",
                           level: .info,
                           message: msg)
+    }
+    
+    /// Log an error message and optionally display an alert message.
+    func communicateError(_ msg: String, alert: Bool=false) {
+        
+        Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                          category: "NoteListViewController",
+                          level: .error,
+                          message: msg)
+        
+        if alert {
+            let dialog = NSAlert()
+            dialog.alertStyle = .warning
+            dialog.messageText = msg
+            dialog.addButton(withTitle: "OK")
+            let _ = dialog.runModal()
+        }
     }
     
 }

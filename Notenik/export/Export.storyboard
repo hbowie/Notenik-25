@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23094"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -113,7 +114,7 @@ Gw
                             <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GXv-Vg-nas">
                                 <rect key="frame" x="175" y="197" width="126" height="23"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="122" id="aQk-7t-yCh"/>
+                                    <constraint firstAttribute="width" constant="122" id="ItD-eO-uaU"/>
                                 </constraints>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="BlB-uK-lkR">
                                     <font key="font" metaFont="system"/>
@@ -155,33 +156,65 @@ Gw
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aOe-69-W18">
+                                <rect key="frame" x="173" y="92" width="78" height="25"/>
+                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="oLM-jS-k5Q" id="Sbb-zd-CGu">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="message"/>
+                                    <menu key="menu" id="OX6-gm-N5B">
+                                        <items>
+                                            <menuItem title="Item 1" state="on" id="oLM-jS-k5Q"/>
+                                            <menuItem title="Item 2" id="f69-aV-nE0"/>
+                                            <menuItem title="Item 3" id="YGD-Ga-YWa"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="71" id="Vcy-6u-x34"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="depthSelected:" target="QdZ-C1-eqn" id="uUl-2S-zIv"/>
+                                </connections>
+                            </popUpButton>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ynR-tT-M1E">
+                                <rect key="frame" x="18" y="100" width="72" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="ToC Depth:" id="tYu-L0-ajF">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="Omm-Zk-4KB" firstAttribute="leading" secondItem="Exq-bf-KLT" secondAttribute="trailing" constant="58" id="0RY-cc-9eB"/>
-                            <constraint firstItem="DzB-J7-VW5" firstAttribute="leading" secondItem="JoO-zm-Yfa" secondAttribute="trailing" constant="12" id="0Wp-P9-4AK"/>
-                            <constraint firstItem="R46-nG-9aE" firstAttribute="leading" secondItem="1yv-gc-F0W" secondAttribute="leading" id="4Jm-UO-onJ"/>
-                            <constraint firstItem="Exq-bf-KLT" firstAttribute="top" secondItem="Omm-Zk-4KB" secondAttribute="top" id="4bf-v0-7O2"/>
-                            <constraint firstItem="Exq-bf-KLT" firstAttribute="leading" secondItem="AG0-xU-rsT" secondAttribute="leading" constant="20" symbolic="YES" id="4xw-QQ-EtD"/>
-                            <constraint firstItem="caW-0K-45t" firstAttribute="top" secondItem="GXv-Vg-nas" secondAttribute="top" id="8NV-Lu-Hik"/>
-                            <constraint firstItem="JoO-zm-Yfa" firstAttribute="top" secondItem="caW-0K-45t" secondAttribute="bottom" constant="14" id="AXw-lp-xT3"/>
-                            <constraint firstItem="R46-nG-9aE" firstAttribute="top" secondItem="JoO-zm-Yfa" secondAttribute="bottom" constant="9" id="Egn-jR-bbz"/>
-                            <constraint firstItem="1yv-gc-F0W" firstAttribute="baseline" secondItem="YYS-Fn-e7G" secondAttribute="baseline" id="Hsn-k4-nQa"/>
-                            <constraint firstItem="1En-Qx-qUZ" firstAttribute="top" secondItem="R46-nG-9aE" secondAttribute="bottom" constant="8" symbolic="YES" id="IkG-qP-dy4"/>
-                            <constraint firstItem="Omm-Zk-4KB" firstAttribute="trailing" secondItem="YYS-Fn-e7G" secondAttribute="trailing" id="M3Q-qI-bGC"/>
-                            <constraint firstAttribute="trailing" secondItem="Omm-Zk-4KB" secondAttribute="trailing" constant="20" symbolic="YES" id="NjS-LW-hbn"/>
-                            <constraint firstItem="Exq-bf-KLT" firstAttribute="leading" secondItem="JoO-zm-Yfa" secondAttribute="leading" id="QWv-YE-pfd"/>
-                            <constraint firstItem="KjJ-fY-bg4" firstAttribute="leading" secondItem="x4w-dm-XxG" secondAttribute="leading" id="XcD-h5-Ht4"/>
-                            <constraint firstItem="GXv-Vg-nas" firstAttribute="top" secondItem="Omm-Zk-4KB" secondAttribute="bottom" constant="11" id="ZVM-Nh-5BZ"/>
-                            <constraint firstAttribute="bottom" secondItem="1yv-gc-F0W" secondAttribute="bottom" constant="20" symbolic="YES" id="Zk8-IY-eO4"/>
-                            <constraint firstItem="Exq-bf-KLT" firstAttribute="top" secondItem="AG0-xU-rsT" secondAttribute="top" constant="20" symbolic="YES" id="a00-Dh-PeR"/>
-                            <constraint firstItem="R46-nG-9aE" firstAttribute="baseline" secondItem="KjJ-fY-bg4" secondAttribute="baseline" id="bUX-kq-56z"/>
-                            <constraint firstItem="x4w-dm-XxG" firstAttribute="leading" secondItem="1En-Qx-qUZ" secondAttribute="trailing" constant="20" id="ghq-1K-E8g"/>
-                            <constraint firstItem="JoO-zm-Yfa" firstAttribute="bottom" secondItem="DzB-J7-VW5" secondAttribute="bottom" id="hZl-Ck-e5X"/>
-                            <constraint firstItem="DzB-J7-VW5" firstAttribute="leading" secondItem="KjJ-fY-bg4" secondAttribute="leading" id="rgC-O1-IQb"/>
-                            <constraint firstItem="GXv-Vg-nas" firstAttribute="leading" secondItem="caW-0K-45t" secondAttribute="trailing" constant="62" id="sbs-Cl-gSd"/>
-                            <constraint firstItem="1En-Qx-qUZ" firstAttribute="baseline" secondItem="x4w-dm-XxG" secondAttribute="baseline" id="u0Z-aW-o9Q"/>
-                            <constraint firstItem="JoO-zm-Yfa" firstAttribute="leading" secondItem="R46-nG-9aE" secondAttribute="leading" id="udp-MT-zXz"/>
-                            <constraint firstItem="GXv-Vg-nas" firstAttribute="leading" secondItem="DzB-J7-VW5" secondAttribute="leading" id="zj2-63-BN9"/>
+                            <constraint firstItem="Omm-Zk-4KB" firstAttribute="trailing" secondItem="YYS-Fn-e7G" secondAttribute="trailing" id="4qe-Ql-ftY"/>
+                            <constraint firstItem="x4w-dm-XxG" firstAttribute="leading" secondItem="1En-Qx-qUZ" secondAttribute="trailing" constant="20" id="5JU-AQ-KYk"/>
+                            <constraint firstItem="Exq-bf-KLT" firstAttribute="top" secondItem="AG0-xU-rsT" secondAttribute="top" constant="20" symbolic="YES" id="66E-xT-py5"/>
+                            <constraint firstItem="x4w-dm-XxG" firstAttribute="leading" secondItem="aOe-69-W18" secondAttribute="leading" id="6sd-ig-hXl"/>
+                            <constraint firstAttribute="bottom" secondItem="1yv-gc-F0W" secondAttribute="bottom" constant="20" symbolic="YES" id="Dhj-qV-YlQ"/>
+                            <constraint firstItem="ynR-tT-M1E" firstAttribute="top" secondItem="1En-Qx-qUZ" secondAttribute="bottom" constant="8" symbolic="YES" id="Do9-pJ-deA"/>
+                            <constraint firstItem="R46-nG-9aE" firstAttribute="leading" secondItem="ynR-tT-M1E" secondAttribute="leading" id="F03-Sq-DhC"/>
+                            <constraint firstItem="1En-Qx-qUZ" firstAttribute="top" secondItem="R46-nG-9aE" secondAttribute="bottom" constant="8" symbolic="YES" id="Gfo-4V-Bvm"/>
+                            <constraint firstItem="1En-Qx-qUZ" firstAttribute="baseline" secondItem="x4w-dm-XxG" secondAttribute="baseline" id="K4Q-RF-Pjh"/>
+                            <constraint firstItem="JoO-zm-Yfa" firstAttribute="baseline" secondItem="DzB-J7-VW5" secondAttribute="baseline" id="KJ3-Q1-g8B"/>
+                            <constraint firstItem="1yv-gc-F0W" firstAttribute="baseline" secondItem="YYS-Fn-e7G" secondAttribute="baseline" id="LHV-Dp-O0n"/>
+                            <constraint firstItem="Exq-bf-KLT" firstAttribute="centerX" secondItem="caW-0K-45t" secondAttribute="centerX" id="Q9H-FI-xwD"/>
+                            <constraint firstItem="JoO-zm-Yfa" firstAttribute="leading" secondItem="R46-nG-9aE" secondAttribute="leading" id="Qln-UB-k3B"/>
+                            <constraint firstItem="DzB-J7-VW5" firstAttribute="leading" secondItem="JoO-zm-Yfa" secondAttribute="trailing" constant="12" id="RN2-WR-8ue"/>
+                            <constraint firstItem="GXv-Vg-nas" firstAttribute="top" secondItem="Omm-Zk-4KB" secondAttribute="bottom" constant="11" id="RY8-oO-Igw"/>
+                            <constraint firstItem="KjJ-fY-bg4" firstAttribute="leading" secondItem="x4w-dm-XxG" secondAttribute="leading" id="W4O-7f-s9c"/>
+                            <constraint firstItem="Exq-bf-KLT" firstAttribute="leading" secondItem="JoO-zm-Yfa" secondAttribute="leading" id="WiP-6X-CMp"/>
+                            <constraint firstItem="DzB-J7-VW5" firstAttribute="leading" secondItem="KjJ-fY-bg4" secondAttribute="leading" id="XIb-gC-4EU"/>
+                            <constraint firstItem="DzB-J7-VW5" firstAttribute="top" secondItem="GXv-Vg-nas" secondAttribute="bottom" constant="10" id="eRN-QW-ph6"/>
+                            <constraint firstItem="ynR-tT-M1E" firstAttribute="top" secondItem="aOe-69-W18" secondAttribute="top" id="ihY-2m-54G"/>
+                            <constraint firstItem="Exq-bf-KLT" firstAttribute="leading" secondItem="AG0-xU-rsT" secondAttribute="leading" constant="20" symbolic="YES" id="kdr-HX-CcO"/>
+                            <constraint firstItem="R46-nG-9aE" firstAttribute="top" secondItem="JoO-zm-Yfa" secondAttribute="bottom" constant="9" id="mV8-SY-rTZ"/>
+                            <constraint firstAttribute="trailing" secondItem="Omm-Zk-4KB" secondAttribute="trailing" constant="20" symbolic="YES" id="p2P-s3-NAN"/>
+                            <constraint firstItem="R46-nG-9aE" firstAttribute="baseline" secondItem="KjJ-fY-bg4" secondAttribute="baseline" id="p3u-Oc-tLh"/>
+                            <constraint firstItem="caW-0K-45t" firstAttribute="top" secondItem="GXv-Vg-nas" secondAttribute="top" id="ryq-rE-AIn"/>
+                            <constraint firstItem="ynR-tT-M1E" firstAttribute="leading" secondItem="1yv-gc-F0W" secondAttribute="leading" id="ti9-Zk-m99"/>
+                            <constraint firstItem="Omm-Zk-4KB" firstAttribute="leading" secondItem="Exq-bf-KLT" secondAttribute="trailing" constant="58" id="wQn-Ta-cmX"/>
+                            <constraint firstItem="GXv-Vg-nas" firstAttribute="leading" secondItem="DzB-J7-VW5" secondAttribute="leading" id="wuv-R8-0JX"/>
+                            <constraint firstItem="Exq-bf-KLT" firstAttribute="top" secondItem="Omm-Zk-4KB" secondAttribute="top" id="wvW-ab-8hO"/>
                         </constraints>
                     </view>
                     <connections>
@@ -190,6 +223,7 @@ Gw
                         <outlet property="formatPopup" destination="Omm-Zk-4KB" id="GtQ-KP-R8W"/>
                         <outlet property="splitTagsCheckBox" destination="KjJ-fY-bg4" id="5xj-fg-4Sp"/>
                         <outlet property="tagsExportPrefsCheckBox" destination="DzB-J7-VW5" id="fYa-lU-IjT"/>
+                        <outlet property="tocDepthSelector" destination="aOe-69-W18" id="7vT-q9-7lU"/>
                     </connections>
                 </viewController>
                 <customObject id="nWL-ih-aXS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

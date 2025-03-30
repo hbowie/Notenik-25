@@ -34,7 +34,7 @@ class CollectionJuggler: NSObject {
     let osdir     = OpenSaveDirectory.shared
     var sortMenu: NSMenu!
     var displayModeMenu: NSMenu!
-    var showHideOutline: NSMenuItem!
+    var outlineTabMenu: NSMenu!
     
     let modelsPath = "/models"
     let introModelPath = "/02 - Notenik Intro"
@@ -1339,15 +1339,21 @@ class CollectionJuggler: NSObject {
     func updateShowHideOutline() {
         guard let collection = _lastWC?.io?.collection else { return }
         if collection.seqFieldDef == nil {
-            showHideOutline.isEnabled = false
-            showHideOutline.title = "Show/Hide Outline Tab"
-            collection.outlineTab = false
+            for item in outlineTabMenu.items {
+                item.isEnabled = false
+            }
+            collection.outlineTabSetting = .none
         } else {
-            showHideOutline.isEnabled = true
-            if collection.outlineTab {
-                showHideOutline.title = "Hide Outline Tab"
-            } else {
-                showHideOutline.title = "Show Outline Tab"
+            let selIndex = Int(collection.outlineTabSetting.rawValue)
+            var i = 0
+            for item in outlineTabMenu.items {
+                item.isEnabled = true
+                if i == selIndex {
+                    item.state = .on
+                } else {
+                    item.state = .off
+                }
+                i += 1
             }
         }
     }

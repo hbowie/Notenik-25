@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 1/21/19.
-//  Copyright © 2019 - 2024 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
     @IBOutlet weak var navAdvSearchItem: NSMenuItem!
     @IBOutlet weak var navFindAgainItem: NSMenuItem!
     
-    @IBOutlet weak var showHideOutline: NSMenuItem!
+    @IBOutlet weak var outlineTabMenu: NSMenu!
     
     var appPrefs:     AppPrefs?
     var displayPrefs: DisplayPrefs?
@@ -82,7 +82,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         juggler!.docController = docController
         juggler!.sortMenu = sortMenu
         juggler!.displayModeMenu = displayModeMenu
-        juggler?.showHideOutline = showHideOutline
+        juggler!.outlineTabMenu = outlineTabMenu
         recentDocumentURLs = docController!.recentDocumentURLs
         stage = "2"
         logger.logDestPrint = false

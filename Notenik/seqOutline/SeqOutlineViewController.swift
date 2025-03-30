@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 8/6/24.
-//  Copyright © 2024 Herb Bowie (https://hbowie.net)
+//  Copyright © 2024 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -27,6 +27,8 @@ class SeqOutlineViewController: NSViewController,
     var collectionWindowController: CollectionWindowController?
     
     var notenikIO: NotenikIO?
+    
+    var outlneTabSetting: OutlineTabSetting = .withSeq
     
     var focusNote: Note?
     
@@ -102,6 +104,10 @@ class SeqOutlineViewController: NSViewController,
         if notenikIO != nil {
             modShortcutMenuForCollection()
         }
+    }
+    
+    func setSeqOption(outlineTabSetting: OutlineTabSetting) {
+        self.outlneTabSetting = outlineTabSetting
     }
     
     func reload() {
@@ -461,7 +467,11 @@ class SeqOutlineViewController: NSViewController,
                     textField.stringValue = notenikIO!.collection!.path
                 case .note:
                     if let note = node.note {
-                        textField.stringValue = note.getTitle(withSeq: true, sep: " - ")
+                        if outlneTabSetting == .withSeq {
+                            textField.stringValue = note.getTitle(withSeq: true, sep: " - ")
+                        } else {
+                            textField.stringValue = note.getTitle(withSeq: false, sep: "")
+                        }
                     } else {
                         textField.stringValue = "???"
                     }
