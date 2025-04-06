@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 5/29/19.
-//  Copyright © 2019 - 2024 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -56,6 +56,8 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
     
     @IBOutlet var openInNovaButton: NSPopUpButton!
     
+    @IBOutlet var allowDotsButton: NSPopUpButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if appPrefs.confirmDeletes {
@@ -94,6 +96,13 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
             openInNovaButton.selectItem(at: 1)
         case true:
             openInNovaButton.selectItem(at: 0)
+        }
+        
+        switch appPrefs.allowDots {
+        case false:
+            allowDotsButton.selectItem(at: 1)
+        case true:
+            allowDotsButton.selectItem(at: 0)
         }
         
         indentSpacesPopUpButton.removeAllItems()
@@ -159,6 +168,18 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
             appPrefs.openInNova = false
         }
     }
+    
+    @IBAction func allowDotsUpdated(_ sender: Any) {
+        switch allowDotsButton.indexOfSelectedItem {
+        case 0:
+            appPrefs.allowDots = true
+        case 1:
+            appPrefs.allowDots = false
+        default:
+            appPrefs.allowDots = false
+        }
+    }
+    
     
     @available(macOS 10.14, *)
     @IBAction func appAppearanceSelected(_ sender: Any) {

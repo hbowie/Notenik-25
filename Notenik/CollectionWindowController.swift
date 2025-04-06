@@ -493,6 +493,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             }
         } else {
             collection.outlineTabSetting = newOutlineTabSetting
+            collectionTabs?.selectedTabViewItemIndex = 2
             success = true
         }
         
@@ -533,6 +534,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             tabs.addTabViewItem(outlineTab)
             viewCoordinator.addView(newView: seqOutlineController)
             viewCoordinator.addView(newView: seqOutlineController)
+            tabs.selectedTabViewItemIndex = 2
         } else {
             Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
                               category: "CollectionWindowController",
@@ -540,9 +542,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                               message: "Couldn't get a Seq Outline View Controller!")
             return false
         }
-        if selectedTab >= 0 && selectedTab < tabs.tabViewItems.count {
+        /* if selectedTab >= 0 && selectedTab < tabs.tabViewItems.count {
             tabs.selectedTabViewItemIndex = selectedTab
-        }
+        } */
         return true
     }
     
@@ -552,6 +554,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             tabs.tabViewItems.removeLast()
         }
         viewCoordinator.removeView(viewID: SeqOutlineViewController.staticViewID)
+        tabs.selectedTabViewItemIndex = 0
         return true
     }
     
@@ -2865,6 +2868,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     func shareNote(_ note: Note) {
         guard let noteIO = guardForCollectionAction() else { return }
+        guard let collection = noteIO.collection else { return }
+        
+        if let fileIO = noteIO as? FileIO {
+            collection.lib.checkStatus(type: .shareTemplatesFolder)
+            fileIO.loadShareTemplates()
+        }
+        
         if let shareController = self.shareStoryboard.instantiateController(withIdentifier: "shareWC") as? ShareWindowController {
             guard let vc = shareController.contentViewController as? ShareViewController else { return }
             shareController.showWindow(self)
@@ -5725,6 +5735,11 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     @IBAction func genDisplaySample(_ sender: Any) {
         guard let noteIO = guardForCollectionAction() else { return }
         let sampler = NoteDisplaySample()
+        if sampler.anyExistingFiles(io: noteIO) {
+            let proceed = confirmAction(msg: "OK to overwrite existing files?",
+                                        info: "One or both of these files already exist")
+            guard proceed else { return }
+        }
         let ok = sampler.genSampleFiles(io: noteIO)
         if ok {
             communicateSuccess("Sample Display Template Successfully Generated",

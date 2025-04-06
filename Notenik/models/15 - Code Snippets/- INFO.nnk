@@ -12,15 +12,21 @@ Sort Blank Dates Last: true
 
 Other Fields Allowed: false
 
-Last Index Selected: 1
+Last Index Selected: 0
 
 Mirror Auto Index: false
 
 Display Body Label: true
 
+Minimum Body Edit View Height: 5.0
+
 Title Display Option: p bold
 
 Display Mode: normal
+
+Outline Tab: 0
+
+Override Custom Display: false
 
 MathJax: false
 
@@ -34,11 +40,13 @@ Ext Links Open in New Windows: true
 
 Scrolling Sync: false
 
+ToC Depth: 3
+
 Note File Format: yaml
 
-Hash Tags: false
+Hash Tags: notenik-field
 
-Window Numbers: 168.0;100.0;1143.0;789.0;375.0;
+Window Numbers: 782.0;23.0;1143.0;789.0;375.0;
 
-Column Widths: x: 12, 20, 50; seq: 30, 80, 250; date: 80, 120, 500; rank: 50, 80, 250; klass: 60, 80, 150; author: 100, 200, 1000; statusdigit: 20, 30, 50; title: 200, 445, 1500; tags: 50, 100, 1200; dateadded: 100, 180, 250; datemod: 100, 180, 250; 
+Column Widths: rank: 50, 80, 250; date: 80, 120, 500; datemod: 100, 180, 250; tags: 50, 100, 1200; x: 12, 20, 50; dateadded: 100, 180, 250; author: 100, 200, 1000; title: 200, 361, 1500; seq: 30, 80, 250; statusdigit: 20, 30, 50; klass: 60, 80, 150; 
 
