@@ -1792,14 +1792,23 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
-    func bulkEditOK(fieldSelected: String, valueToAssign: String, notes: [Note], vc: BulkEditViewController) {
+    func bulkEditOK(fieldSelected: String,
+                    subvalueToReplace: String,
+                    valueToAssign: String,
+                    notes: [Note],
+                    vc: BulkEditViewController) {
         
         guard !notes.isEmpty else { return }
         guard let noteIO = guardForCollectionAction() else { return }
         guard let def = noteIO.collection?.dict.getDef(fieldSelected) else { return }
         
+        var subvalueMsg = ""
+        if !subvalueToReplace.isEmpty {
+            subvalueMsg = " with a subvalue of \(subvalueToReplace)"
+        }
+        
         guard confirmAction(msg: "Proceed with Bulk Edit?",
-                            info: "This will change the field labeled \(def.fieldLabel.properForm) to a value of '\(valueToAssign)' for \(notes.count) notes") else {
+                            info: "This will change the field labeled \(def.fieldLabel.properForm)\(subvalueMsg) to a value of '\(valueToAssign)' for \(notes.count) notes") else {
             return
         }
         
@@ -1808,7 +1817,30 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         for noteToUpdate in notes {
             let modNote = noteToUpdate.copy() as! Note
             if let field = modNote.getField(def: def) {
-                if let multi = field.value as? MultiValues {
+                if !subvalueToReplace.isEmpty {
+                    if field.value.value.contains(subvalueToReplace) {
+                        if valueToAssign.isEmpty {
+                            var sepIndex = field.value.value.range(of: subvalueToReplace)!.upperBound
+                            var sepString = ""
+                            var looking = true
+                            while sepIndex < field.value.value.endIndex && looking {
+                                let c = field.value.value[sepIndex]
+                                if c.isWhitespace || c.isPunctuation {
+                                    sepString.append(c)
+                                    sepIndex = field.value.value.index(sepIndex, offsetBy: 1)
+                                } else {
+                                    looking = false
+                                }
+                            }
+                            let completeValueToRemove = subvalueToReplace + sepString
+                            field.setValue(field.value.value.replacingOccurrences(of: completeValueToRemove,
+                                                                                  with: valueToAssign))
+                        } else {
+                            field.setValue(field.value.value.replacingOccurrences(of: subvalueToReplace,
+                                                                                  with: valueToAssign))
+                        }
+                    }
+                } else if let multi = field.value as? MultiValues {
                     multi.append(valueToAssign)
                 } else {
                     field.setValue(valueToAssign)
@@ -2035,6 +2067,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     /// Paste the passed notes found in the system clipboard.
     @IBAction func paste(_ sender: AnyObject?) {
+        print("CollectionWindowController.paste")
         let board = NSPasteboard.general
         guard let items = board.pasteboardItems else { return }
         _ = pasteItems(items, row: -1, dropOperation: .above)
@@ -2861,12 +2894,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     }
     
     @IBAction func menuNoteShare(_ sender: Any) {
-        let (_, sel) = guardForNoteAction()
-        guard let selNote = sel else { return }
-        shareNote(selNote)
+        
+        guard let noteIO = guardForCollectionAction() else { return }
+        guard let collection = noteIO.collection else { return }
+        guard listVC != nil else { return }
+        shareNote(notes: listVC!.getSelectedNotes(io: noteIO))
     }
     
-    func shareNote(_ note: Note) {
+    func shareNote(notes: [Note]) {
         guard let noteIO = guardForCollectionAction() else { return }
         guard let collection = noteIO.collection else { return }
         
@@ -2880,7 +2915,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             shareController.showWindow(self)
             vc.window = shareController
             vc.io = noteIO
-            vc.note = note
+            vc.notes = notes
             var searchPhrase: String?
             if displayVC != nil {
                 searchPhrase = displayVC!.searchPhrase

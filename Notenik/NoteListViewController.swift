@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 1/21/19.
-//  Copyright © 2019 - 2024 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -373,11 +373,27 @@ class NoteListViewController:   NSViewController,
     
     /// Respond to a contextual menu selection to launch a link for the clicked Note.
     @objc private func shareItem(_ sender: AnyObject) {
-        guard collectionWindowController != nil else { return }
-        let row = tableView.clickedRow
-        guard row >= 0 else { return }
-        guard let clickedNote = notenikIO?.getNote(at: row) else { return }
-        collectionWindowController!.shareNote(clickedNote)
+        
+        guard let wc = collectionWindowController else { return }
+        guard let io = notenikIO else { return }
+
+        collectionWindowController!.shareNote(notes: getSelectedNotes(io: io))
+    }
+    
+    func getSelectedNotes(io: NotenikIO) -> [Note] {
+        var selNotes: [Note] = []
+        for index in tableView.selectedRowIndexes {
+            if let selNote = io.getNote(at: index) {
+                selNotes.append(selNote)
+            }
+        }
+        if selNotes.isEmpty {
+            let row = tableView.clickedRow
+            guard row >= 0 else { return [] }
+            guard let clickedNote = notenikIO?.getNote(at: row) else { return [] }
+            selNotes.append(clickedNote)
+        }
+        return selNotes
     }
     
     /// Respond to a request to copy a note's internal url to the clipboard.

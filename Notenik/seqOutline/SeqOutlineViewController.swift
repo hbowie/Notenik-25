@@ -227,7 +227,7 @@ class SeqOutlineViewController: NSViewController,
         case .launchLink:
             wc.launchLink(for: clickedNote)
         case .share:
-            wc.shareNote(clickedNote)
+            wc.shareNote(notes: selNotes)
         case .copyNotenikURL:
             let str = clickedNote.getNotenikLink(preferringTimestamp: false)
             let board = NSPasteboard.general

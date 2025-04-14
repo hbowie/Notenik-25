@@ -49,9 +49,9 @@ class ShareViewController: NSViewController {
     
     var window: ShareWindowController?
     
-    var note: Note?
+    var notes: [Note] = []
     var searchPhrase: String?
-    var stringToShare = "No data available"
+    // var stringToShare = "No data available"
 
     @IBOutlet var contentBodyOnlyButton: NSButton!
     @IBOutlet var contentEntireNoteButton: NSButton!
@@ -183,14 +183,13 @@ class ShareViewController: NSViewController {
     /// User said OK -- Let's do the Sharing now
     @IBAction func okButtonPressed(_ sender: Any) {
         
-        guard note != nil && window != nil && io != nil else {
+        guard !notes.isEmpty && window != nil && io != nil else {
             return
         }
         
         let displayParms = DisplayParms()
-        displayParms.setFrom(note: note!)
+        displayParms.setFrom(note: notes[0])
         let mkdownOptions = displayParms.genMkdownOptions()
-        mkdownOptions.shortID = note!.shortID.value
         
         // Set desired output format
         var format: MarkedupFormat = .htmlDoc
@@ -201,208 +200,44 @@ class ShareViewController: NSViewController {
             format = .markdown
         }
         
-        var formatted = false
-        var result = ""
+        var concatString = ""
         
-        // Perform selected transformation
-        (formatted, result) = formatUsingTemplate()
-        if formatted {
-            stringToShare = result
-        }
-        
-        if !formatted && contentTitleButton.state == .on {
-            formatted = true
-            stringToShare = note!.title.value
-        }
-        
-        if !formatted && contentWikilinkButton.state == .on {
-            formatted = true
-            stringToShare = "[[\(note!.noteID.getBasis())]]"
-        }
-        
-        if !formatted && formatMarkdownQuoteButton.state == .on {
-            (formatted, result) = fomatMarkdownQuote()
-            if formatted {
-                stringToShare = result
-            }
-        }
-
-        if !formatted && formatMarkdownQuoteFrom.state == .on {
-            (formatted, result) = formatMarkdownQF()
-            if formatted {
-                stringToShare = result
-            }
-        }
-            
-        if !formatted && contentBodyOnlyButton.state == .on && formatMarkdownButton.state == .on {
-            if note!.hasBody() {
-                stringToShare = note!.body.value
-            }
-            formatted = true
-        }
-            
-        if !formatted && contentTeaserOnlyButton.state == .on {
-            (formatted, result) = formatTeaserOnly(format: format, options: mkdownOptions)
-            if formatted {
-                stringToShare = result
-            }
-        }
-        
-        if !formatted && formatNotenikButton.state == .on {
-            formatted = true
-            let writer = BigStringWriter()
-            let noteLineMaker = NoteLineMaker(writer)
-            if contentBodyOnlyButton.state == .on {
-                noteLineMaker.putField(note!.getBodyAsField(),
-                                       format: note!.noteID.getNoteFileFormat())
-            } else {
-                _ = noteLineMaker.putNote(note!)
-            }
-            if noteLineMaker.fieldsWritten > 0 {
-                stringToShare = writer.bigString
-            }
-        }
-            
-        // Format as JSON.
-        if !formatted && formatJSONButton.state == .on {
-            formatted = true
-            let jWriter = JSONWriter()
-            jWriter.open()
-            if contentBodyOnlyButton.state == .on {
-                jWriter.writeBodyAsObject(note!)
-            } else {
-                jWriter.writeNoteAsObject(note!)
-            }
-            jWriter.close()
-            stringToShare = jWriter.outputString
-        }
-            
-        // Format Body to HTML.
-        if !formatted && contentBodyOnlyButton.state == .on {
-            formatted = true
-            let markdown = Markdown()
-            markdown.md = note!.body.value
-            let context = NotesMkdownContext(io: io!)
-            let html = markdown.parse(markdown: note!.body.value,
-                                      options: mkdownOptions,
-                                      context: context)
-            if format == .htmlDoc {
-                let markedup = Markedup(format: .htmlDoc)
-                markedup.startDoc(withTitle: note!.title.value, withCSS: nil)
-                markedup.append(html)
-                markedup.finishDoc()
-                stringToShare = markedup.code
-            } else if formatHTMLBlockquoteButton.state == .on {
-                let markedup = Markedup(format: .htmlFragment)
-                markedup.startBlockQuote()
-                markedup.append(markdown.html)
-                markedup.finishBlockQuote()
-                stringToShare = markedup.code
-            } else {
-                stringToShare = markdown.html
-            }
-        }
-            
-        if !formatted && formatMicroButton.state == .on {
-            formatted = true
-            stringToShare = note!.body.value
-            newLine()
-            if note!.hasLink() {
-                appendLine(" ")
-                appendLine(note!.link.value)
-            }
-            if contentEntireNoteButton.state == .on {
-                if note!.hasTags() {
-                    appendLine(" ")
-                    let tagsField = note!.getTagsAsField()
-                    if let tagsValue = tagsField?.value as? TagsValue {
-                        appendLine(tagsValue.microTags)
-                    }
+        let (done, str) = formatUsingTemplate(notes: notes)
+        if done {
+            concatString = str
+        } else {
+            for note in notes {
+                mkdownOptions.shortID = note.shortID.value
+                let shr = shareNote(note,
+                                    format: format,
+                                    mkdownOptions: mkdownOptions,
+                                    displayParms: displayParms)
+                if !concatString.isEmpty && !shr.isEmpty {
+                    concatString.append("\n")
                 }
-            }
-        }
-            
-        // Format with Merge Template.
-        if !formatted && formatTemplateButton.state == .on {
-            let openPanel = NSOpenPanel()
-            openPanel.title = "Select a Merge Template"
-            openPanel.prompt = "Use This Template"
-            var parent = note!.collection.lib.getURL(type: .reports)
-            if parent == nil {
-                parent = note!.collection.lib.getURL(type: .notes)
-            }
-            if parent != nil {
-                openPanel.directoryURL = parent!
-            }
-            openPanel.showsResizeIndicator = true
-            openPanel.showsHiddenFiles = false
-            openPanel.canChooseDirectories = false
-            openPanel.canCreateDirectories = false
-            openPanel.canChooseFiles = true
-            openPanel.allowsMultipleSelection = false
-            let userChoice = openPanel.runModal()
-            if userChoice == .OK {
-                formatted = true
-                let template = Template()
-                var ok = template.openTemplate(templateURL: openPanel.url!)
-                if ok {
-                    let notesList = NotesList()
-                    notesList.append(note!)
-                    template.supplyData(note!,
-                                        dataSource: note!.collection.title,
-                                        io: io)
-                    ok = template.generateOutput()
-                    if ok {
-                        stringToShare = template.util.linesToOutput
-                    }
-                }
-                if !ok {
-                    stringToShare = "Template Generation Failed"
-                    Logger.shared.log(subsystem: "NotenikLib",
-                                      category: "ShareViewController",
-                                      level: .error,
-                                      message: "Template generation failed")
-                }
+                concatString.append(shr)
             }
         }
         
-        if !formatted {
-            // Format the entire Note as HTML.
-            let noteDisplay = NoteDisplay()
-            displayParms.localMj = false
-            displayParms.format = format
-            displayParms.curlyApostrophes = note!.collection.curlyApostrophes
-            displayParms.extLinksOpenInNewWindows = note!.collection.extLinksOpenInNewWindows
-            displayParms.checkBoxMessageHandlerName = NotenikConstants.checkBoxMessageHandlerName
-            let mdResults = TransformMdResults()
-            let displayString = noteDisplay.display(note!, io: io!, parms: displayParms, mdResults: mdResults)
-            if format == .htmlDoc && searchPhrase != nil && searchPhrase!.count > 0 {
-                stringToShare = StringUtils.highlightPhraseInHTML(phrase: searchPhrase!,
-                                                                  html: displayString,
-                                                                  klass: "search-results")
-            } else {
-                stringToShare = displayString
-            }
-        }
         
         // Write the string to an output destination
         if destinationClipboardButton.state == .on {
             let pb = NSPasteboard.general
             pb.clearContents()
-            _ = pb.setString(stringToShare, forType: .string)
+            _ = pb.setString(concatString, forType: .string)
         }
         
         if destinationFileButton.state == .on {
             let savePanel = NSSavePanel();
             savePanel.title = "Specify an output file"
-            let parent = note?.collection.fullPathURL
+            let parent = notes[0].collection.fullPathURL
             if parent != nil {
                 savePanel.directoryURL = parent!
             }
             savePanel.showsResizeIndicator = true
             savePanel.showsHiddenFiles = false
             savePanel.canCreateDirectories = true
-            let defaultFileName = StringUtils.toReadableFilename(note!.title.value,
+            let defaultFileName = StringUtils.toReadableFilename(notes[0].title.value,
                                                                  allowDots: AppPrefs.shared.allowDots)
             var defaultExt = ".md"
             if formatHTMLFragmentButton.state == .on || formatHTMLDocButton.state == .on {
@@ -413,7 +248,7 @@ class ShareViewController: NSViewController {
             if userChoice == .OK {
                 let url = savePanel.url
                 do {
-                    try stringToShare.write(to: url!, atomically: true, encoding: .utf8)
+                    try concatString.write(to: url!, atomically: true, encoding: .utf8)
                 } catch {
                     Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
                                       category: "ShareViewController",
@@ -424,13 +259,13 @@ class ShareViewController: NSViewController {
         }
         
         if destinationBrowserButton.state == .on {
-            if let notesFolder = note?.collection.lib.getURL(type: .notes) {
+            if let notesFolder = notes[0].collection.lib.getURL(type: .notes) {
                 let browseFolder = notesFolder.appendingPathComponent("browse", isDirectory: true)
                 _ = FileUtils.makeDirectory(at: browseFolder)
-                let fn = StringUtils.toCommonFileName(note!.title.value)
+                let fn = StringUtils.toCommonFileName(notes[0].title.value)
                 let url = browseFolder.appendingPathComponent(fn).appendingPathExtension("html")
                 do {
-                    try stringToShare.write(to: url, atomically: true, encoding: .utf8)
+                    try concatString.write(to: url, atomically: true, encoding: .utf8)
                     NSWorkspace.shared.open(url)
                 } catch {
                     Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
@@ -504,7 +339,198 @@ class ShareViewController: NSViewController {
         window!.close()
     }
     
-    func formatUsingTemplate() -> (Bool, String) {
+    /// Share a single note, returning formatted string for that note.
+    func shareNote(_ note: Note,
+                   format: MarkedupFormat,
+                   mkdownOptions: MkdownOptions,
+                   displayParms: DisplayParms) -> String {
+        
+        var formatted = false
+        var result = ""
+        var stringToShare = ""
+        
+        // Perform selected transformation
+        
+        if !formatted && contentTitleButton.state == .on {
+            formatted = true
+            stringToShare = note.title.value
+        }
+        
+        if !formatted && contentWikilinkButton.state == .on {
+            formatted = true
+            stringToShare = "[[\(note.noteID.getBasis())]]"
+        }
+        
+        if !formatted && formatMarkdownQuoteButton.state == .on {
+            (formatted, result) = fomatMarkdownQuote(note: note)
+            if formatted {
+                stringToShare = result
+            }
+        }
+
+        if !formatted && formatMarkdownQuoteFrom.state == .on {
+            (formatted, result) = formatMarkdownQF(note: note)
+            if formatted {
+                stringToShare = result
+            }
+        }
+            
+        if !formatted && contentBodyOnlyButton.state == .on && formatMarkdownButton.state == .on {
+            if note.hasBody() {
+                stringToShare = note.body.value
+            }
+            formatted = true
+        }
+            
+        if !formatted && contentTeaserOnlyButton.state == .on {
+            (formatted, result) = formatTeaserOnly(note: note, format: format, options: mkdownOptions)
+            if formatted {
+                stringToShare = result
+            }
+        }
+        
+        if !formatted && (formatNotenikButton.state == .on || formatMarkdownButton.state == .on) {
+            formatted = true
+            let writer = BigStringWriter()
+            let noteLineMaker = NoteLineMaker(writer)
+            if contentBodyOnlyButton.state == .on {
+                noteLineMaker.putField(note.getBodyAsField(),
+                                       format: note.noteID.getNoteFileFormat())
+            } else {
+                _ = noteLineMaker.putNote(note)
+            }
+            if noteLineMaker.fieldsWritten > 0 {
+                stringToShare = writer.bigString
+            }
+        }
+            
+        // Format as JSON.
+        if !formatted && formatJSONButton.state == .on {
+            formatted = true
+            let jWriter = JSONWriter()
+            jWriter.open()
+            if contentBodyOnlyButton.state == .on {
+                jWriter.writeBodyAsObject(note)
+            } else {
+                jWriter.writeNoteAsObject(note)
+            }
+            jWriter.close()
+            stringToShare = jWriter.outputString
+        }
+            
+        // Format Body to HTML.
+        if !formatted && contentBodyOnlyButton.state == .on {
+            formatted = true
+            let markdown = Markdown()
+            markdown.md = note.body.value
+            let context = NotesMkdownContext(io: io!)
+            let html = markdown.parse(markdown: note.body.value,
+                                      options: mkdownOptions,
+                                      context: context)
+            if format == .htmlDoc {
+                let markedup = Markedup(format: .htmlDoc)
+                markedup.startDoc(withTitle: note.title.value, withCSS: nil)
+                markedup.append(html)
+                markedup.finishDoc()
+                stringToShare = markedup.code
+            } else if formatHTMLBlockquoteButton.state == .on {
+                let markedup = Markedup(format: .htmlFragment)
+                markedup.startBlockQuote()
+                markedup.append(markdown.html)
+                markedup.finishBlockQuote()
+                stringToShare = markedup.code
+            } else {
+                stringToShare = markdown.html
+            }
+        }
+            
+        if !formatted && formatMicroButton.state == .on {
+            formatted = true
+            stringToShare = note.body.value
+            stringToShare.append("\n")
+            if note.hasLink() {
+                stringToShare.append(" \n")
+                stringToShare.append(note.link.value)
+                stringToShare.append("\n")
+            }
+            if contentEntireNoteButton.state == .on {
+                if note.hasTags() {
+                    stringToShare.append(" \n")
+                    let tagsField = note.getTagsAsField()
+                    if let tagsValue = tagsField?.value as? TagsValue {
+                        stringToShare.append(tagsValue.microTags)
+                        stringToShare.append("\n")
+                    }
+                }
+            }
+        }
+            
+        // Format with Merge Template.
+        if !formatted && formatTemplateButton.state == .on {
+            let openPanel = NSOpenPanel()
+            openPanel.title = "Select a Merge Template"
+            openPanel.prompt = "Use This Template"
+            var parent = note.collection.lib.getURL(type: .reports)
+            if parent == nil {
+                parent = note.collection.lib.getURL(type: .notes)
+            }
+            if parent != nil {
+                openPanel.directoryURL = parent!
+            }
+            openPanel.showsResizeIndicator = true
+            openPanel.showsHiddenFiles = false
+            openPanel.canChooseDirectories = false
+            openPanel.canCreateDirectories = false
+            openPanel.canChooseFiles = true
+            openPanel.allowsMultipleSelection = false
+            let userChoice = openPanel.runModal()
+            if userChoice == .OK {
+                formatted = true
+                let template = Template()
+                var ok = template.openTemplate(templateURL: openPanel.url!)
+                if ok {
+                    let notesList = NotesList()
+                    notesList.append(note)
+                    template.supplyData(note,
+                                        dataSource: note.collection.title,
+                                        io: io)
+                    ok = template.generateOutput()
+                    if ok {
+                        stringToShare = template.util.linesToOutput
+                    }
+                }
+                if !ok {
+                    stringToShare = "Template Generation Failed"
+                    Logger.shared.log(subsystem: "NotenikLib",
+                                      category: "ShareViewController",
+                                      level: .error,
+                                      message: "Template generation failed")
+                }
+            }
+        }
+        
+        if !formatted {
+            // Format the entire Note as HTML.
+            let noteDisplay = NoteDisplay()
+            displayParms.localMj = false
+            displayParms.format = format
+            displayParms.curlyApostrophes = note.collection.curlyApostrophes
+            displayParms.extLinksOpenInNewWindows = note.collection.extLinksOpenInNewWindows
+            displayParms.checkBoxMessageHandlerName = NotenikConstants.checkBoxMessageHandlerName
+            let mdResults = TransformMdResults()
+            let displayString = noteDisplay.display(note, io: io!, parms: displayParms, mdResults: mdResults)
+            if format == .htmlDoc && searchPhrase != nil && searchPhrase!.count > 0 {
+                stringToShare = StringUtils.highlightPhraseInHTML(phrase: searchPhrase!,
+                                                                  html: displayString,
+                                                                  klass: "search-results")
+            } else {
+                stringToShare = displayString
+            }
+        }
+        return stringToShare
+    }
+    
+    func formatUsingTemplate(notes: [Note]) -> (Bool, String) {
         if let collection = io?.collection {
             collection.selShareTemplate = ""
             if let selectedShareTemplate = templateNamePopupButton.titleOfSelectedItem {
@@ -516,12 +542,10 @@ class ShareViewController: NSViewController {
                     let template = Template()
                     template.openTemplate(templateContents: contents)
                     let notesList = NotesList()
-                    notesList.append(note!)
-                    template.supplyData(note!,
-                                        dataSource: note!.collection.title,
-                                        io: io,
-                                        bodyHTML: nil,
-                                        minutesToRead: nil)
+                    for note in notes {
+                        notesList.append(note)
+                    }
+                    template.supplyData(notesList: notesList, dataSource: collection.title, io: io)
                     let ok = template.generateOutput()
                     if !ok {
                         Logger.shared.log(subsystem: "Notenik",
@@ -536,24 +560,25 @@ class ShareViewController: NSViewController {
         return (false, "")
     }
     
-    func fomatMarkdownQuote() -> (Bool, String) {
+    func fomatMarkdownQuote(note: Note) -> (Bool, String) {
         let markedUp = Markedup(format: .markdown)
-        if note!.hasBody() {
+        if note.hasBody() {
             markedUp.startBlockQuote()
-            markedUp.writeBlockOfLines(note!.body.value)
+            markedUp.writeBlockOfLines(note.body.value)
             markedUp.finishBlockQuote()
         }
         if contentEntireNoteButton.state == .on {
-            let author = note!.creatorValue
+            let author = note.creatorValue
             if author.count > 0 {
                 markedUp.newLine()
                 var authorLine = "-- "
                 authorLine.append(author)
-                let date = note!.date.value
+                let date = note.date.value
                 if date.count > 0 {
                     authorLine.append(", \(date)")
                 }
-                let workTypeField = FieldGrabber.getField(note: note!, label: note!.collection.workTypeFieldDef.fieldLabel.commonForm)
+                let workTypeField = FieldGrabber.getField(note: note,
+                                                          label: note.collection.workTypeFieldDef.fieldLabel.commonForm)
                 var workType = ""
                 if workTypeField != nil {
                     workType = workTypeField!.value.value
@@ -573,7 +598,7 @@ class ShareViewController: NSViewController {
                         theType = "the \(workType)"
                     }
                 }
-                var workTitle = note!.workTitle.value
+                var workTitle = note.workTitle.value
                 if workTitle.lowercased() == "unknown" {
                     workTitle = ""
                 }
@@ -586,16 +611,17 @@ class ShareViewController: NSViewController {
         return (true, markedUp.code)
     }
     
-    func formatMarkdownQF() -> (Bool, String) {
+    func formatMarkdownQF(note: Note) -> (Bool, String) {
         let markedUp = Markedup(format: .markdown)
-        if note!.hasBody() {
+        if note.hasBody() {
             markedUp.startBlockQuote()
-            markedUp.writeBlockOfLines(note!.body.value)
+            markedUp.writeBlockOfLines(note.body.value)
             markedUp.finishBlockQuote()
         }
         if contentEntireNoteButton.state == .on {
             markedUp.newLine()
-            let workTypeField = FieldGrabber.getField(note: note!, label: note!.collection.workTypeFieldDef.fieldLabel.commonForm)
+            let workTypeField = FieldGrabber.getField(note: note,
+                                                      label: note.collection.workTypeFieldDef.fieldLabel.commonForm)
             var workType = ""
             if workTypeField != nil {
                 workType = workTypeField!.value.value
@@ -603,49 +629,40 @@ class ShareViewController: NSViewController {
             if workType.lowercased() == "unknown" {
                 workType = ""
             }
-            var workTitle = note!.workTitle.value
+            var workTitle = note.workTitle.value
             if workTitle.lowercased() == "unknown" {
                 workTitle = ""
             }
-            let authorLinkField = FieldGrabber.getField(note: note!, label: NotenikConstants.authorLinkCommon)
+            let authorLinkField = FieldGrabber.getField(note: note, label: NotenikConstants.authorLinkCommon)
             var authorLink = ""
             if authorLinkField != nil {
                 authorLink = authorLinkField!.value.value
             }
-            let workLinkField = FieldGrabber.getField(note: note!, label: note!.collection.workLinkFieldDef.fieldLabel.commonForm)
+            let workLinkField = FieldGrabber.getField(note: note, label: note.collection.workLinkFieldDef.fieldLabel.commonForm)
             var workLink = ""
             if workLinkField != nil {
                 workLink = workLinkField!.value.value
             }
-            markedUp.writeLine("{:quote-from:\(note!.creatorValue)|\(note!.date.value)|\(workType)|\(workTitle)|\(authorLink)|\(workLink)}")
+            markedUp.writeLine("{:quote-from:\(note.creatorValue)|\(note.date.value)|\(workType)|\(workTitle)|\(authorLink)|\(workLink)}")
         }
         return (true, markedUp.code)
     }
     
-    func formatTeaserOnly(format: MarkedupFormat, options: MkdownOptions) -> (Bool, String) {
-        if note!.hasTeaser() {
+    func formatTeaserOnly(note: Note, format: MarkedupFormat, options: MkdownOptions) -> (Bool, String) {
+        if note.hasTeaser() {
             if format == .htmlDoc || format == .htmlFragment {
                 let markdown = Markdown()
-                markdown.md = note!.teaser.value
+                markdown.md = note.teaser.value
                 let context = NotesMkdownContext(io: io!)
-                let html = markdown.parse(markdown: note!.teaser.value,
+                let html = markdown.parse(markdown: note.teaser.value,
                                           options: options,
                                           context: context)
                 return (true, html)
             } else {
-                return (true, note!.teaser.value)
+                return (true, note.teaser.value)
             }
         }
         return (false, "")
-    }
-    
-    func appendLine(_ str: String) {
-        stringToShare.append(str)
-        newLine()
-    }
-    
-    func newLine() {
-        stringToShare.append("\n")
     }
     
     @IBAction func cancelButtonPressed(_ sender: Any) {

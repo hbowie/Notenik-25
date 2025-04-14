@@ -26,6 +26,8 @@ class BulkEditViewController: NSViewController {
     
     @IBOutlet var fieldSelector: NSPopUpButton!
     
+    @IBOutlet var subvalueToReplace: NSTextField!
+    
     @IBOutlet var valueToAssign: NSTextField!
     
     override func viewDidLoad() {
@@ -78,6 +80,7 @@ class BulkEditViewController: NSViewController {
     
     @IBAction func okToProceed(_ sender: Any) {
         collectionWC!.bulkEditOK(fieldSelected: fieldSelector.titleOfSelectedItem!,
+                                 subvalueToReplace: subvalueToReplace.stringValue,
                                  valueToAssign: valueToAssign.stringValue,
                                  notes: selNotes,
                                  vc: self)

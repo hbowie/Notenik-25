@@ -332,13 +332,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         }
     }
     
-    @IBAction func donateViaKofi(_ sender: Any) {
-        let url = URL(string: NotenikConstants.webDonate)
-        if url != nil {
-            NSWorkspace.shared.open(url!)
-        }
-    }
-    
     @IBAction func menuHelpDiscussionForum(_ sender: NSMenuItem) {
         guard let url = URL(string: NotenikConstants.webForum) else { return }
         NSWorkspace.shared.open(url)
