@@ -71,6 +71,7 @@ class SeqOutlineViewController: NSViewController,
         adjustFonts()
         outlineView.dataSource = self
         outlineView.delegate = self
+        outlineView.stronglyReferencesItems = false
         
         // Setup for drag and drop.
         outlineView.setDraggingSourceOperationMask(.copy, forLocal: false)

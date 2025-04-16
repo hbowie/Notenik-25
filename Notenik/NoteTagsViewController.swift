@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 1/28/19.
-//  Copyright © 2019-2024 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019-2054 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -54,6 +54,7 @@ class NoteTagsViewController: NSViewController,
         super.viewDidLoad()
         adjustFonts()
         outlineView.dataSource = self
+        outlineView.stronglyReferencesItems = false
         
         // Setup the popup menu for rows in the list.
         shortcutMenu = NSMenu()
