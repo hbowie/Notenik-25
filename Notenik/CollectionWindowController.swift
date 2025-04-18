@@ -2067,7 +2067,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     /// Paste the passed notes found in the system clipboard.
     @IBAction func paste(_ sender: AnyObject?) {
-        print("CollectionWindowController.paste")
         let board = NSPasteboard.general
         guard let items = board.pasteboardItems else { return }
         _ = pasteItems(items, row: -1, dropOperation: .above)
@@ -3728,9 +3727,19 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard let sel = selection else { return }
         guard let following = newNote else { return }
         
-        if following.collection.seqFieldDef != nil && sel.hasSeq()
-                && (collection.sortParm == .seqPlusTitle || collection.sortParm == .tasksBySeq) {
-            let incSeq = sel.seq.dupe()
+        if sel.hasSeq() && (collection.sortParm == .seqPlusTitle || collection.sortParm == .tasksBySeq) {
+            var incSeq = sel.seq.dupe()
+            if collection.noteIdentifier.uniqueIdRule == .auxOnly {
+                if !collection.noteIdentifier.noteIdAuxField.isEmpty {
+                    if let def = collection.dict.getDef(collection.noteIdentifier.noteIdAuxField) {
+                        if def.fieldType.typeString == NotenikConstants.seqCommon {
+                            if collection.highestSeq != nil {
+                                incSeq = collection.highestSeq!.dupe()
+                            }
+                        }
+                    }
+                }
+            }
             incSeq.increment()
             _ = following.setSeq(incSeq.value)
         }
