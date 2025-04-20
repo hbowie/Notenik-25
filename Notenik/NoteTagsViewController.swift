@@ -368,7 +368,7 @@ class NoteTagsViewController: NSViewController,
                  searchPhrase: String?,
                  withUpdates: Bool = false) {
         
-        guard viewID != initViewID else { return }
+        guard viewID != initViewID || withUpdates else { return }
         guard note != nil else { return }
         guard outlineView != nil else {
             print("  - tags outline view is nil!")

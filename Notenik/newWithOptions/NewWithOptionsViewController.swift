@@ -140,10 +140,24 @@ class NewWithOptionsViewController: NSViewController {
     
     func adjustSeq() {
         guard collection != nil else { return }
-        guard let newSeq = currSeq?.dupe() else { return }
+        guard let dupe = currSeq?.dupe() else { return }
+        var newSeq = dupe
         let newLevelInt = levelPopup.indexOfSelectedItem + levelConfig.low
         let newLevel = LevelValue(i: newLevelInt,
                                   config: collection!.levelConfig)
+        
+        if collection!.noteIdentifier.uniqueIdRule == .auxOnly {
+            if !collection!.noteIdentifier.noteIdAuxField.isEmpty {
+                if let def = collection!.dict.getDef(collection!.noteIdentifier.noteIdAuxField) {
+                    if def.fieldType.typeString == NotenikConstants.seqCommon {
+                        if collection!.highestSeq != nil {
+                            newSeq = collection!.highestSeq!.dupe()
+                        }
+                    }
+                }
+            }
+        }
+        
         newSeq.incByLevels(originalLevel: currLevel!, newLevel: newLevel)
         seqField.stringValue = newSeq.value
     }

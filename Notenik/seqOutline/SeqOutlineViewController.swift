@@ -545,7 +545,7 @@ class SeqOutlineViewController: NSViewController,
                  searchPhrase: String?,
                  withUpdates: Bool = false) {
         
-        guard viewID != initViewID else { return }
+        guard viewID != initViewID || withUpdates else { return }
         guard note != nil else { return }
         focusNote = note
         guard outlineView != nil else {

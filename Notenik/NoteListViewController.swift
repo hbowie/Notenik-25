@@ -377,7 +377,7 @@ class NoteListViewController:   NSViewController,
         guard let wc = collectionWindowController else { return }
         guard let io = notenikIO else { return }
 
-        collectionWindowController!.shareNote(notes: getSelectedNotes(io: io))
+        wc.shareNote(notes: getSelectedNotes(io: io))
     }
     
     func getSelectedNotes(io: NotenikIO) -> [Note] {
@@ -1089,7 +1089,7 @@ class NoteListViewController:   NSViewController,
                  searchPhrase: String?,
                  withUpdates: Bool = false) {
         
-        guard initViewID != viewID else { return }
+        guard initViewID != viewID || withUpdates else { return }
         guard position != nil && position!.valid else { return }
         if withUpdates {
             reload()

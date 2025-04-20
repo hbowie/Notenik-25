@@ -115,6 +115,11 @@ class CollectionViewCoordinator: NSObject {
             return false
         }
         
+        var listUpdates = withUpdates
+        if outcome == .add || outcome == .modWithKeyChanges {
+            listUpdates = true
+        }
+        
         collectionWindowController.applyCheckBoxUpdates()
         
         scroller = NoteScroller(collection: notenikIO!.collection!)
@@ -163,7 +168,7 @@ class CollectionViewCoordinator: NSObject {
                          position: positionToUse,
                          io: notenikIO!,
                          searchPhrase: searchPhrase,
-                         withUpdates: withUpdates)
+                         withUpdates: listUpdates)
         }
         
         lastNote = noteToUse

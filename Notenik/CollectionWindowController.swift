@@ -4084,10 +4084,17 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
         
         if outcome == .add || outcome == .modWithKeyChanges {
-            // reloadViews()
+            var position = NotePosition()
+            if note != nil {
+                position = io!.positionOfNote(note!)
+            }
+             
+            if !position.valid {
+                print("  - Could not obtain valid note position!")
+            }
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: note,
-                                        position: nil,
+                                        position: position,
                                         row: -1, searchPhrase: nil,
                                         withUpdates: true)
             // select(note: note, position: nil, source: .action, andScroll: true)
