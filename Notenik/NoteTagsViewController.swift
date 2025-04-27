@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 1/28/19.
-//  Copyright © 2019-2054 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -294,7 +294,7 @@ class NoteTagsViewController: NSViewController,
                             || sortParm == .tasksBySeq
                             || sortParm == .datePlusSeq
                             || sortParm == .tagsPlusSeq {
-                            textField.stringValue = node.note!.getTitle(withSeq: true, sep: " - ")
+                            textField.stringValue = node.note!.getTitle(withSeq: true, full: true, sep: " - ")
                         } else {
                             textField.stringValue = node.note!.title.value
                         }

@@ -4,7 +4,7 @@
 //
 //  Created by Herb Bowie on 1/28/19.
 //
-//  Copyright © 2019 - 2024 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -257,7 +257,7 @@ class NoteEditViewController: NSViewController, CollectionView {
     
     /// Make a View to contain a field label
     func makeLabelView(with label: FieldLabel) -> NSView {
-        let str = AppPrefsCocoa.shared.makeUserAttributedString(text: label.properWithParent + ": ", usage: .labels)
+        let str = AppPrefsCocoa.shared.makeUserAttributedString(text: label.properWithParent + ": ", usage: .edit)
         let vw = NSTextField(labelWithAttributedString: str)
         return vw
     }

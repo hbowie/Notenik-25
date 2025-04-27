@@ -131,6 +131,12 @@ class ViewFactory {
             return PersonView()
         case NotenikConstants.rankCommon:
             return RankView(config: collection.rankConfig)
+        case NotenikConstants.seqCommon:
+            if let seqType = def.fieldType as? SeqType {
+                return SeqView(formatter: collection.seqFormatter, parms: seqType.seqParms)
+            } else {
+                return StringView()
+            }
         case NotenikConstants.shortIdCommon:
             return ShortIdView()
         case NotenikConstants.statusCommon:

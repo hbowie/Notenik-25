@@ -19,6 +19,7 @@ class AppPrefsCocoa {
     
     let defaults = UserDefaults.standard
     
+    var editFontPrefs  = CocoaFontPrefs(.edit)
     var labelFontPrefs = CocoaFontPrefs(.labels)
     var textFontPrefs  = CocoaFontPrefs(.text)
     var codeFontPrefs  = CocoaFontPrefs(.code)
@@ -112,6 +113,8 @@ class AppPrefsCocoa {
     /// Make an attributed string using latest font size
     public func makeUserAttributedString(text: String, usage: CocoaFontUsage) -> NSAttributedString {
         switch usage {
+        case .edit:
+            return NSAttributedString(string: text, attributes: editFontPrefs.fontAttrs as [NSAttributedString.Key: Any])
         case .labels:
             return NSAttributedString(string: text, attributes: labelFontPrefs.fontAttrs as [NSAttributedString.Key: Any])
         case .text:

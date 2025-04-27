@@ -469,7 +469,11 @@ class SeqOutlineViewController: NSViewController,
                 case .note:
                     if let note = node.note {
                         if outlneTabSetting == .withSeq {
-                            textField.stringValue = note.getTitle(withSeq: true, sep: " - ")
+                            if note.collection.seqFormatter.isEmpty {
+                                textField.stringValue = note.getTitle(withSeq: true, formattedSeq: false, sep: " - ")
+                            } else {
+                                textField.stringValue = note.getTitle(withSeq: true, formattedSeq: true, sep: " ")
+                            }
                         } else {
                             textField.stringValue = note.getTitle(withSeq: false, sep: "")
                         }

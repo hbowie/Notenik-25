@@ -569,24 +569,25 @@ class NoteListViewController:   NSViewController,
         guard let anyView = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) else { return nil }
         guard let cellView = anyView as? NSTableCellView else { return nil }
         if let note = notenikIO?.getNote(at: row) {
+            var indent = 0
+            if let collection = notenikIO?.collection {
+                if collection.sortBySeq {
+                    if note.hasLevel() {
+                        let config = collection.levelConfig
+                        let levelValue = note.level
+                        let level = levelValue.getInt()
+                        indent = level - config.low
+                    }
+                }
+            }
             if !lnfCol1Title.isEmpty && lnfCol1Title == tableColumn?.title {
                 modifyCellView(cellView: cellView, value: note.lastNameFirst)
             } else if tableColumn?.title == "Title" ||
                 tableColumn?.title == note.collection.titleFieldDef.fieldLabel.properForm {
                 let title = note.title.value
                 var displayValue = ""
-                if let collection = notenikIO?.collection {
-                    if collection.sortParm == .seqPlusTitle {
-                        if note.hasLevel() {
-                            let config = collection.levelConfig
-                            let levelValue = note.level
-                            let level = levelValue.getInt()
-                            let indent = level - config.low
-                            if indent > 0 {
-                                displayValue = AppPrefs.shared.indentSpaces(level: indent)
-                            }
-                        }
-                    }
+                if indent > 0 {
+                    displayValue = AppPrefs.shared.indentSpaces(level: indent)
                 }
                 displayValue.append(title)
                 modifyCellView(cellView: cellView, value: displayValue)
@@ -597,7 +598,17 @@ class NoteListViewController:   NSViewController,
             } else if tableColumn?.title == "Rank" {
                 modifyCellView(cellView: cellView, value: note.rank.value)
             } else if tableColumn?.title == "Seq" {
-                modifyCellView(cellView: cellView, value: note.seq.value, mono: true)
+                var displayValue = ""
+                if let collection = notenikIO?.collection {
+                    let (formatted, skipped) = collection.seqFormatter.format(seq: note.seq, full: true)
+                    if skipped > 0 {
+                        displayValue = AppPrefs.shared.indentSpaces(level: skipped)
+                    }
+                    displayValue.append(formatted)
+                } else {
+                    displayValue = note.seq.value
+                }
+                modifyCellView(cellView: cellView, value: displayValue, mono: true)
             } else if tableColumn?.title == "X" {
                 modifyCellView(cellView: cellView, value: note.doneXorT)
             } else if tableColumn?.title == "Date" {

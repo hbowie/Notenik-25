@@ -515,7 +515,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             return false
         }
         guard let tabs = collectionTabs else { return false }
-        let selectedTab = tabs.selectedTabViewItemIndex
+        // let selectedTab = tabs.selectedTabViewItemIndex
         if tabs.tabViewItems.count > 2 {
             tabs.tabViewItems.removeLast()
         }
@@ -4241,6 +4241,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let (_, newIO) = multi.provision(collectionPath: path, inspector: nil, readOnly: readOnly)
         
         self.io = newIO
+        collectionTabs?.selectedTabViewItemIndex = 0
     }
     
     /// Open the current Note in the user's preferred text editor.

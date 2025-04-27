@@ -76,6 +76,8 @@ class EditPrefsViewController: NSViewController, NSComboBoxDataSource {
     
     func setFontUsage(_ usage: CocoaFontUsage) {
         switch usage {
+        case .edit:
+            break
         case .labels:
             selectedFontPrefs = labelFontPrefs
         case .text:
@@ -178,6 +180,8 @@ class EditPrefsViewController: NSViewController, NSComboBoxDataSource {
         }
         
         switch selectedFontPrefs.usage {
+        case .edit:
+            break
         case .labels:
             sampleTextView.string = "Body: "
             appPrefsCocoa.setLabelFont(object: sampleTextView)
