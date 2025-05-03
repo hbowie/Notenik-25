@@ -102,7 +102,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         
         var successfulOpens = 0
         if launchURLs.count > 0 {
-            successfulOpens = juggler!.open(urls: launchURLs)
+            successfulOpens = juggler!.open(urls: launchURLs, source: .fromWithout)
         }
         if successfulOpens == 0 {
             juggler!.loadInitialCollection()
@@ -130,7 +130,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
     @objc func openICloudItem(_ sender: NSMenuItem) {
         let urlToOpen = notenikFolderList!.getICloudURLFromFolderName(sender.title)
         if urlToOpen != nil {
-            _ = juggler!.open(urls: [urlToOpen!])
+            _ = juggler!.open(urls: [urlToOpen!], source: .fromWithout)
         }
     }
     
@@ -139,7 +139,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         if stage == "1" {
             launchURLs = urls
         } else {
-            _ = juggler!.open(urls: urls)
+            _ = juggler!.open(urls: urls, source: .fromWithout)
         }
     }
     
@@ -163,7 +163,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
 
         logInfo("Apple Event passed URL: \(appleEventURL)")
         
-        _ = juggler!.open(url: appleEventURL)
+        _ = juggler!.open(url: appleEventURL, source: .fromWithout)
         
     }
     

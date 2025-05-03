@@ -281,7 +281,7 @@ class CustomURLActor {
     
     func open(link: NotenikLink?, id: String) -> Bool {
         guard let collectionLink = link else { return false }
-        guard let wc = juggler.open(link: collectionLink) else { return false }
+        guard let wc = juggler.open(link: collectionLink, source: .fromWithout) else { return false }
         if id.count == 0 { return true }
         guard let io = wc.io else { return false }
         guard let note = io.getNote(knownAs: id) else { return false }
@@ -358,11 +358,11 @@ class CustomURLActor {
             }
             link = NotenikLink(str: fileURLstr, assume: .assumeFile)
             if link != nil {
-                link!.determineCollectionType()
+                link!.determineCollectionType(source: .fromWithout)
             }
         }
         guard let collectionLink = link else { return nil }
-        return juggler.open(link: collectionLink)
+        return juggler.open(link: collectionLink, source: .fromWithout)
     }
     
     func getFolderForShortcut(_ shortcut: String) -> NotenikLink? {

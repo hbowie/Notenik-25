@@ -4300,14 +4300,22 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     /// Attempt to launch the passed URL.
     func launchLink(url: URL) {
+        let _ = juggler.open(url: url, source: .fromWithin)
+        /*
         let link = NotenikLink(url: url)
+        let _ = juggler.open(link: link)
+
         if link.type == .script {
             launchScript(fileURL: url)
             return
         } else if link.type == .folder {
             link.determineCollectionType()
+            print("  - link type after collection type determination: \(link.type)")
             if link.type == .ordinaryCollection || link.type == .webCollection {
                 let _ = juggler.openFileWithNewWindow(fileURL: url, readOnly: false)
+                return
+            } else if link.type == .parentRealm {
+                let _ = juggler.openParentRealm()
                 return
             }
         }
@@ -4315,7 +4323,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let ok = NSWorkspace.shared.open(url)
         if !ok {
             communicateError("Could not open the requested url: \(url.absoluteString)", alert: true)
-        }
+        } */
     }
     
     func launchScript(fileURL: URL) {

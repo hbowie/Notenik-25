@@ -39,7 +39,7 @@ class NoteLinkResolverCocoa {
                 // print("  - collection link is nil")
                 return nil
             }
-            guard let controller = juggler.open(link: collectionLink) else {
+            guard let controller = juggler.open(link: collectionLink, source: .fromWithout) else {
                 // print("  - could not get a window controller from the juggler")
                 return nil
             }

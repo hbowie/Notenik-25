@@ -220,7 +220,7 @@ class QuickActionViewController: NSViewController, NSComboBoxDataSource {
     
     func open(link: NotenikLink) -> CollectionWindowController? {
         MultiFileIO.shared.secureAccess(shortcut: link.shortcut, url: link.url!)
-        return juggler!.open(link: link)
+        return juggler!.open(link: link, source: .fromWithout)
     }
     
     /// Close the Quick Action Window.

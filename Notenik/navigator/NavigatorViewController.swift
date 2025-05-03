@@ -221,13 +221,13 @@ class NavigatorViewController: NSViewController, NSOutlineViewDataSource, NSOutl
         } else if node.type == .folder {
             let clickedFolder = node.folder
             if clickedFolder != nil {
-                _ = juggler!.open(link: clickedFolder!)
+                _ = juggler!.open(link: clickedFolder!, source: .fromWithout)
             }
         }
     }
     
     func open(link: NotenikLink) {
-        let wc = juggler!.open(link: link)
+        let wc = juggler!.open(link: link, source: .fromWithout)
         if wc != nil {
             closeWindow()
         }
@@ -250,7 +250,7 @@ class NavigatorViewController: NSViewController, NSOutlineViewDataSource, NSOutl
             guard node.type == .folder else { continue }
             let clickedFolder = node.folder
             if clickedFolder != nil {
-                _ = juggler!.open(link: clickedFolder!)
+                _ = juggler!.open(link: clickedFolder!, source: .fromWithout)
             }
         }
     }

@@ -130,10 +130,9 @@ class NoteListViewController:   NSViewController,
             tableView.rowHeight = rowHeight
             tableView.rowSizeStyle = .custom
         }
-        /*
         if !listFontMsg.isEmpty {
             logInfo(msg: listFontMsg)
-        } */
+        }
     }
     
     func modShortcutMenuForCollection() {

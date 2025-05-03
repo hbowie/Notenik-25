@@ -186,16 +186,16 @@ class CollectionJuggler: NSObject {
         let result = openPanel.runModal()
         if result == .OK {
             MultiFileIO.shared.registerBookmark(url: openPanel.url!)
-            opens = open(urls: [openPanel.url!])
+            opens = open(urls: [openPanel.url!], source: .fromWithout)
         }
         return opens > 0
     }
     
     /// Figure out what to do with a bunch of passed URLs.
-    func open(urls: [URL]) -> Int {
+    func open(urls: [URL], source: NotenikLinkSource) -> Int {
         var successfulOpens = 0
         for url in urls {
-            let ok = open(url: url)
+            let ok = open(url: url, source: source)
             if ok {
                 successfulOpens += 1
             }
@@ -204,7 +204,7 @@ class CollectionJuggler: NSObject {
     }
     
     /// Open a single URL.
-    func open(url: URL) -> Bool {
+    func open(url: URL, source: NotenikLinkSource) -> Bool {
         var link: NotenikLink?
         var readable = true
         var folderURL: URL?
@@ -229,7 +229,7 @@ class CollectionJuggler: NSObject {
             return false
         }
         // link!.determineCollectionType()
-        let wc = open(link: link!)
+        let _ = open(link: link!, source: source)
         return true
     }
     
@@ -250,12 +250,12 @@ class CollectionJuggler: NSObject {
     }
     
     /// Open a single NotenikLink. 
-    func open(link: NotenikLink) -> CollectionWindowController? {
+    func open(link: NotenikLink, source: NotenikLinkSource) -> CollectionWindowController? {
         
         guard link.location != .appBundle else {
             return openFileWithNewWindow(fileURL: link.url!, readOnly: true)
         }
-        link.determineCollectionType()
+        link.determineCollectionType(source: source)
         switch link.type {
         case .accessFolder:
             accessGranted(accessFolder: link.url)
@@ -271,7 +271,16 @@ class CollectionJuggler: NSObject {
         case .noteFile:
             _ = openNoteFile(link: link)
         default:
-            communicateError("Item to be opened at \(link) could not be used, possibly due to expired permissions", alert: true)
+            var ok = true
+            if let url = link.url {
+                ok = NSWorkspace.shared.open(url)
+            } else {
+                ok = false
+            }
+            if !ok {
+                communicateError("Item to be opened at \(link) could not be used, possibly due to expired permissions",
+                                 alert: true)
+            }
         }
         return nil
     }
@@ -813,7 +822,7 @@ class CollectionJuggler: NSObject {
             communicateError("Essential Collection not identified", alert: true)
             return
         }
-        _ = open(url: essentialURL)
+        _ = open(url: essentialURL, source: .fromWithout)
         // notenikFolderList.add(url: essentialURL, type: .ordinaryCollection, location: .undetermined)
         // _ = openFileWithNewWindow(fileURL: essentialURL, readOnly: false)
     }
