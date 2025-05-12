@@ -10,7 +10,7 @@
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
 //
 
-import Foundation
+import Cocoa
 
 import NotenikLib
 import NotenikUtils
@@ -83,6 +83,8 @@ class CustomURLActor {
             processPrefsCommand()
         case "run":
             processRunCommand(labels: labels, values: values)
+        case "find":
+            processFindCommand(labels: labels, values: values)
         default:
             communicateError("Invalid Command: \(command)")
             return false
@@ -290,6 +292,36 @@ class CustomURLActor {
                                        position: nil, row: -1, searchPhrase: nil)
        //  wc.select(note: note, position: nil, source: .action, andScroll: true)
         return true
+    }
+    
+    func processFindCommand(labels: [String], values: [String]) {
+        var i = 0
+        while i < labels.count {
+            processFindParm(label: labels[i],
+                            value: values[i])
+            i += 1
+        }
+    }
+    
+    
+    func processFindParm(label: String,
+                         value: String) {
+        switch label {
+        case "path":
+            var relURL: URL?
+            if !juggler.lastSelectedNoteFilepath.count.words.isEmpty {
+                relURL = URL(filePath: juggler.lastSelectedNoteFilepath)
+            }
+            let url = URL(filePath: value,
+                          directoryHint: .inferFromPath,
+                          relativeTo: relURL)
+            let ok = NSWorkspace.shared.open(url)
+            if !ok {
+                communicateError("Item to be opened with Finder at \(value) could not be used, possibly due to expired permissions")
+            }
+        default:
+            communicateError("Find Query Parameter of '\(label)' not recognized")
+        }
     }
     
     func processAddCommand(labels: [String], values: [String]) {

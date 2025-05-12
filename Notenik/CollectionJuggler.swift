@@ -270,6 +270,8 @@ class CollectionJuggler: NSObject {
             _ = actor.act(on: link.str)
         case .noteFile:
             _ = openNoteFile(link: link)
+        case .script:
+            launchScript(fileURL: link.url!)
         default:
             var ok = true
             if let url = link.url {
