@@ -101,6 +101,34 @@ class NoteTagsViewController: NSViewController,
         }
     }
     
+    func expandOutline() {
+        var i = -1
+        while (i + 1) < outlineView.numberOfRows {
+            i += 1
+            guard let item = outlineView.item(atRow: i) else { continue }
+            guard let node = item as? TagsNode else { continue }
+            guard node.children.count > 0 else { continue }
+            guard node.type == .tag else { continue }
+            if !outlineView.isItemExpanded(item) {
+                outlineView.expandItem(item, expandChildren: true)
+            }
+        }
+    }
+    
+    func collapseOutline() {
+        var i = -1
+        while (i + 1) < outlineView.numberOfRows {
+            i += 1
+            guard let item = outlineView.item(atRow: i) else { continue }
+            guard let node = item as? TagsNode else { continue }
+            guard node.children.count > 0 else { continue }
+            guard node.type == .tag else { continue }
+            if outlineView.isItemExpanded(item) {
+                outlineView.collapseItem(item, collapseChildren: true)
+            }
+        }
+    }
+    
     /// Expand the given tag so that its children are visible
     /// - Parameter forTag: The tag to be expanded.
     public func expand(forTag: String) {

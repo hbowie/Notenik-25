@@ -201,6 +201,36 @@ class SeqOutlineViewController: NSViewController,
         shortcutMenu.addItem(item)
     }
     
+    func expandOutline() {
+        var i = -1
+        while (i + 1) < outlineView.numberOfRows {
+            i += 1
+            guard let item = outlineView.item(atRow: i) else { continue }
+            guard let node = item as? OutlineNode2 else { continue }
+            guard node.children.count > 0 else { continue }
+            guard node.type == .note else { continue }
+            if !outlineView.isItemExpanded(item) {
+                outlineView.expandItem(item, expandChildren: true)
+            }
+        }
+    }
+    
+    func collapseOutline() {
+        var i = -1
+        while (i + 1) < outlineView.numberOfRows {
+            i += 1
+            guard let item = outlineView.item(atRow: i) else { continue }
+            guard let node = item as? OutlineNode2 else { continue }
+            guard node.children.count > 0 else { continue }
+            guard node.type == .note else { continue }
+            guard let note = node.note else { continue }
+            if note.seq.isEmpty { continue }
+            if outlineView.isItemExpanded(item) {
+                outlineView.collapseItem(item, collapseChildren: true)
+            }
+        }
+    }
+    
     @IBAction func takeShortcutAction(_ sender: Any) {
         guard let menuItem = sender as? NSMenuItem else { return }
         guard let actionType = NoteActionType(rawValue: menuItem.title) else { return }

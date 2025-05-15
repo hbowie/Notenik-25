@@ -105,7 +105,7 @@ class NoteListViewController:   NSViewController,
         var listFontMsg = ""
         var rowHeight: CGFloat = 17.0
         if let userFontName = defaults.string(forKey: "list-display-font") {
-            listFontMsg = "List Tab Font Request: name = \(userFontName)"
+            // listFontMsg = "List Tab Font Request: name = \(userFontName)"
             if !userFontName.isEmpty && !userFontName.lowercased().contains("system font") {
                 if let userFontSize = defaults.string(forKey: "list-display-size") {
                     listFontMsg.append(", font size = \(userFontSize)")

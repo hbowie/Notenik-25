@@ -423,6 +423,26 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
+    @IBAction func expandOutline(_ sender: Any) {
+        if collectionTabs != nil {
+            if collectionTabs!.selectedTabViewItemIndex == 1 && tagsVC != nil {
+                tagsVC!.expandOutline()
+            } else if collectionTabs!.selectedTabViewItemIndex == 2 && seqOutlineVC != nil {
+                seqOutlineVC!.expandOutline()
+            }
+        }
+    }
+    
+    @IBAction func collapseOutline(_ sender: Any) {
+        if collectionTabs != nil {
+            if collectionTabs!.selectedTabViewItemIndex == 1 && tagsVC != nil {
+                tagsVC!.collapseOutline()
+            } else if collectionTabs!.selectedTabViewItemIndex == 2 && seqOutlineVC != nil {
+                seqOutlineVC!.collapseOutline()
+            }
+        }
+    }
+    
     func changeLeftViewVisibility(makeVisible: Bool, narrow: Bool = false) {
         guard let splits = splitViewController else { return }
         let dividerPosition = splits.changeLeftViewVisibility(makeVisible: makeVisible)
