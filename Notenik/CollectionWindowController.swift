@@ -899,6 +899,36 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
  
         guard let noteIO = guardForCollectionAction() else { return }
         guard let collection = noteIO.collection else { return }
+        let path = collection.fullPath
+        let readOnly = collection.readOnly
+        
+        var auxIsFolder = false
+        let noteIdentifier = collection.noteIdentifier
+        if collection.folderFieldDef != nil {
+            if noteIdentifier.uniqueIdRule == .titleBeforeAux || noteIdentifier.uniqueIdRule == .titleAfterAux {
+                if let def = collection.dict.getDef(noteIdentifier.noteIdAuxField) {
+                    if def.fieldType.typeString == NotenikConstants.folderCommon {
+                        auxIsFolder = true
+                    }
+                }
+            }
+        }
+        if !auxIsFolder {
+            noteIdConfigRename(noteIO: noteIO)
+        }
+        
+        newNoteRequested = false
+        pendingMod = false
+        pendingEdits = false
+        
+        let (_, newIO) = multi.provision(collectionPath: path, inspector: nil, readOnly: readOnly)
+        
+        self.io = newIO
+        
+    }
+    
+    func noteIdConfigRename(noteIO: NotenikIO) {
+        guard let collection = noteIO.collection else { return }
         let notesFolder = collection.lib.getPath(type: .notes)
         var notesList: [Note] = []
         var oldFilenames: [String] = []
@@ -914,8 +944,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 }
             }
         }
-        let path = noteIO.collection!.fullPath
-        let readOnly = noteIO.collection!.readOnly
         saveBeforeClose()
         noteIO.closeCollection()
         
@@ -930,9 +958,10 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 if newFilename != oldFilename {
                     let oldPath = FileUtils.joinPaths(path1: notesFolder, path2: oldFilename)
                     var renameDone = false
+                    var renameError = false
                     var dupeCounter = 1
                     let originalTitle = note.title.value
-                    while !renameDone {
+                    while !renameDone && !renameError {
                         let newPath = FileUtils.joinPaths(path1: notesFolder, path2: newFilename!)
                         do {
                             try FileManager.default.moveItem(atPath: oldPath, toPath: newPath)
@@ -940,10 +969,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                             notesRenamed += 1
                         } catch let error as NSError {
                             communicateError("Could not rename file from \(oldPath) to \(newPath) due to \(error)", alert: true)
-                            dupeCounter += 1
-                            _ = note.setTitle("\(originalTitle) \(dupeCounter)")
-                            note.identify()
-                            newFilename = note.noteID.getBaseDotExt()
+                            if error.domain == NSCocoaErrorDomain && error.code == NSFileNoSuchFileError {
+                                renameError = true
+                            } else {
+                                dupeCounter += 1
+                                _ = note.setTitle("\(originalTitle) \(dupeCounter)")
+                                note.identify()
+                                newFilename = note.noteID.getBaseDotExt()
+                            }
                         }
                     }
                 }
@@ -951,19 +984,10 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             i += 1
         }
         
-        reportNumberOfNotesUpdated(notesRenamed )
+        reportNumberOfNotesUpdated(notesRenamed)
             
         notesList = []
         oldFilenames = []
-        
-        newNoteRequested = false
-        pendingMod = false
-        pendingEdits = false
-        
-        let (_, newIO) = multi.provision(collectionPath: path, inspector: nil, readOnly: readOnly)
-        
-        self.io = newIO
-        
     }
     
     @IBAction func importFromWikiQuote(_ sender: Any) {

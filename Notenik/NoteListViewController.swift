@@ -108,16 +108,16 @@ class NoteListViewController:   NSViewController,
             // listFontMsg = "List Tab Font Request: name = \(userFontName)"
             if !userFontName.isEmpty && !userFontName.lowercased().contains("system font") {
                 if let userFontSize = defaults.string(forKey: "list-display-size") {
-                    listFontMsg.append(", font size = \(userFontSize)")
+                    // listFontMsg.append(", font size = \(userFontSize)")
                     if let doubleValue = Double(userFontSize) {
                         let cgFloat = CGFloat(doubleValue)
                         rowHeight = cgFloat * 1.3
                         userFont = NSFont(name: userFontName, size: cgFloat)
                     } else {
-                        listFontMsg.append(" | Could not convert \(userFontSize) to a double")
+                        listFontMsg.append("Could not convert \(userFontSize) to a double")
                     }
                 } else {
-                    listFontMsg.append(" | font size not available")
+                    listFontMsg.append("font size not available")
                 }
             }
         } else {
