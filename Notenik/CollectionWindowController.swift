@@ -3225,6 +3225,65 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
+    /// Back up in list of pages for this indexed term.
+    @IBAction func backwardInIndex(_ sender:Any) {
+        navWithinIndex(inc: -1)
+    }
+    
+    /// Move forward in list of pages for this indexed term.
+    @IBAction func forwardInIndex(_ sender: Any) {
+        navWithinIndex(inc: 1)
+    }
+    
+    /// Move around within list of pages indexed for the selected term.
+    func navWithinIndex(inc: Int) {
+        
+        guard let io = guardForCollectionAction() else { return }
+        guard let collection = io.collection else { return }
+        
+        guard collection.indexFieldDef != nil else {
+            communicateError("No index field defined for the collection", alert: true)
+            return
+        }
+        
+        guard collection.indexOfCollection != nil else {
+            communicateError("Index page has not yet been visited", alert: true)
+            return
+        }
+        
+        guard !collection.lastIndexTermKey.isEmpty && collection.lastIndexTermPageIx >= 0 else {
+            communicateError("No link from the index page is active", alert: true)
+            return
+        }
+        
+        guard let indexTerm = collection.indexOfCollection!.getTermEntry(key: collection.lastIndexTermKey) else {
+            communicateError("Index term not found", alert: true)
+            return
+        }
+        
+        let newIx = collection.lastIndexTermPageIx + inc
+        
+        guard newIx >= 0 && newIx < indexTerm.refs.count else {
+            communicateError("No additional references for this index term", alert: true)
+            return
+        }
+        
+        let indexPageRef = indexTerm.refs[newIx]
+        guard let nextNote = io.getNote(knownAs: indexPageRef.page) else {
+            communicateError("Unable to find indexed note with ID of \(indexPageRef.page)", alert: true)
+            return
+        }
+        
+        collection.lastIndexTermPageIx = newIx
+        collection.lastIndexedPageID = StringUtils.toCommon(indexPageRef.page)
+        
+        let nextPosition = io.positionOfNote(nextNote)
+        _ = viewCoordinator.focusOn(initViewID: collectionViewID,
+                                    note: nextNote,
+                                    position: nextPosition,
+                                    row: -1, searchPhrase: nil)
+    }
+    
     /// Respond to a user request for an Advanced Search.
     @IBAction func advSearch(_ sender: Any) {
         guard let noteIO = guardForCollectionAction() else { return }

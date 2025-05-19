@@ -656,6 +656,19 @@
                                                 <action selector="forwardInHistory:" target="Ady-hI-5gd" id="PDh-me-ky9"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="c31-hj-bFl"/>
+                                        <menuItem title="Back in Index" keyEquivalent="" id="1yq-By-Wf0">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                                            <connections>
+                                                <action selector="backwardInIndex:" target="Ady-hI-5gd" id="Nhf-AP-unw"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Forward in Index" keyEquivalent="" id="jVF-Y8-AfB">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                                            <connections>
+                                                <action selector="forwardInIndex:" target="Ady-hI-5gd" id="Iuo-rr-prj"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="q8f-lW-o23"/>
                                         <menuItem title="Search" keyEquivalent="f" id="O5R-wR-C3l" userLabel="Find">
                                             <connections>
@@ -1403,6 +1416,7 @@ CA
                         <outlet property="navAdvSearchItem" destination="dRa-3A-SnJ" id="lvV-93-h5d"/>
                         <outlet property="navFindAgainItem" destination="Sis-fg-Ibk" id="tld-89-TWt"/>
                         <outlet property="navFindItem" destination="O5R-wR-C3l" id="z0E-Y5-3Qu"/>
+                        <outlet property="navMenu" destination="dLq-1G-gJa" id="uqw-7d-Ihp"/>
                         <outlet property="outlineTabMenu" destination="Apq-II-tR6" id="d2n-0N-bWh"/>
                         <outlet property="sortMenu" destination="LhB-sl-AeY" id="YbX-M5-rEM"/>
                     </connections>
@@ -1656,7 +1670,7 @@ CA
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" autosaveColumns="NO" typeSelect="NO" rowSizeStyle="automatic" headerView="08a-mn-sim" viewBased="YES" id="5Qb-62-xdU">
-                                            <rect key="frame" x="0.0" y="0.0" width="1457" height="19"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="1457" height="11"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>

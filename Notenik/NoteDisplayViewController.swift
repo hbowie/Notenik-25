@@ -425,6 +425,14 @@ class NoteDisplayViewController: NSViewController,
             if resolution.result == .resolved {
                 webLinkFollowed(false)
                 decisionHandler(.cancel)
+                if !link.indexTermKey.isEmpty && link.indexedPageIndex >= 0 {
+                    if let collection = io?.collection {
+                        collection.lastIndexTermKey = link.indexTermKey
+                        collection.lastIndexTermPageIx = link.indexedPageIndex
+                        collection.lastIndexTermPageCount = link.indexedPageCount
+                        collection.lastIndexedPageID = link.noteID
+                    }
+                } 
                 _ = NoteLinkResolverCocoa.link(wc: wc!, resolution: resolution)
             } else {
                 webLinkFollowed(true)
