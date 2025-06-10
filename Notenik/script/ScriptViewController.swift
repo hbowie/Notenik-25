@@ -257,13 +257,13 @@ class ScriptViewController: NSViewController {
             savePanel.showsResizeIndicator = true
             savePanel.showsHiddenFiles = false
             savePanel.canCreateDirectories = true
-            if command.module == .script {
+            /* if command.module == .script {
                 savePanel.allowedFileTypes = ["tcz"]
                 savePanel.allowsOtherFileTypes = false
             } else {
                 savePanel.allowedFileTypes = ["txt", "csv", "tab"]
                 savePanel.allowsOtherFileTypes = true
-            }
+            } */
             let userChoice = savePanel.runModal()
             if userChoice == .OK {
                 command.setValue(fileURL: savePanel.url!)

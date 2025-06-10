@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -75,7 +75,7 @@ Gw
                                     <action selector="contentButtonChanged:" target="fNj-gh-u1r" id="HZO-zZ-ady"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tAY-nJ-zS1">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tAY-nJ-zS1">
                                 <rect key="frame" x="20" y="240" width="57" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="53" id="mLz-oP-aHQ"/>
@@ -126,7 +126,7 @@ Gw
                                     <action selector="contentButtonChanged:" target="fNj-gh-u1r" id="fiQ-oV-As2"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YpW-3B-iHK">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YpW-3B-iHK">
                                 <rect key="frame" x="153" y="240" width="51" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Format:" id="mIz-hP-whn">
                                     <font key="font" metaFont="system"/>
@@ -164,7 +164,7 @@ Gw
                                     <action selector="formatButtonChanged:" target="fNj-gh-u1r" id="LLW-o4-PZp"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BfL-eD-NsV">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BfL-eD-NsV">
                                 <rect key="frame" x="174" y="24" width="133" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="2022-07-07 10:21:33" id="5WG-BJ-Nrc">
                                     <font key="font" metaFont="system"/>
@@ -182,7 +182,7 @@ Gw
                                     <action selector="formatButtonChanged:" target="fNj-gh-u1r" id="kSb-Pu-iek"/>
                                 </connections>
                             </button>
-                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mbg-Su-xMb">
+                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mbg-Su-xMb">
                                 <rect key="frame" x="155" y="93" width="305" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="fZ5-5x-lJY">
                                     <font key="font" metaFont="system"/>

@@ -141,7 +141,6 @@ class DateInsertViewController: NSViewController {
                 date = nextYear
             }
         }
-        
         // Now apply the desired format.
         if format1Button.state == .on {
             formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -163,6 +162,10 @@ class DateInsertViewController: NSViewController {
     }
     
     @IBAction func okButtonClicked(_ sender: Any) {
+        if prefs.dateFormat == "format-custom" && customFormatText.stringValue != prefs.customDateFormat {
+            prefs.customDateFormat = customFormatText.stringValue
+            generateFormattedDate()
+        }
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.declareTypes([.string], owner: nil)

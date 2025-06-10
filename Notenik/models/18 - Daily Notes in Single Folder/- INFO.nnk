@@ -1,0 +1,50 @@
+Title: 18 - Daily Notes in Single Folder
+
+Title Set by User: false
+
+Sort Parm: 0
+
+Sort Descending: false
+
+Sort Blank Dates Last: true
+
+Other Fields Allowed: false
+
+Mirror Auto Index: false
+
+Display Body Label: true
+
+Minimum Body Edit View Height: 5.0
+
+Title Display Option: p bold
+
+Display Mode: normal
+
+Outline Tab: 0
+
+Override Custom Display: false
+
+MathJax: false
+
+Local Images: false
+
+Missing Targets: false
+
+Curly Apostrophes: true
+
+Ext Links Open in New Windows: false
+
+Scrolling Sync: false
+
+Shortcut: daily
+
+ToC Depth: 3
+
+Note File Format: nnk
+
+Daily Notes: notes
+
+Hash Tags: notenik-field
+
+Column Widths: author: 100, 200, 1000; datemod: 100, 180, 250; dateadded: 100, 180, 250; statusdigit: 20, 30, 50; x: 12, 20, 50; seq: 30, 80, 250; title: 200, 445, 1500; rank: 50, 80, 250; klass: 60, 80, 150; date: 80, 120, 500; tags: 50, 100, 1200; 
+

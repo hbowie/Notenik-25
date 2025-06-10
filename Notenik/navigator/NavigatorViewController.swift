@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 9/10/20.
-//  Copyright © 2020 - 2023 Herb Bowie (https://powersurgepub.com)
+//  Copyright © 2020 - 2025 Herb Bowie (https://powersurgepub.com)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -263,8 +263,8 @@ class NavigatorViewController: NSViewController, NSOutlineViewDataSource, NSOutl
             }
             guard node.type == .folder else { continue }
             let selFolder = node.folder
-            if selFolder != nil {
-                _ = NSWorkspace.shared.openFile(selFolder!.path)
+            if selFolder != nil && selFolder?.url != nil {
+                _ = NSWorkspace.shared.open(selFolder!.url!)
             }
         }
     }

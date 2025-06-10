@@ -41,13 +41,14 @@ class CollectionPrefsViewController: NSViewController {
     @IBOutlet var missingTargetsCkBox:  NSButton!
     @IBOutlet var curlyApostsCkBox:     NSButton!
     @IBOutlet var extLinksCkBox:        NSButton!
-    @IBOutlet weak var scrollingSyncCkBox: NSButton!
+    @IBOutlet var scrollingSyncCkBox: NSButton!
     @IBOutlet var pathControl:          NSPathControl!
     @IBOutlet var parentView:           NSView!
     @IBOutlet var displayModePopUp:     NSPopUpButton!
     @IBOutlet var minEditBodySlider:    NSSlider!
     @IBOutlet var minEditBodyHeight:    NSTextField!
     @IBOutlet var cssFilePopup:         NSPopUpButton!
+    @IBOutlet var dailyCkBox:           NSButton!
     
     var extPicker: FileExtensionPicker!
     
@@ -169,6 +170,7 @@ class CollectionPrefsViewController: NSViewController {
         setMissingTargets(collection!.missingTargets)
         setCurlyApostrophes(collection!.curlyApostrophes)
         setExtLinks(collection!.extLinksOpenInNewWindows)
+        setDaily(collection!.dailyNotesType)
         setScrollingSync(collection!.scrollingSync)
         
         cssFilePopup.removeAllItems()
@@ -457,6 +459,14 @@ class CollectionPrefsViewController: NSViewController {
         }
     }
     
+    func setDaily(_ type: DailyNotesType) {
+        if type == .none {
+            dailyCkBox.state = .off
+        } else {
+            dailyCkBox.state = .on
+        }
+    }
+    
     func setScrollingSync(_ on: Bool) {
         if on {
             scrollingSyncCkBox.state = .on
@@ -597,6 +607,15 @@ class CollectionPrefsViewController: NSViewController {
         if !collection!.otherFields {
             dict.lock()
         }
+        
+        if dailyCkBox.state == .off {
+            collection!.dailyNotesType = .none
+        } else if collection!.folderFieldDef == nil {
+            collection!.dailyNotesType = .notes
+        } else {
+            collection!.dailyNotesType = .folders
+        }
+        
         application.stopModal(withCode: .OK)
         windowController!.close()
     }

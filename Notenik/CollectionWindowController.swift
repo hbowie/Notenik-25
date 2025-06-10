@@ -144,8 +144,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             if notenikIO!.collection!.title == "" {
                 notenikIO!.collection!.setDefaultTitle()
             }
-            let essential = notenikIO!.collection!.fullPathURL == appPrefs.essentialURL
-            markEssential(essential: essential)
+            assignWindowTitle()
 
             scroller = NoteScroller(collection: notenikIO!.collection!)
             
@@ -639,6 +638,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     // -----------------------------------------------------------
     
     /// The user has requested a chance to review and possibly modify the Collection Preferences.
+    /// Note that this is  called automatically when creating a New Collection.
     @IBAction func menuCollectionPreferences(_ sender: Any) {
         
         guard let noteIO = guardForCollectionAction() else { return }
@@ -703,9 +703,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             if collection.noteFileFormat != noteFileFormat || hashtagsUpdate {
                 confirmFileFormatChange(fileIO: fileIO, collection: collection)
             }
-            /* if collection.selCSSfile.isEmpty {
-                fileIO.loadDisplayCSS()
-            } */
         }
         removeFields()
         
@@ -1395,6 +1392,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
+    /// Add a new note, if the title does not already exist, otherwise append the body text to
+    /// the end of the body field for the existing note.
     func updateNote(title: String, bodyText: String) {
         guard title.count > 0 else {
             return
@@ -1409,6 +1408,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
+    /// Append the given body text to the end of the existing body field.
     func updateNote(noteToUpdate: Note, bodyText: String) {
         
         guard bodyText.count > 0 else { return }
@@ -1416,12 +1416,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     note: noteToUpdate,
                                     position: nil, row: -1, searchPhrase: nil)
-        // select(note: noteToUpdate, position: nil, source: .action, andScroll: true)
         let (_, sel) = guardForNoteAction()
         guard let selectedNote = sel else { return }
         var body = selectedNote.body.value
         let updatedNote = selectedNote.copy() as! Note
-        body.append("\n\n")
+        if !body.isEmpty {
+            body.append("\n\n")
+        }
         body.append(bodyText)
         guard updatedNote.setBody(body) else { return }
         newNoteRequested = false
@@ -1476,6 +1477,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
+    /// Add a new note with the given title and body text. 
     func newNote(title: String, bodyText: String) {
         
         guard let noteIO = guardForCollectionAction() else { return }
@@ -1551,6 +1553,11 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         
         if level == nil && seq == nil {
             setFollowing()
+        }
+        
+        if collection.dailyNotesType == .folders {
+            let (date, _) = DailyNotes.now()
+            _ = newNote!.setFolder(str: date)
         }
         
         if addAndReturn {
@@ -2121,8 +2128,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                     row: Int,
                     dropOperation: NSTableView.DropOperation) -> Int {
         
-        // print("CollectionWindowController.pasteItems row = \(row), drop? \(dropOperation)")
-        
         // Make sure we're ready to do stuff.
         guard let noteIO = guardForCollectionAction() else { return 0 }
         guard let collection = noteIO.collection else { return 0 }
@@ -2133,7 +2138,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         var newKlass: KlassValue?
                             
         // Gen Seq and Level, if appropriate
-        if row > 0 && dropOperation == .above && seqDef != nil
+        if row > 0 && dropOperation == .above && seqDef != nil && collection.dailyNotesType == .none
             && (collection.sortParm == .seqPlusTitle || collectionTabs!.selectedTabViewItemIndex == 2) {
             let seqType = seqDef!.fieldType as! SeqType
             var seqAbove = seqType.createValue() as! SeqValue
@@ -2174,7 +2179,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let urlType     = NSPasteboard.PasteboardType("public.url")
         let fileURLType = NSPasteboard.PasteboardType("public.file-url")
         let vcardType   = NSPasteboard.PasteboardType(UTType.vCard.identifier)
-        // let utf8Type    = NSPasteboard.PasteboardType("public.utf8-plain-text")
         
         // Process each pasteboard item.
         for item in pbItems {
@@ -2187,9 +2191,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             let title = item.string(forType: urlNameType)
             let fileRefURL = item.string(forType: fileURLType)
             
-            // let utf8 = item.string(forType: utf8Type)
-            
             let note = Note(collection: collection)
+            
+            dailyNotesMods(note: note)
             
             var attachmentPaths = ""
             
@@ -2203,6 +2207,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 let contacts = ContactCards()
                 let contactNotes = contacts.parse(vcard!, collection: collection)
                 for contactNote in contactNotes {
+                    dailyNotesMods(note: contactNote)
                     let addedNote = addPastedNote(contactNote)
                     if addedNote != nil {
                         notesAdded += 1
@@ -2217,8 +2222,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 let likelyText = ResourceFileSys.isLikelyNoteFile(fileURL: fileURL, preferredNoteExt: collection.preferredExt)
                 let fileName = fileURL.deletingPathExtension().lastPathComponent
                 let ext = fileURL.pathExtension
-                // print("  - file ext = \(ext)")
-                // print("  - likely text? \(likelyText)")
                 if ext == "opml" {
                     let defaultTitle = StringUtils.wordDemarcation(fileName,
                                                                    caseMods: ["u", "u", "l"],
@@ -2233,6 +2236,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                     let contacts = ContactCards()
                     let contactNotes = contacts.parse(vCards: fileURL, collection: collection)
                     for contactNote in contactNotes {
+                        dailyNotesMods(note: contactNote)
                         let addedNote = addPastedNote(contactNote)
                         if addedNote != nil {
                             notesAdded += 1
@@ -2241,7 +2245,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                             }
                         }
                     }
-                } else if row >= 0 && dropOperation == .on && !likelyText {
+                } else if row >= 0 && dropOperation == .on && !likelyText && collection.dailyNotesType == .none {
                     let dropNote = noteIO.getNote(at: row)
                     if dropNote != nil {
                         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
@@ -2253,13 +2257,18 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                             firstNotePasted = dropNote
                         }
                     }
-                } else if dropOperation != .on && !likelyText {
+                } else if !likelyText && (dropOperation != .on || collection.dailyNotesType == .folders)  {
                     let defaultTitle = StringUtils.wordDemarcation(fileName,
                                                         caseMods: ["u", "u", "l"],
                                                         delimiter: " ")
                     _ = note.setTitle(defaultTitle)
                     let localLink = collection.makeLinkRelative(startingLink: fileURL.absoluteString)
                     _ = note.setLink(localLink)
+                } else if collection.dailyNotesType == .folders {
+                    let text = try? String(contentsOf: fileURL, encoding: .utf8)
+                    if text != nil && !text!.isEmpty {
+                        _ = note.setBody(text!)
+                    }
                 } else {
                     let addedNote = importTextFile(fileURL: fileURL,
                                                    newLevel: newLevel, newSeq: newSeq, newKlass: newKlass,
@@ -2270,8 +2279,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                     continue
                 }
             } else if str != nil && str!.count > 0 {
-                logInfo(msg: "Processing pasted item as Note")
-                attachmentPaths = strToNote(str: str!, note: note, defaultTitle: nil)
+                if collection.dailyNotesType == .folders {
+                    _ = note.setBody(str!)
+                    _ = note.setTitle(StringUtils.summarize(str!, max: 60, ellipsis: false, trailingPeriod: false))
+                } else {
+                    logInfo(msg: "Processing pasted item as Note")
+                    attachmentPaths = strToNote(str: str!, note: note, defaultTitle: nil)
+                }
             } else {
                 logInfo(msg: "Not sure how to handle this pasted item")
             }
@@ -2330,6 +2344,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         return notesAdded
     }
     
+    func dailyNotesMods(note: Note) {
+        if note.collection.dailyNotesType == .folders {
+            let (date, time) = DailyNotes.now()
+            _ = note.setFolder(str: date)
+            _ = note.setSeq(time)
+        }
+    }
+    
     
     /// Given a Note formatted as a String, extract the fields and apply them to the give Note.
     /// - Parameters:
@@ -2342,7 +2364,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let tempCollection = NoteCollection()
         tempCollection.otherFields = note.collection.otherFields
         note.collection.populateFieldDefs(to: tempCollection)
-        // tempCollection.dict.unlock()
         let reader = BigStringReader(str)
         let parser = NoteLineParser(collection: tempCollection, reader: reader)
         var possibleTitle = "Pasted Note"
@@ -2354,6 +2375,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                       flexibleFieldAssignment: true)
         if !tempNote.title.value.hasPrefix("Pasted Note")
                 || tempNote.hasBody() || tempNote.hasLink() {
+            if tempNote.title.value.hasPrefix("Pasted Note") && tempNote.hasBody() {
+                _ = tempNote.setTitle(StringUtils.summarize(tempNote.body.value, max: 60, ellipsis: false, trailingPeriod: false))
+            }
             tempNote.copyDefinedFields(to: note)
         }
         if let attachmentsField = tempNote.getField(common: NotenikConstants.attachmentsCommon) {
@@ -2939,7 +2963,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     @IBAction func menuNoteShare(_ sender: Any) {
         
         guard let noteIO = guardForCollectionAction() else { return }
-        guard let collection = noteIO.collection else { return }
+        guard noteIO.collection != nil else { return }
         guard listVC != nil else { return }
         shareNote(notes: listVC!.getSelectedNotes(io: noteIO))
     }
@@ -3802,13 +3826,15 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     @IBAction func newNote(_ sender: Any) {
         
         guard notenikIO != nil && notenikIO!.collectionOpen else { return }
+        guard let collection = notenikIO!.collection else { return }
         
         let (outcome, _) = modIfChanged()
         guard outcome != modIfChangedOutcome.tryAgain else { return }
         applyCheckBoxUpdates()
         
         newNoteRequested = true
-        newNote = Note(collection: notenikIO!.collection!)
+        newNote = Note(collection: collection)
+        DailyNotes.applyDateAndTime(to: newNote!)
         adjustAttachmentsMenu(nil)
         scroller = NoteScroller(collection: notenikIO!.collection!)
         
@@ -4283,16 +4309,24 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     }
     
     @IBAction func makeCollectionEssential(_ sender: Any) {
-        markEssential(essential: true)
         juggler.makeCollectionEssential(io: notenikIO!)
     }
     
-    func markEssential(essential: Bool = true) {
-        if essential {
-            window!.title = notenikIO!.collection!.userFacingLabel() + " (E)"
-        } else {
-            window!.title = notenikIO!.collection!.userFacingLabel()
+    @IBAction func makeCollectionDaily(_ sender: Any) {
+        juggler.makeCollectionGeneral(io: notenikIO!)
+    }
+    
+    func assignWindowTitle() {
+        guard let collection = notenikIO?.collection else { return }
+        var suffix = ""
+        if collection.essential && collection.general {
+            suffix = " (E+G)"
+        } else if collection.essential {
+            suffix = " (E)"
+        } else if collection.general {
+            suffix = " (G)"
         }
+        window!.title = collection.userFacingLabel() + suffix
     }
     
     @IBAction func normalizeCollection(_ sender: Any) {

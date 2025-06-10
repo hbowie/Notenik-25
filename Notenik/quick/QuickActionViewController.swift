@@ -136,6 +136,12 @@ class QuickActionViewController: NSViewController, NSComboBoxDataSource {
         guard let link = folders[i].link else { return }
         collectionWC = open(link: link)
         loadNoteTitles()
+        if let collection = collectionWC?.io?.collection {
+            if collection.dailyNotesType == .notes {
+                let (date, _) = DailyNotes.now()
+                noteTitleComboBox.stringValue = date
+            }
+        }
         window.window?.makeKeyAndOrderFront(self)
     }
     

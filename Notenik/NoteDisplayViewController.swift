@@ -64,7 +64,7 @@ class NoteDisplayViewController: NSViewController,
         // Initialize WebKit stuff
         webConfig = WKWebViewConfiguration()
         let webPrefs = WKPreferences()
-        webPrefs.javaScriptEnabled = true
+        // webPrefs.javaScriptEnabled = true
         if #available(macOS 11.0, *) {
             webConfig.limitsNavigationsToAppBoundDomains = false
         }

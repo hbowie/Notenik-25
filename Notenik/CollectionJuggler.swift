@@ -805,17 +805,8 @@ class CollectionJuggler: NSObject {
     func makeCollectionEssential(io: NotenikIO) {
         guard let collection = io.collection else { return }
         guard let collectionURL = collection.fullPathURL else { return }
-        if let oldEssential = appPrefs.essentialURL {
-            for window in windows {
-                guard let windowCollection = window.io?.collection else { continue }
-                guard let windowURL = windowCollection.fullPathURL else { continue }
-                if windowURL == oldEssential && window.window != nil {
-                    window.markEssential(essential: false)
-                    break
-                }
-            }
-        }
         appPrefs.essentialURL = collectionURL
+        assignWindowTitles()
     }
     
     /// Open the Essential Collection, if we have one
@@ -825,8 +816,50 @@ class CollectionJuggler: NSObject {
             return
         }
         _ = open(url: essentialURL, source: .fromWithout)
-        // notenikFolderList.add(url: essentialURL, type: .ordinaryCollection, location: .undetermined)
-        // _ = openFileWithNewWindow(fileURL: essentialURL, readOnly: false)
+    }
+    
+    func makeCollectionGeneral(io: NotenikIO) {
+        guard let collection = io.collection else { return }
+        guard let collectionURL = collection.fullPathURL else { return }
+        appPrefs.generalURL = collectionURL
+        assignWindowTitles()
+    }
+    
+    func assignWindowTitles() {
+        for window in windows {
+            guard let windowCollection = window.io?.collection else { continue }
+            windowCollection.determineSpecialFlags()
+            window.assignWindowTitle()
+        }
+    }
+    
+    func openGeneralNotes() {
+        guard let generalURL = appPrefs.generalURL else {
+            communicateError("General Notes not identified", alert: true)
+            return
+        }
+        _ = open(url: generalURL, source: .fromWithout)
+    }
+    
+    func addGeneralFromClipboard() {
+        
+        guard let generalURL = AppPrefs.shared.generalURL else {
+            communicateError("General Notes Collection not yet identified", alert: true)
+            return
+        }
+        
+        guard let wc = openFileWithNewWindow(folderPath: generalURL.path, readOnly: false) else {
+            communicateError("General Notes Collection could not be opened", alert: true)
+            return
+        }
+        
+        let board = NSPasteboard.general
+        guard let items = board.pasteboardItems else {
+            communicateError("Clipboard appears to be empty", alert: true)
+            return
+        }
+        
+        _ = wc.pasteItems(items, row: -1, dropOperation: .above)
     }
     
     /// Open the Notenik Knowledge Base.

@@ -246,6 +246,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         juggler!.openEssentialCollection()
     }
     
+    @IBAction func menuFileOpenGeneral(_ sender: NSMenuItem) {
+        juggler!.openGeneralNotes()
+    }
+    
+    @IBAction func addGeneralFromClipboard(_ sender: Any) {
+        juggler!.addGeneralFromClipboard()
+    }
+    
     @IBAction func menuFileOpenParentRealm(_ sender: Any) {
         _ = juggler!.openParentRealm()
     }

@@ -27,6 +27,9 @@ class CustomURLActor {
         
     }
     
+    /// Take action specified by a Notenik custom URL.
+    /// - Parameter customURL: A Notenik URL.
+    /// - Returns: True if successful, false if problems.
     func act(on customURL: String) -> Bool {
   
         var url: URL? = nil
@@ -146,6 +149,8 @@ class CustomURLActor {
             cwc = openCollection(shortcut: value, path: nil)
         case "path":
             cwc = openCollection(shortcut: nil, path: value)
+        case "special":
+            cwc = openCollection(shortcut: nil, path: nil, special: value)
         case "tag":
             guard let controller = cwc else {
                 communicateError("Unable to open desired Collection")
@@ -181,6 +186,8 @@ class CustomURLActor {
             cwc = openCollection(shortcut: value, path: nil)
         case "path":
             cwc = openCollection(shortcut: nil, path: value)
+        case "special":
+            cwc = openCollection(shortcut: nil, path: nil, special: value)
         case "id":
             guard let controller = cwc else {
                 communicateError("Unable to open desired Collection")
@@ -358,6 +365,10 @@ class CustomURLActor {
             cwc = openCollection(shortcut: nil, path: value)
             guard let controller = cwc else { return }
             note = Note(collection: controller.io!.collection!)
+        case "special":
+            cwc = openCollection(shortcut: nil, path: nil, special: value)
+            guard let controller = cwc else { return }
+            note = Note(collection: controller.io!.collection!)
         case "title", "name":
             guard note != nil else { return }
             _ = note!.setTitle(value)
@@ -375,13 +386,16 @@ class CustomURLActor {
         }
     }
     
-    func openCollection(shortcut: String?, path: String?) -> CollectionWindowController? {
+    func openCollection(shortcut: String?, path: String?, special: String? = nil) -> CollectionWindowController? {
         var link: NotenikLink?
         if shortcut != nil && shortcut!.count > 0 {
             link = getFolderForShortcut(shortcut!)
         }
-        if link == nil && path != nil {
+        if link == nil && path != nil && path!.count > 0 {
             link = folders.getFolderFor(path: path!)
+        }
+        if link == nil && special != nil && !special!.isEmpty {
+            link = getSpecialFolder(special!)
         }
         if link == nil && path != nil {
             var fileURLstr = path!
@@ -406,6 +420,22 @@ class CustomURLActor {
         } else {
             return multiEntry!.link
         }
+    }
+    
+    func getSpecialFolder(_ special: String) -> NotenikLink? {
+        switch special {
+        case "essential":
+            if let essentialURL = AppPrefs.shared.essentialURL {
+                return NotenikLink(url: essentialURL)
+            }
+        case "general":
+            if let generalURL = AppPrefs.shared.generalURL {
+                return NotenikLink(url: generalURL)
+            }
+        default:
+            return nil
+        }
+        return nil
     }
     
     func processPrefsCommand() {

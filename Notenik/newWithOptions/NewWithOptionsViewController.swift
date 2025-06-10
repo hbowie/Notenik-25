@@ -96,6 +96,8 @@ class NewWithOptionsViewController: NSViewController {
             if collection.seqFieldDef != nil {
                 seqField.isEnabled = true
             }
+            
+            adjustForDailyNotes()
         }
     }
     
@@ -113,6 +115,24 @@ class NewWithOptionsViewController: NSViewController {
         currSeq = note.seq
         
         adjustSeq()
+        
+        adjustForDailyNotes()
+    }
+    
+    func adjustForDailyNotes() {
+        guard collection != nil else { return }
+        switch collection!.dailyNotesType {
+            case .none:
+                return
+            case .folders:
+                if seqField.isEnabled {
+                    let (_, time) = DailyNotes.now()
+                    seqField.stringValue = time
+                }
+            case .notes:
+                let (date, _) = DailyNotes.now()
+                titleField.stringValue = date
+        }
     }
 
     
