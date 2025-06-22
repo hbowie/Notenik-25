@@ -262,6 +262,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         juggler!.clone()
     }
     
+    @IBAction func menuFileSync(_ sender: Any) {
+        juggler!.sync()
+    }
     @IBAction func scriptPlay(_ sender: Any) {
         juggler!.scriptOpen()
     }

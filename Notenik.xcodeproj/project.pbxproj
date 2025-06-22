@@ -586,6 +586,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9C9E89B92D6F903C0017FA69 /* clone */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = clone; sourceTree = "<group>"; };
+		9CA5045D2E05DFFE00D561AB /* sync */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = sync; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -838,6 +839,7 @@
 				9C5BE168277163C30013C0D3 /* seqmod */,
 				9CC5B41E2C62D0790064E2A1 /* seqOutline */,
 				9CB60BBE22650975003B5655 /* share */,
+				9CA5045D2E05DFFE00D561AB /* sync */,
 				9CB06CB522CCF4A200887778 /* tags */,
 				9CC902672AE073EF0004101B /* tagsAssign */,
 				9CD3261E2233063100D06B77 /* views */,
@@ -1234,6 +1236,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				9C9E89B92D6F903C0017FA69 /* clone */,
+				9CA5045D2E05DFFE00D561AB /* sync */,
 			);
 			name = Notenik;
 			packageProductDependencies = (
@@ -1903,7 +1906,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 853;
+				CURRENT_PROJECT_VERSION = 857;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1917,7 +1920,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 17.0.1;
+				MARKETING_VERSION = 17.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1933,7 +1936,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 853;
+				CURRENT_PROJECT_VERSION = 857;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1947,7 +1950,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 17.0.1;
+				MARKETING_VERSION = 17.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -49,6 +49,7 @@ class CollectionJuggler: NSObject {
     let navStoryboard:             NSStoryboard = NSStoryboard(name: "Navigator", bundle: nil)
     let quickActionStoryBoard:     NSStoryboard = NSStoryboard(name: "QuickAction", bundle: nil)
     let clonerStoryBoard:          NSStoryboard = NSStoryboard(name: "Cloner", bundle: nil)
+    let syncStoryBoard:            NSStoryboard = NSStoryboard(name: "Sync", bundle: nil)
     
     let scriptStoryboard: NSStoryboard = NSStoryboard(name: "Script", bundle: nil)
     var scriptWindowController: ScriptWindowController?
@@ -66,6 +67,7 @@ class CollectionJuggler: NSObject {
     var navController: NavigatorWindowController?
     var quickActionController: QuickActionWindowController?
     var clonerWindowController: ClonerWindowController?
+    var syncWindowController: SyncWindowController?
     
     var lastSelectedNoteTitle = ""
     var lastSelectedNoteCustomURL = ""
@@ -686,6 +688,16 @@ class CollectionJuggler: NSObject {
             communicateError("Couldn't get a Cloner Window Controller", alert: true)
         }
 
+    }
+    
+    func sync() {
+        if let syncWC = self.syncStoryBoard.instantiateController(withIdentifier: "syncWC") as? SyncWindowController {
+            syncWC.juggler = self
+            syncWC.showWindow(self)
+            syncWindowController = syncWC
+        } else {
+            communicateError("Couldn't get a Sync Window Controller", alert: true)
+        }
     }
     
     
