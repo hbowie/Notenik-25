@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 7/26/19.
-//  Copyright © 2019 - 2023 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -90,6 +90,7 @@ class ScriptViewController: NSViewController {
         modulePopUp.addItem(withTitle: "sort")
         modulePopUp.addItem(withTitle: "template")
         modulePopUp.addItem(withTitle: "output")
+        modulePopUp.addItem(withTitle: "sync")
         modulePopUp.selectItem(at: 0)
         
         modulePopUpSelected(self)
@@ -127,6 +128,10 @@ class ScriptViewController: NSViewController {
             actionPopUp.addItem(withTitle: "generate")
         case .output:
             actionPopUp.addItem(withTitle: "open")
+        case .sync:
+            actionPopUp.addItem(withTitle: "open")
+            actionPopUp.addItem(withTitle: "set")
+            actionPopUp.addItem(withTitle: "sync")
         default:
             actionPopUp.addItem(withTitle: "")
         }
@@ -188,6 +193,13 @@ class ScriptViewController: NSViewController {
         if command.module == .input && command.action == .set {
             objectComboBox.addItem(withObjectValue: "xpltags")
             objectComboBox.addItem(withObjectValue: "dirdepth")
+        } else if command.module == .sync && command.action == .open {
+            objectComboBox.addItem(withObjectValue: "left")
+            objectComboBox.addItem(withObjectValue: "right")
+        } else if command.module == .sync && command.action == .set {
+            objectComboBox.addItem(withObjectValue: "direction")
+            objectComboBox.addItem(withObjectValue: "respectblanks")
+            objectComboBox.addItem(withObjectValue: "actions")
         } else if command.module == .input && command.action == .open {
             objectComboBox.addItem(withObjectValue: "")
             objectComboBox.addItem(withObjectValue: "merge")
@@ -239,6 +251,19 @@ class ScriptViewController: NSViewController {
                 valueComboBox.addItem(withObjectValue: "9")
                 valueComboBox.addItem(withObjectValue: "10")
             }
+        } else if command.module == .sync && command.action == .set {
+            if command.object == "direction" {
+                valueComboBox.addItem(withObjectValue: "lefttoright")
+                valueComboBox.addItem(withObjectValue: "righttoleft")
+                valueComboBox.addItem(withObjectValue: "bidirectional")
+            } else if command.object == "respectblanks" {
+                valueComboBox.addItem(withObjectValue: "true")
+                valueComboBox.addItem(withObjectValue: "false")
+            } else if command.object == "actions" {
+                valueComboBox.addItem(withObjectValue: "logonly")
+                valueComboBox.addItem(withObjectValue: "logdetails")
+                valueComboBox.addItem(withObjectValue: "logsummary")
+            }
         } else if command.action == .open {
             pathNeededForValue = true
         }
@@ -276,7 +301,8 @@ class ScriptViewController: NSViewController {
             openPanel.showsResizeIndicator = true
             openPanel.showsHiddenFiles = false
             if command.modifier == "dir" || command.modifier.hasPrefix("notenik")
-                    || (command.module == .template && command.action == .webroot) {
+                    || (command.module == .template && command.action == .webroot)
+                    || (command.module == .sync && command.action == .open) {
                 openPanel.canChooseFiles = false
                 openPanel.canChooseDirectories = true
             } else {
