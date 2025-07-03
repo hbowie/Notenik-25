@@ -98,6 +98,10 @@
 		9C3CC8F6250A9C9E002C95D0 /* Navigator.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C3CC8F5250A9C9E002C95D0 /* Navigator.storyboard */; };
 		9C3CC8F8250AA0F8002C95D0 /* NavigatorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3CC8F7250AA0F8002C95D0 /* NavigatorWindowController.swift */; };
 		9C3CC8FA250AA136002C95D0 /* NavigatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3CC8F9250AA136002C95D0 /* NavigatorViewController.swift */; };
+		9C4267652E0CACF400412C86 /* FirstUse.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C4267642E0CACF400412C86 /* FirstUse.storyboard */; };
+		9C4267672E0CAFA600412C86 /* FirstUseWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4267662E0CAFA600412C86 /* FirstUseWindowController.swift */; };
+		9C4267692E0CAFD000412C86 /* FirstUseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4267682E0CAFD000412C86 /* FirstUseViewController.swift */; };
+		9C42676B2E0CC18A00412C86 /* FirstUseInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C42676A2E0CC18A00412C86 /* FirstUseInfo.swift */; };
 		9C45E8BB2298B87C003F6589 /* BodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C45E8BA2298B87C003F6589 /* BodyView.swift */; };
 		9C45E8BC2298B87C003F6589 /* BodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C45E8BA2298B87C003F6589 /* BodyView.swift */; };
 		9C45E8BE2298BC87003F6589 /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C45E8BD2298BC87003F6589 /* CodeView.swift */; };
@@ -408,6 +412,10 @@
 		9C3CC8F5250A9C9E002C95D0 /* Navigator.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Navigator.storyboard; sourceTree = "<group>"; };
 		9C3CC8F7250AA0F8002C95D0 /* NavigatorWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorWindowController.swift; sourceTree = "<group>"; };
 		9C3CC8F9250AA136002C95D0 /* NavigatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorViewController.swift; sourceTree = "<group>"; };
+		9C4267642E0CACF400412C86 /* FirstUse.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FirstUse.storyboard; sourceTree = "<group>"; };
+		9C4267662E0CAFA600412C86 /* FirstUseWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstUseWindowController.swift; sourceTree = "<group>"; };
+		9C4267682E0CAFD000412C86 /* FirstUseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstUseViewController.swift; sourceTree = "<group>"; };
+		9C42676A2E0CC18A00412C86 /* FirstUseInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstUseInfo.swift; sourceTree = "<group>"; };
 		9C45E8BA2298B87C003F6589 /* BodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyView.swift; sourceTree = "<group>"; };
 		9C45E8BD2298BC87003F6589 /* CodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeView.swift; sourceTree = "<group>"; };
 		9C46A71425D05CC0006E9C16 /* NewCollection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NewCollection.storyboard; sourceTree = "<group>"; };
@@ -711,6 +719,17 @@
 			path = navigator;
 			sourceTree = "<group>";
 		};
+		9C4267632E0CAC4000412C86 /* firstUse */ = {
+			isa = PBXGroup;
+			children = (
+				9C4267642E0CACF400412C86 /* FirstUse.storyboard */,
+				9C4267662E0CAFA600412C86 /* FirstUseWindowController.swift */,
+				9C4267682E0CAFD000412C86 /* FirstUseViewController.swift */,
+				9C42676A2E0CC18A00412C86 /* FirstUseInfo.swift */,
+			);
+			path = firstUse;
+			sourceTree = "<group>";
+		};
 		9C46A71325D05C58006E9C16 /* filenew */ = {
 			isa = PBXGroup;
 			children = (
@@ -818,6 +837,7 @@
 				9CAD6A5422DFA95D00531D90 /* export */,
 				9CD92F582B263DA0008A4A0A /* fieldRename */,
 				9C46A71325D05C58006E9C16 /* filenew */,
+				9C4267632E0CAC4000412C86 /* firstUse */,
 				9C9361452B7836270077BA22 /* idPrefs */,
 				9C6D7030295777E4003F5924 /* import */,
 				9C7995BD28877376003C22D5 /* intentHandlers */,
@@ -1394,6 +1414,7 @@
 				9C10831425AA67B8004B33CA /* News.storyboard in Resources */,
 				9CD92F5A2B263DDB008A4A0A /* FieldRename.storyboard in Resources */,
 				9C02D2B02267F29400587EDF /* Calendar.storyboard in Resources */,
+				9C4267652E0CACF400412C86 /* FirstUse.storyboard in Resources */,
 				9C5556D222E115960099414E /* Export.storyboard in Resources */,
 				9CC78E692283565E00640477 /* DisplayPrefs.storyboard in Resources */,
 				9C617AE227DBDC4300ACEC8A /* NotePicker.storyboard in Resources */,
@@ -1531,6 +1552,7 @@
 				9C969DE22888629B0002618C /* GetNoteSharingLinkIntentHandler.swift in Sources */,
 				9CD9058F26363053000851E8 /* MicroBlogWindowController.swift in Sources */,
 				9C5556D722E11E3B0099414E /* ExportWindowController.swift in Sources */,
+				9C4267672E0CAFA600412C86 /* FirstUseWindowController.swift in Sources */,
 				9C568DE92322F701005D6B0A /* WorkTitleView.swift in Sources */,
 				9C8693E52575658700F045D2 /* NewICloudWindowController.swift in Sources */,
 				9C5DE003288E03870099EC9A /* AddNoteFromTextIntentHandler.swift in Sources */,
@@ -1607,6 +1629,8 @@
 				9CE32510224D5E180051CA1F /* LogViewController.swift in Sources */,
 				9CAE23F526D1659B0002FCCD /* LookupView.swift in Sources */,
 				9CB1487A28C95F6500AF6D69 /* NoteLinkResolverCocoa.swift in Sources */,
+				9C4267692E0CAFD000412C86 /* FirstUseViewController.swift in Sources */,
+				9C42676B2E0CC18A00412C86 /* FirstUseInfo.swift in Sources */,
 				9C619A38231B323B003CFFBE /* WorkTypeView.swift in Sources */,
 				9CBC386821FFA9C200BA7900 /* NoteEditViewController.swift in Sources */,
 				9C29A79B25645B78002C5F7A /* FileAttachView.swift in Sources */,
@@ -1906,7 +1930,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 858;
+				CURRENT_PROJECT_VERSION = 862;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1920,7 +1944,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 17.1.2;
+				MARKETING_VERSION = 17.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1936,7 +1960,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 858;
+				CURRENT_PROJECT_VERSION = 862;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1950,7 +1974,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 17.1.2;
+				MARKETING_VERSION = 17.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -1,0 +1,23 @@
+Title:  Welcome to Notenik
+
+Tags:   
+
+Link:   https://notenik.app
+
+Body: 
+
+Welcome! It looks like you are using Notenik for the first time, and have elected to start with a simple starting collection. Congratulations! This is a great entry point into Notenik. 
+
+You should see two other windows open as well, both containing read-only collections designed to help you use the app. 
+
+The first window should show a title of *Notenik Tips*. This is a simple sequence of notes designed to get you quickly up and running, and it's a good idea to run through this. If you check the Notenik Settings, you'll find an option to view these tips every time you launch Notenik. You can turn this off whenever you feel you're ready to work without these. 
+
+The other window should show a title of *Notenik Knowlege Base*. This is the complete user manual for Notenik. Feel free to read as much or as little of this as you like, and to use it in the future as a reference, whenever you're ready to try something new, or to refresh your memory about a topic you've already visited. This won't open automatically after this first launch, but you can always open it using its entry beneath the *Help* menu.  
+
+You can go ahead and start adding your own notes to this collection as soon as you are ready, and you can delete this starting note at any point after you've added a few of your own. 
+
+If you have questions or want to suggest further improvements, you can always visit [The Notenik Discourse Forum](https://discourse.notenik.app/) and post something there. 
+
+I hope you enjoy using Notenik! 
+
+— Herb Bowie, Notenik developer

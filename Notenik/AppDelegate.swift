@@ -101,6 +101,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
             }
         }
         
+        // Show Tips if requested
+        if appPrefs!.tipsAtStartup {
+            _ = juggler!.openTips()
+        }
+        
         var successfulOpens = 0
         if launchURLs.count > 0 {
             successfulOpens = juggler!.open(urls: launchURLs, source: .fromWithout)
@@ -114,11 +119,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         
         // Register our app to handle Apple events.
         NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(self.handleAppleEvent(event:replyEvent:)), forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
-        
-        // Show Tips if requested
-        if appPrefs!.tipsAtStartup {
-            _ = juggler!.openTips()
-        }
         
         // Done launching
         appPrefs!.appLaunching = false

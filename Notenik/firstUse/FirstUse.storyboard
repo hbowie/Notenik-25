@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="CFS-tI-sQ5">
+            <objects>
+                <windowController storyboardIdentifier="firstuseWC" id="nxk-Z3-33f" customClass="FirstUseWindowController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="First Use" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="U6T-lC-XuU">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="425" y="462" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1415"/>
+                        <view key="contentView" id="ulD-Pe-iNO">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="nxk-Z3-33f" id="fuk-96-5Mb"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="zZS-iZ-5H4" kind="relationship" relationship="window.shadowedContentViewController" id="Oue-TJ-jRu"/>
+                    </connections>
+                </windowController>
+                <customObject id="ozk-GU-G1B" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="118" y="-73"/>
+        </scene>
+        <!--First Use View Controller-->
+        <scene sceneID="5JM-j0-TYc">
+            <objects>
+                <viewController id="zZS-iZ-5H4" customClass="FirstUseViewController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="vvk-24-l8j">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Xoe-Fa-ccs">
+                                <rect key="frame" x="18" y="157" width="444" height="96"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="96" id="hR0-UO-ufE"/>
+                                </constraints>
+                                <textFieldCell key="cell" selectable="YES" id="vnu-Hq-sLa">
+                                    <font key="font" metaFont="system" size="14"/>
+                                    <string key="title">Welcome! It looks like this is the first time you're using Notenik. Would you like Notenik to create a simple starting collection for you? And, if so, what would you like to call it? (And, if not, you'll have another chance to create one shortly, and be given more options.)</string>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bEC-Kb-ccu">
+                                <rect key="frame" x="414" y="13" width="53" height="32"/>
+                                <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fmZ-6w-85X">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="okeyDokey:" target="zZS-iZ-5H4" id="VAY-kJ-A47"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2l4-zp-rqx">
+                                <rect key="frame" x="13" y="13" width="76" height="32"/>
+                                <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aex-m0-oy8">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="cancel:" target="zZS-iZ-5H4" id="RB8-4h-Xhr"/>
+                                </connections>
+                            </button>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CGU-tG-IsZ">
+                                <rect key="frame" x="20" y="108" width="108" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Collection Name:" id="tVV-4n-KTD">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PeO-MK-RdR">
+                                <rect key="frame" x="20" y="79" width="440" height="21"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="Notes" drawsBackground="YES" id="war-bf-QT0">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="PeO-MK-RdR" firstAttribute="top" secondItem="CGU-tG-IsZ" secondAttribute="bottom" constant="8" symbolic="YES" id="3Fd-Eh-TW5"/>
+                            <constraint firstItem="2l4-zp-rqx" firstAttribute="baseline" secondItem="bEC-Kb-ccu" secondAttribute="baseline" id="6VW-iF-TqF"/>
+                            <constraint firstItem="PeO-MK-RdR" firstAttribute="leading" secondItem="2l4-zp-rqx" secondAttribute="leading" id="MIu-sa-vbZ"/>
+                            <constraint firstItem="2l4-zp-rqx" firstAttribute="top" secondItem="PeO-MK-RdR" secondAttribute="bottom" constant="39" id="X0l-dh-rGY"/>
+                            <constraint firstItem="Xoe-Fa-ccs" firstAttribute="leading" secondItem="vvk-24-l8j" secondAttribute="leading" constant="20" symbolic="YES" id="Y1M-jG-YSn"/>
+                            <constraint firstItem="Xoe-Fa-ccs" firstAttribute="leading" secondItem="PeO-MK-RdR" secondAttribute="leading" id="ZRQ-AL-fcd"/>
+                            <constraint firstItem="CGU-tG-IsZ" firstAttribute="leading" secondItem="vvk-24-l8j" secondAttribute="leading" constant="22" id="eOf-tA-xWU"/>
+                            <constraint firstAttribute="bottom" secondItem="2l4-zp-rqx" secondAttribute="bottom" constant="20" symbolic="YES" id="eq3-aq-sru"/>
+                            <constraint firstAttribute="trailing" secondItem="Xoe-Fa-ccs" secondAttribute="trailing" constant="20" symbolic="YES" id="fde-WU-h0O"/>
+                            <constraint firstItem="PeO-MK-RdR" firstAttribute="trailing" secondItem="bEC-Kb-ccu" secondAttribute="trailing" id="lc8-rZ-l9I"/>
+                            <constraint firstItem="CGU-tG-IsZ" firstAttribute="top" secondItem="Xoe-Fa-ccs" secondAttribute="bottom" constant="33" id="n7q-n9-cp6"/>
+                            <constraint firstItem="Xoe-Fa-ccs" firstAttribute="trailing" secondItem="PeO-MK-RdR" secondAttribute="trailing" id="nQR-ew-F5b"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="folderName" destination="PeO-MK-RdR" id="lFT-fQ-86T"/>
+                    </connections>
+                </viewController>
+                <customObject id="y1f-DT-Ana" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="118" y="399"/>
+        </scene>
+    </scenes>
+</document>

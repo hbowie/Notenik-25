@@ -50,6 +50,7 @@ class CollectionJuggler: NSObject {
     let quickActionStoryBoard:     NSStoryboard = NSStoryboard(name: "QuickAction", bundle: nil)
     let clonerStoryBoard:          NSStoryboard = NSStoryboard(name: "Cloner", bundle: nil)
     let syncStoryBoard:            NSStoryboard = NSStoryboard(name: "Sync", bundle: nil)
+    let firstUseStoryboard:        NSStoryboard = NSStoryboard(name: "FirstUse", bundle: nil)
     
     let scriptStoryboard: NSStoryboard = NSStoryboard(name: "Script", bundle: nil)
     var scriptWindowController: ScriptWindowController?
@@ -68,6 +69,7 @@ class CollectionJuggler: NSObject {
     var quickActionController: QuickActionWindowController?
     var clonerWindowController: ClonerWindowController?
     var syncWindowController: SyncWindowController?
+    var firstUseWindowController: FirstUseWindowController?
     
     var lastSelectedNoteTitle = ""
     var lastSelectedNoteCustomURL = ""
@@ -101,13 +103,36 @@ class CollectionJuggler: NSObject {
         
         var collection: NoteCollection?
         var io = FileIO()
+        var firstUse = false
+        if !appPrefs.beyondFirstUse {
+            appPrefs.beyondFirstUse = true
+            if appPrefs.essentialURL == nil
+                && appPrefs.generalURL == nil
+                && appPrefs.lastURL == nil {
+                firstUse = true
+            }
+        }
         
         let collector = NoteCollector()
         
-        if let url = appPrefs.essentialURL {
-            (collection, io) = multi.provision(collectionPath: url.path,
-                                               inspector: collector,
-                                               readOnly: false)
+        if firstUse {
+            if let url = firstUseSuggestion() {
+                (collection, io) = multi.provision(collectionPath: url.path,
+                                                   inspector: collector,
+                                                   readOnly: false)
+            }
+            if collection != nil {
+                firstUse = true
+                _ = openKB()
+            }
+        }
+        
+        if collection == nil {
+            if let url = appPrefs.essentialURL {
+                (collection, io) = multi.provision(collectionPath: url.path,
+                                                   inspector: collector,
+                                                   readOnly: false)
+            }
         }
         
         if collection == nil {
@@ -148,8 +173,92 @@ class CollectionJuggler: NSObject {
                         io.persistCollectionInfo()
                     }
                 }
+                if firstUse {
+                    makeCollectionEssential(io: io)
+                }
             }
         }
+    }
+    
+    /// Looks like this is the first time that this user has launched Notenik.
+    func firstUseSuggestion() -> (URL?) {
+        
+        if let firstUseWC = self.firstUseStoryboard.instantiateController(withIdentifier: "firstuseWC") as? FirstUseWindowController {
+            firstUseWindowController = firstUseWC
+            firstUseWC.juggler = self
+            let firstUseInfo = FirstUseInfo()
+            firstUseWC.firstUseInfo = firstUseInfo
+            if let firstUseWindow = firstUseWC.window {
+                let returnCode = application.runModal(for: firstUseWindow)
+                if returnCode == NSApplication.ModalResponse.OK {
+                    return firstUseConfirmed(firstUseInfo: firstUseInfo)
+                } else {
+                    print("First Use Window returned a code of: \(returnCode)")
+                }
+            }
+            
+        } else {
+            communicateError("Couldn't get a First Use Window Controller", alert: true)
+        }
+        return nil
+    }
+    
+    func firstUseConfirmed(firstUseInfo: FirstUseInfo) -> URL? {
+        
+        var io = FileIO()
+        var collectionURL: URL?
+        
+        var folderName = "Notes"
+        if !firstUseInfo.folderName.isEmpty {
+            folderName = firstUseInfo.folderName
+        }
+        
+        if notenikFolderList.iCloudContainerAvailable
+            && notenikFolderList.iCloudContainerURL != nil {
+            let (collURL, errorMsg) = NotenikFolderList.shared.createNewFolderWithinICloudContainer(folderName: folderName)
+            if collURL == nil {
+                if errorMsg != nil {
+                    communicateError(errorMsg!, alert: true)
+                    return nil
+                } else {
+                    communicateError("Problems creating new folder in the iCloud container", alert: true)
+                    return nil
+                }
+            } else {
+                collectionURL = collURL
+            }
+        } else {
+            let homeDirURL = fm.homeDirectoryForCurrentUser
+             let newFolderURL = homeDirURL.appendingPathComponent(folderName)
+             guard !fm.fileExists(atPath: newFolderURL.path) else {
+                 communicateError("Folder named \(folderName) already exists within the App Sandbox", alert: true)
+                 return nil
+             }
+             do {
+                 try fm.createDirectory(at: newFolderURL, withIntermediateDirectories: true, attributes: nil)
+             } catch {
+                 communicateError("Could not create new collection at \(newFolderURL.path)", alert: true)
+                 return nil
+             }
+        }
+        
+        let starterPacks = StarterPackMgr()
+        let resourceURL = Bundle.main.resourceURL
+        let modelsURL = resourceURL!.appendingPathComponent(modelsPath)
+        starterPacks.load(fromFolder: modelsURL)
+        guard starterPacks.firstUsePack != nil else {
+            communicateError("Could not find first use starter pack", alert: true)
+            return nil
+        }
+        
+        let ok = starterPacks.firstUsePack!.create(toURL: collectionURL!)
+        
+        guard ok else {
+            communicateError("Could not populate new Collection with model folder")
+            return nil
+        }
+        
+        return collectionURL
     }
     
     func checkGrantAndLoadShortcuts() {
@@ -691,6 +800,7 @@ class CollectionJuggler: NSObject {
     }
     
     func sync() {
+        
         if let syncWC = self.syncStoryBoard.instantiateController(withIdentifier: "syncWC") as? SyncWindowController {
             syncWC.juggler = self
             syncWC.showWindow(self)
