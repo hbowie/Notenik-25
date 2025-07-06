@@ -225,6 +225,9 @@ Gw
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                             <menuItem title="Streamlined Reading" id="HR0-91-3CB"/>
+                                            <menuItem title="Continuous Reading" id="arf-jI-0ua">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
                                             <menuItem title="Presentation" id="7v0-ZI-DfT"/>
                                             <menuItem title="Quotations" id="NRu-LL-3Dl">
                                                 <modifierMask key="keyEquivalentModifierMask"/>

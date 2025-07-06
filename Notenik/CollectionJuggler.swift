@@ -1493,12 +1493,14 @@ class CollectionJuggler: NSObject {
             displayModeMenu!.items[0].state = .on
         case .streamlinedReading:
             displayModeMenu!.items[1].state = .on
-        case .presentation:
+        case .continuous:
             displayModeMenu!.items[2].state = .on
-        case .quotations:
+        case .presentation:
             displayModeMenu!.items[3].state = .on
-        case .custom:
+        case .quotations:
             displayModeMenu!.items[4].state = .on
+        case .custom:
+            displayModeMenu!.items[5].state = .on
         }
     }
     

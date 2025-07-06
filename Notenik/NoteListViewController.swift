@@ -569,14 +569,18 @@ class NoteListViewController:   NSViewController,
         guard let cellView = anyView as? NSTableCellView else { return nil }
         if let note = notenikIO?.getNote(at: row) {
             var indent = 0
+            var seqValue: SeqValue?
             if let collection = notenikIO?.collection {
                 if collection.sortBySeq {
+                    seqValue = note.seq
                     if note.hasLevel() {
                         let config = collection.levelConfig
                         let levelValue = note.level
                         let level = levelValue.getInt()
                         indent = level - config.low
                     }
+                } else if collection.sortParm == .datePlusSeq {
+                    seqValue = note.seqAsTimeOfDay
                 }
             }
             if !lnfCol1Title.isEmpty && lnfCol1Title == tableColumn?.title {
@@ -599,7 +603,10 @@ class NoteListViewController:   NSViewController,
             } else if tableColumn?.title == "Seq" {
                 var displayValue = ""
                 if let collection = notenikIO?.collection {
-                    let (formatted, skipped) = collection.seqFormatter.format(seq: note.seq, full: true)
+                    if seqValue == nil {
+                        seqValue = note.seq
+                    }
+                    let (formatted, skipped) = collection.seqFormatter.format(seq: seqValue!, full: true)
                     if skipped > 0 {
                         displayValue = AppPrefs.shared.indentSpaces(level: skipped)
                     }

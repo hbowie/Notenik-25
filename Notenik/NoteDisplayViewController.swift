@@ -228,7 +228,8 @@ class NoteDisplayViewController: NSViewController,
         } else {
             imagePref = .light
         }
-        let displayHTML = noteDisplay.display(note!, io: io!, parms: parms, mdResults: mdResults, imagePref: imagePref)
+        var displayHTML = ""
+        displayHTML = noteDisplay.display(note!, io: io!, parms: parms, mdResults: mdResults, imagePref: imagePref)
         var html = ""
         if searchPhrase == nil || searchPhrase!.isEmpty {
             html = displayHTML

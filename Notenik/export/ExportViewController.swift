@@ -27,6 +27,7 @@ class ExportViewController: NSViewController {
     let tabDelim  = "Tab-Delimited"
     let bookmarks = "Netscape Bookmark File"
     let concatHtml = "Concatenated HTML"
+    let continuousHtml = "Continuous HTML"
     let outlineHtml = "HTML Outline"
     let concatMd  = "Concatenated Markdown"
     let webBookEPUBFolder = "Web Book as EPUB Folder"
@@ -103,6 +104,7 @@ class ExportViewController: NSViewController {
         formatPopup.addItem(withTitle: bookmarks)
         formatPopup.addItem(withTitle: outline)
         formatPopup.addItem(withTitle: concatHtml)
+        formatPopup.addItem(withTitle: continuousHtml)
         formatPopup.addItem(withTitle: outlineHtml)
         formatPopup.addItem(withTitle: concatMd)
         formatPopup.addItem(withTitle: webBookEPUBFolder)
@@ -153,6 +155,9 @@ class ExportViewController: NSViewController {
             case concatHtml:
                 fileExtCombo.selectItem(withObjectValue: html)
                 splitTagsCheckBox.state = .off
+            case continuousHtml:
+                fileExtCombo.selectItem(withObjectValue: html)
+                splitTagsCheckBox.state = .off
             case outlineHtml:
                 fileExtCombo.selectItem(withObjectValue: html)
                 splitTagsCheckBox.state = .off
@@ -178,13 +183,9 @@ class ExportViewController: NSViewController {
     @IBAction func okButtonPressed(_ sender: Any) {
         
         // Get desired Table of Contents Depth
-        print("Getting desired toc depth")
         if tocDepthSelector.selectedItem != nil {
-            print("  - selected item not nil")
             let depth = tocDepthSelector.indexOfSelectedItem + 1
-            print("  - depth = \(depth)")
             if depth > 0 && depth < 10 {
-                print("  - setting depth for collection")
                 io!.collection!.tocDepth = depth
                 io!.persistCollectionInfo()
             }
@@ -214,6 +215,8 @@ class ExportViewController: NSViewController {
                 format = .opml
             case concatHtml:
                 format = .concatHtml
+            case continuousHtml:
+                format = .continuousHtml
             case outlineHtml:
                 format = .outlineHtml
             case concatMd:
@@ -254,6 +257,8 @@ class ExportViewController: NSViewController {
         // Now let's export.
         if format == .exportScript {
             runExportScript(scriptName: formatTitle, exportPath: url!.path)
+        } else if format == .continuousHtml {
+            exportContinuousHtml(io: io!, destination: destination)
         } else {
             let exporter = NotesExporter()
             let notesExported = exporter.export(noteIO: io!,
@@ -330,6 +335,35 @@ class ExportViewController: NSViewController {
         let scriptPath = scriptURL.path
         let player = ScriptPlayer()
         player.playScript(fileName: scriptPath, exportPath: exportPath, templateOutputConsumer: nil)
+    }
+    
+    func exportContinuousHtml(io: NotenikIO, destination: URL) {
+        guard let note = io.getNote(at: 0) else { return }
+        guard let collection = io.collection else { return }
+        let parms = DisplayParms()
+        let noteDisplay = NoteDisplay()
+        noteDisplay.loadResourcePagesForCollection(io: io, parms: parms)
+        if collection.imgLocal {
+            parms.imagesPath = NotenikConstants.filesFolderName
+        }
+        parms.setFrom(note: note)
+        parms.displayMode = .continuous
+        
+        let mdResults = TransformMdResults()
+        
+        var imagePref: ImagePref = .light
+        let appearance = view.effectiveAppearance
+        if appearance.name.rawValue.lowercased().contains("dark") {
+            imagePref = .dark
+        } else {
+            imagePref = .light
+        }
+        let html = noteDisplay.display(note, io: io, parms: parms, mdResults: mdResults, imagePref: imagePref)
+        do {
+            try html.write(to: destination, atomically: false, encoding: .utf8)
+        } catch {
+            print("Problems writing continuous HTML file to \(destination)")
+        }
     }
     
     /// Generate a Web Book of CSS and HTML pages, containing the entire Collection.

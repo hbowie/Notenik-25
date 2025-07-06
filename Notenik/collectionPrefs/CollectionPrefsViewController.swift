@@ -157,13 +157,15 @@ class CollectionPrefsViewController: NSViewController {
         case .normal:
             displayModePopUp.selectItem(at: 0)
         case .presentation:
-            displayModePopUp.selectItem(at: 2)
-        case .quotations:
             displayModePopUp.selectItem(at: 3)
+        case .quotations:
+            displayModePopUp.selectItem(at: 4)
         case .streamlinedReading:
             displayModePopUp.selectItem(at: 1)
+        case .continuous:
+            displayModePopUp.selectItem(at: 2)
         case .custom:
-            displayModePopUp.selectItem(at: 4)
+            displayModePopUp.selectItem(at: 5)
         }
         setMathJax(collection!.mathJax)
         setImgLocal(collection!.imgLocal)
@@ -544,12 +546,18 @@ class CollectionPrefsViewController: NSViewController {
         }
         
         switch displayModePopUp.indexOfSelectedItem {
+        case 0:
+            collection!.displayMode = .normal
         case 1:
             collection!.displayMode = .streamlinedReading
         case 2:
-            collection!.displayMode = .presentation
+            collection!.displayMode = .continuous
         case 3:
+            collection!.displayMode = .presentation
+        case 4:
             collection!.displayMode = .quotations
+        case 5:
+            collection!.displayMode = .custom
         default:
             collection!.displayMode = .normal
         }

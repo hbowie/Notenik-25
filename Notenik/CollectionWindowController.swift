@@ -4615,6 +4615,10 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         setDisplayTo(.streamlinedReading)
     }
     
+    @IBAction func setDisplayToContinuous(_ sender: Any) {
+        setDisplayTo(.continuous)
+    }
+    
     @IBAction func setDisplayToPresentation(_sender: Any) {
         setDisplayTo(.presentation)
     }
@@ -4663,6 +4667,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         case .quotations:
             collection.displayMode = .normal
         case .custom:
+            collection.displayMode = .normal
+        case .continuous:
             collection.displayMode = .normal
         }
         noteIO.persistCollectionInfo()
