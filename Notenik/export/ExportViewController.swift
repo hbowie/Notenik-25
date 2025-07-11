@@ -30,6 +30,7 @@ class ExportViewController: NSViewController {
     let continuousHtml = "Continuous HTML"
     let outlineHtml = "HTML Outline"
     let concatMd  = "Concatenated Markdown"
+    let continuousMd  = "Continuous Markdown"
     let webBookEPUBFolder = "Web Book as EPUB Folder"
     let webBookSite = "Web Book as Site"
     let webBookEPUB = "Web Book as EPUB"
@@ -107,6 +108,7 @@ class ExportViewController: NSViewController {
         formatPopup.addItem(withTitle: continuousHtml)
         formatPopup.addItem(withTitle: outlineHtml)
         formatPopup.addItem(withTitle: concatMd)
+        formatPopup.addItem(withTitle: continuousMd)
         formatPopup.addItem(withTitle: webBookEPUBFolder)
         formatPopup.addItem(withTitle: webBookSite)
         formatPopup.addItem(withTitle: webBookEPUB)
@@ -162,6 +164,9 @@ class ExportViewController: NSViewController {
                 fileExtCombo.selectItem(withObjectValue: html)
                 splitTagsCheckBox.state = .off
             case concatMd:
+                fileExtCombo.selectItem(withObjectValue: md)
+                splitTagsCheckBox.state = .off
+            case continuousMd:
                 fileExtCombo.selectItem(withObjectValue: md)
                 splitTagsCheckBox.state = .off
             case webBookEPUB:
@@ -221,6 +226,8 @@ class ExportViewController: NSViewController {
                 format = .outlineHtml
             case concatMd:
                 format = .concatMarkdown
+            case continuousMd:
+                format = .continuousMarkdown
             case webBookEPUB:
                 format = .webBookEPUB
                 generateWebBook(exportFormat: format)

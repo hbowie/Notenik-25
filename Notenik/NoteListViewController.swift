@@ -88,8 +88,9 @@ class NoteListViewController:   NSViewController,
         shortcutMenu.addItem(NSMenuItem(title: "Copy Title", action: #selector(copyItemTitle(_:)), keyEquivalent: ""))
         shortcutMenu.addItem(NSMenuItem(title: "Copy Timestamp", action: #selector(copyItemTimestamp(_:)), keyEquivalent: ""))
         shortcutMenu.addItem(NSMenuItem(title: "Export to iCal", action: #selector(exportToICal(_:)), keyEquivalent: ""))
-        shortcutMenu.addItem(NSMenuItem(title: "Bulk Edit...", action: #selector(bulkEdit(_:)), keyEquivalent: ""))
+        shortcutMenu.addItem(NSMenuItem(title: "Continuous Display", action: #selector(continuousDisplay(_:)), keyEquivalent: ""))
         shortcutMenu.addItem(NSMenuItem.separator())
+        shortcutMenu.addItem(NSMenuItem(title: "Bulk Edit...", action: #selector(bulkEdit(_:)), keyEquivalent: ""))
         shortcutMenu.addItem(NSMenuItem(title: "Duplicate", action: #selector(duplicateItem(_:)), keyEquivalent: ""))
         shortcutMenu.addItem(NSMenuItem(title: "Delete Range...", action: #selector(deleteNotes(_:)), keyEquivalent: ""))
         tableView.menu = shortcutMenu
@@ -194,6 +195,19 @@ class NoteListViewController:   NSViewController,
         }
         
         collectionWindowController!.exportToICal(startingRow: lowIndex, endingRow: highIndex)
+    }
+    
+    @objc private func continuousDisplay(_ sender: AnyObject) {
+        guard let wc = collectionWindowController else { return }
+        guard let io = notenikIO else { return }
+        guard tableView.selectedRow >= 0 else { return }
+        var selNotes: [Note] = []
+        for index in tableView.selectedRowIndexes {
+            if let selNote = io.getNote(at: index) {
+                selNotes.append(selNote)
+            }
+        }
+        wc.bulkEdit(notes: selNotes)
     }
     
     @objc private func deleteNotes(_ sender: AnyObject) {
