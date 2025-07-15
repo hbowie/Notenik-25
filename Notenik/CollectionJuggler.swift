@@ -1495,12 +1495,14 @@ class CollectionJuggler: NSObject {
             displayModeMenu!.items[1].state = .on
         case .continuous:
             displayModeMenu!.items[2].state = .on
-        case .presentation:
+        case .continuousPartial:
             displayModeMenu!.items[3].state = .on
-        case .quotations:
+        case .presentation:
             displayModeMenu!.items[4].state = .on
-        case .custom:
+        case .quotations:
             displayModeMenu!.items[5].state = .on
+        case .custom:
+            displayModeMenu!.items[6].state = .on
         }
     }
     

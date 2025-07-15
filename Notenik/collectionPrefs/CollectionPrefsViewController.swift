@@ -156,16 +156,18 @@ class CollectionPrefsViewController: NSViewController {
         switch collection!.displayMode {
         case .normal:
             displayModePopUp.selectItem(at: 0)
-        case .presentation:
-            displayModePopUp.selectItem(at: 3)
-        case .quotations:
-            displayModePopUp.selectItem(at: 4)
         case .streamlinedReading:
             displayModePopUp.selectItem(at: 1)
         case .continuous:
             displayModePopUp.selectItem(at: 2)
-        case .custom:
+        case .continuousPartial:
+            displayModePopUp.selectItem(at: 3)
+        case .presentation:
+            displayModePopUp.selectItem(at: 4)
+        case .quotations:
             displayModePopUp.selectItem(at: 5)
+        case .custom:
+            displayModePopUp.selectItem(at: 6)
         }
         setMathJax(collection!.mathJax)
         setImgLocal(collection!.imgLocal)

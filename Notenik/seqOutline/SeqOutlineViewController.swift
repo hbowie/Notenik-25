@@ -15,6 +15,7 @@ import UniformTypeIdentifiers
 import NotenikLib
 import NotenikUtils
 
+/// This is the view controller for the optional Outline tab.
 class SeqOutlineViewController: NSViewController,
                                 NSOutlineViewDataSource,
                                 NSOutlineViewDelegate,
@@ -99,6 +100,7 @@ class SeqOutlineViewController: NSViewController,
         
         addToShortcutMenu(actionType: .duplicate)
         addToShortcutMenu(actionType: .deleteRange)
+        addToShortcutMenu(actionType: .continuousDisplay)
         
         outlineView.menu = shortcutMenu
         
@@ -243,36 +245,45 @@ class SeqOutlineViewController: NSViewController,
         guard node.type == .note else { return }
         let clickedNote = node.note!
         
+        notesAction(actionType: actionType, io: io, collection: collection, clickedNote: clickedNote, wc: wc)
+  
+    }
+    
+    public func notesAction(actionType: NoteActionType, io: NotenikIO, collection: NoteCollection, clickedNote: Note?, wc: CollectionWindowController) {
+        guard outlineView.numberOfSelectedRows > 0 else { return }
         var selNotes: [Note] = []
+        var primaryNote: Note? = clickedNote
         for index in outlineView.selectedRowIndexes {
             guard let node = outlineView.item(atRow: index) as? OutlineNode2 else { continue }
             guard node.type == .note else { continue }
             selNotes.append(node.note!)
         }
-        
+        if primaryNote == nil {
+            primaryNote = selNotes.first
+        }
         switch actionType {
         case .showInFinder:
             let folderPath = io.collection!.lib.getPath(type: .collection)
-            let filePath = clickedNote.noteID.getFullPath(note: clickedNote)
+            let filePath = primaryNote!.noteID.getFullPath(note: primaryNote!)
             NSWorkspace.shared.selectFile(filePath, inFileViewerRootedAtPath: folderPath)
         case .launchLink:
-            wc.launchLink(for: clickedNote)
+            wc.launchLink(for: primaryNote!)
         case .share:
             wc.shareNote(notes: selNotes)
         case .copyNotenikURL:
-            let str = clickedNote.getNotenikLink(preferringTimestamp: false)
+            let str = primaryNote!.getNotenikLink(preferringTimestamp: false)
             let board = NSPasteboard.general
             board.clearContents()
             board.setString(str, forType: NSPasteboard.PasteboardType.string)
         case .copyTitle:
-            let str = clickedNote.noteID.getBasis()
+            let str = primaryNote!.noteID.getBasis()
             let board = NSPasteboard.general
             board.clearContents()
             board.setString(str, forType: NSPasteboard.PasteboardType.string)
         case .copyTimestamp:
             var str = "No timestamp available!"
             if collection.hasTimestamp {
-                str = clickedNote.timestampAsString
+                str = primaryNote!.timestampAsString
             }
             let board = NSPasteboard.general
             board.clearContents()
@@ -280,23 +291,32 @@ class SeqOutlineViewController: NSViewController,
         case .bulkEdit:
             wc.bulkEdit(notes: selNotes)
         case .newWithOptions:
-            wc.newWithOptions(currentNote: clickedNote)
+            wc.newWithOptions(currentNote: primaryNote!)
         case .duplicate:
-            wc.duplicateNote(startingNote: clickedNote)
+            wc.duplicateNote(startingNote: primaryNote!)
         case .deleteRange:
             let (lo, hi) = getRangeOfSelectedNotes(io: io)
             guard lo >= 0 && hi >= lo else { return }
             wc.deleteRangeOfNotes(startingRow: lo, endingRow: hi)
         case .newChild:
-            wc.newChild(parent: clickedNote)
+            wc.newChild(parent: primaryNote!)
         case .modifySeqRange:
-            guard collection.seqFieldDef != nil 
+            guard collection.seqFieldDef != nil
                     && (collection.sortParm == .seqPlusTitle || collection.sortParm == .tasksBySeq) else {
                 return
             }
             let (lo, hi) = getRangeOfSelectedNotes(io: io)
             guard lo >= 0 && hi >= lo else { return }
             wc.seqModify(startingRow: lo, endingRow: hi)
+        case .continuousDisplay:
+            collection.setPartialDisplay()
+            collection.displayedNotes = SelectedNotes(io:io)
+            for index in outlineView.selectedRowIndexes {
+                guard let node = outlineView.item(atRow: index) as? OutlineNode2 else { continue }
+                guard node.type == .note else { continue }
+                collection.displayedNotes.append(node.note!)
+            }
+            wc.reloadDisplayView(self)
         }
     }
     

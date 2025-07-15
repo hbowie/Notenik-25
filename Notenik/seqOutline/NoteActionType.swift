@@ -25,4 +25,5 @@ public enum NoteActionType: String {
     case deleteRange    = "Delete Range..."
     case newChild       = "New Child"
     case modifySeqRange = "Modify Seq..."
+    case continuousDisplay = "Continuous Display"
 }

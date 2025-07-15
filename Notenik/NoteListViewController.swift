@@ -197,17 +197,14 @@ class NoteListViewController:   NSViewController,
         collectionWindowController!.exportToICal(startingRow: lowIndex, endingRow: highIndex)
     }
     
-    @objc private func continuousDisplay(_ sender: AnyObject) {
+    @objc public func continuousDisplay(_ sender: AnyObject) {
         guard let wc = collectionWindowController else { return }
         guard let io = notenikIO else { return }
-        guard tableView.selectedRow >= 0 else { return }
-        var selNotes: [Note] = []
-        for index in tableView.selectedRowIndexes {
-            if let selNote = io.getNote(at: index) {
-                selNotes.append(selNote)
-            }
-        }
-        wc.bulkEdit(notes: selNotes)
+        guard let collection = io.collection else { return }
+        guard tableView.numberOfSelectedRows > 0 else { return }
+        collection.setPartialDisplay()
+        collection.displayedNotes = SelectedNotes(io: io, selected: tableView.selectedRowIndexes)
+        wc.reloadDisplayView(self)
     }
     
     @objc private func deleteNotes(_ sender: AnyObject) {

@@ -4619,6 +4619,17 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         setDisplayTo(.continuous)
     }
     
+    @IBAction func setDisplayToContinuousPartial(_ sender: Any) {
+        guard let noteIO = guardForCollectionAction() else { return }
+        guard let collection = noteIO.collection else { return }
+        guard collectionTabs != nil else { return }
+        if collectionTabs!.selectedTabViewItemIndex == 0 && listVC != nil{
+            listVC!.continuousDisplay(self)
+        } else if collectionTabs!.selectedTabViewItemIndex == 2 && seqOutlineVC != nil {
+            seqOutlineVC!.notesAction(actionType: .continuousDisplay, io: noteIO, collection: collection, clickedNote: nil, wc: self)
+        }
+    }
+    
     @IBAction func setDisplayToPresentation(_sender: Any) {
         setDisplayTo(.presentation)
     }
@@ -4669,6 +4680,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         case .custom:
             collection.displayMode = .normal
         case .continuous:
+            collection.displayMode = .normal
+        case .continuousPartial:
             collection.displayMode = .normal
         }
         noteIO.persistCollectionInfo()
