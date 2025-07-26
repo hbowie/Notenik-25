@@ -59,11 +59,11 @@ public class ReportRunner: NSObject, TemplateOutputSource {
         let calendar = CalendarMaker(format: .htmlDoc, lowYM: lowYM, highYM: highYM)
         calendar.startCalendar(title: io.collection!.title, prefs: displayPrefs)
         
-        var (note, position) = io.firstNote()
+        var (sortedNote, position) = io.firstNote()
         var done = false
-        while note != nil && !done {
-            done = calendar.nextNote(note!)
-            (note, position) = io.nextNote(position)
+        while sortedNote != nil && !done {
+            done = calendar.nextNote(sortedNote!.note)
+            (sortedNote, position) = io.nextNote(position)
         }
         
         let html = calendar.finishCalendar()

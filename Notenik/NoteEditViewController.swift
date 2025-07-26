@@ -277,8 +277,8 @@ class NoteEditViewController: NSViewController, CollectionView {
     }
     
     func focusOn(initViewID: String, 
-                 note: NotenikLib.Note?,
-                 position: NotenikLib.NotePosition?,
+                 sortedNote: SortedNote?,
+                 position: NotePosition?,
                  io: any NotenikLib.NotenikIO,
                  searchPhrase: String?,
                  withUpdates: Bool = false) {
@@ -287,7 +287,7 @@ class NoteEditViewController: NSViewController, CollectionView {
         guard initialViewLoaded && containerViewBuilt else { return }
         guard io.collectionOpen else { return }
         guard let collection = io.collection else { return }
-        guard let focusNote = note else { return }
+        guard let focusNote = sortedNote?.note else { return }
         
         selectedNote = focusNote
         if collection.klassFieldDef != nil {

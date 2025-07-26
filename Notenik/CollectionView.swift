@@ -24,7 +24,7 @@ protocol CollectionView {
     ///   - position: The position of the selection.
     ///   - searchPhrase: Any search phrase currently in effect. 
     func focusOn(initViewID: String,
-                 note: Note?,
+                 sortedNote: SortedNote?,
                  position: NotePosition?,
                  io: NotenikIO,
                  searchPhrase: String?,

@@ -1023,7 +1023,7 @@ class CollectionJuggler: NSObject {
         let position = io.positionOfNote(note)
         let (nextNote, nextPosition) = io.nextNote(position)
         _ = kbwc.viewCoordinator.focusOn(initViewID: "juggler",
-                                         note: nextNote, position: nextPosition,
+                                         sortedNote: nextNote, position: nextPosition,
                                          row: -1, searchPhrase: nil)
         // kbwc.select(note: nextNote, position: nextPosition, source: .action, andScroll: true)
     }

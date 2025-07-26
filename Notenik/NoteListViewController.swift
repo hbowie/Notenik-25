@@ -377,7 +377,7 @@ class NoteListViewController:   NSViewController,
         guard collectionWindowController != nil else { return }
         let row = tableView.clickedRow
         guard row >= 0 else { return }
-        guard let clickedNote = notenikIO?.getNote(at: row) else { return }
+        guard let clickedNote = notenikIO?.getSortedNote(at: row) else { return }
         collectionWindowController!.incrementNote(clickedNote)
     }
     
@@ -578,7 +578,8 @@ class NoteListViewController:   NSViewController,
         // Try to get the appropriate cell view
         guard let anyView = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) else { return nil }
         guard let cellView = anyView as? NSTableCellView else { return nil }
-        if let note = notenikIO?.getNote(at: row) {
+        if let sortedNote = notenikIO?.getSortedNote(at: row) {
+            let note = sortedNote.note
             var indent = 0
             var seqValue: SeqValue?
             if let collection = notenikIO?.collection {
@@ -590,6 +591,7 @@ class NoteListViewController:   NSViewController,
                         let level = levelValue.getInt()
                         indent = level - config.low
                     }
+                    indent = sortedNote.depth
                 } else if collection.sortParm == .datePlusSeq {
                     seqValue = note.seqAsTimeOfDay
                 }
@@ -612,19 +614,7 @@ class NoteListViewController:   NSViewController,
             } else if tableColumn?.title == "Rank" {
                 modifyCellView(cellView: cellView, value: note.rank.value)
             } else if tableColumn?.title == "Seq" {
-                var displayValue = ""
-                if let collection = notenikIO?.collection {
-                    if seqValue == nil {
-                        seqValue = note.seq
-                    }
-                    let (formatted, skipped) = collection.seqFormatter.format(seq: seqValue!, full: true)
-                    if skipped > 0 {
-                        displayValue = AppPrefs.shared.indentSpaces(level: skipped)
-                    }
-                    displayValue.append(formatted)
-                } else {
-                    displayValue = note.seq.value
-                }
+                let displayValue = getSeqDisplay(sortedNote: sortedNote, indent: indent)
                 modifyCellView(cellView: cellView, value: displayValue, mono: true)
             } else if tableColumn?.title == "X" {
                 modifyCellView(cellView: cellView, value: note.doneXorT)
@@ -658,7 +648,8 @@ class NoteListViewController:   NSViewController,
                 } else if tableColumn?.title == notenikIO!.collection!.dateFieldDef.fieldLabel.properForm {
                     modifyCellView(cellView: cellView, value: note.date.dMyDate)
                 } else if notenikIO!.collection!.seqFieldDef != nil && tableColumn?.title == notenikIO!.collection!.seqFieldDef!.fieldLabel.properForm {
-                    modifyCellView(cellView: cellView, value: note.seq.value, mono: true)
+                    let displayValue = getSeqDisplay(sortedNote: sortedNote, indent: indent)
+                    modifyCellView(cellView: cellView, value: displayValue, mono: true)
                 } else if tableColumn?.title == notenikIO!.collection!.creatorFieldDef.fieldLabel.properForm {
                     modifyCellView(cellView: cellView, value: note.creatorValue)
                 } else if notenikIO!.collection!.klassFieldDef != nil && tableColumn?.title == notenikIO!.collection!.klassFieldDef!.fieldLabel.properForm {
@@ -672,6 +663,21 @@ class NoteListViewController:   NSViewController,
         }
         
         return cellView
+    }
+    
+    func getSeqDisplay(sortedNote: SortedNote, indent: Int) -> String {
+        var displayValue = ""
+        var seqSingleValue = sortedNote.seqSingleValue
+        if let collection = notenikIO?.collection {
+            let (formatted, skipped) = collection.seqFormatter.format(seq: seqSingleValue, full: true)
+            if skipped > 0 {
+                displayValue = AppPrefs.shared.indentSpaces(level: indent)
+            }
+            displayValue.append(formatted)
+        } else {
+            displayValue = sortedNote.note.seq.value
+        }
+        return displayValue
     }
     
     func modifyCellView(cellView: NSTableCellView, value: String, mono: Bool = false) {
@@ -699,19 +705,14 @@ class NoteListViewController:   NSViewController,
         guard !programmaticSelection else { return }
         let row = tableView.selectedRow
         guard row >= 0 else { return }
+        guard let sortedNote = io!.getSortedNote(at: row) else { return }
         guard coordinator != nil else { return }
         guard collectionWindowController != nil else { return }
-        // let (outcome, _) = collectionWindowController!.modIfChanged()
-        // guard outcome != modIfChangedOutcome.tryAgain else { return }
-        // collectionWindowController!.applyCheckBoxUpdates()
         _ = coordinator!.focusOn(initViewID: viewID,
-                             note: nil,
+                             sortedNote: nil,
                              position: nil,
                              row: row,
                              searchPhrase: nil)
-        // if let (note, position) = notenikIO?.selectNote(at: row) {
-        //     collectionWindowController!.select(note: note, position: position, source: NoteSelectionSource.list)
-        // }
         lastRowSelected = row
     }
     
@@ -1111,9 +1112,9 @@ class NoteListViewController:   NSViewController,
     }
     
     func focusOn(initViewID: String, 
-                 note: NotenikLib.Note?,
-                 position: NotenikLib.NotePosition?,
-                 io: any NotenikLib.NotenikIO,
+                 sortedNote: SortedNote?,
+                 position: NotePosition?,
+                 io: any NotenikIO,
                  searchPhrase: String?,
                  withUpdates: Bool = false) {
         

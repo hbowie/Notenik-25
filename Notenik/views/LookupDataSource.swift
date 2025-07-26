@@ -50,12 +50,12 @@ class LookupDataSource: ComboData {
             return
         }
         lookupIO = io
-        var note: Note?
+        var sortedNote: SortedNote?
         var pos: NotePosition?
-        (note, pos) = io.firstNote()
-        while (note != nil) {
-            addItem(note!.title.value)
-            (note, pos) = io.nextNote(pos!)
+        (sortedNote, pos) = io.firstNote()
+        while (sortedNote != nil) {
+            addItem(sortedNote!.note.title.value)
+            (sortedNote, pos) = io.nextNote(pos!)
         }
         sortItems()
     }

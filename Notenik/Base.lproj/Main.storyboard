@@ -688,14 +688,14 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="c31-hj-bFl"/>
-                                        <menuItem title="Back in Index" keyEquivalent="" id="1yq-By-Wf0">
-                                            <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                                        <menuItem title="Back in Index" keyEquivalent="[" id="1yq-By-Wf0">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                             <connections>
                                                 <action selector="backwardInIndex:" target="Ady-hI-5gd" id="Nhf-AP-unw"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Forward in Index" keyEquivalent="" id="jVF-Y8-AfB">
-                                            <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                                        <menuItem title="Forward in Index" keyEquivalent="]" id="jVF-Y8-AfB">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                             <connections>
                                                 <action selector="forwardInIndex:" target="Ady-hI-5gd" id="Iuo-rr-prj"/>
                                             </connections>
@@ -2229,13 +2229,13 @@ CA
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTK-bV-70K">
-                                <rect key="frame" x="0.0" y="0.0" width="479" height="91"/>
+                                <rect key="frame" x="0.0" y="0.0" width="479" height="81"/>
                                 <clipView key="contentView" id="caU-8Q-uow">
-                                    <rect key="frame" x="1" y="1" width="477" height="89"/>
+                                    <rect key="frame" x="1" y="1" width="477" height="79"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="fwC-s0-qs1" id="Zqh-F5-OQn">
-                                            <rect key="frame" x="0.0" y="0.0" width="477" height="89"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="477" height="79"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>

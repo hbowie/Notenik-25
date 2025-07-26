@@ -4,7 +4,7 @@
 //
 //  Created by Herb Bowie on 8/7/24.
 //
-//  Copyright © 2024 Herb Bowie (https://hbowie.net)
+//  Copyright © 2024 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -19,7 +19,7 @@ class CollectionViewCoordinator: NSObject {
     
     var collectionWindowController: CollectionWindowController
     
-    var lastNote: Note?
+    var lastNote: SortedNote?
     var lastViewID = ""
     
     var scroller: NoteScroller?
@@ -66,7 +66,7 @@ class CollectionViewCoordinator: NSObject {
         }
         if notenikIO != nil && lastNote != nil && !lastViewID.isEmpty {
             newView.focusOn(initViewID: lastViewID,
-                            note: lastNote,
+                            sortedNote: lastNote,
                             position: nil,
                             io: notenikIO!,
                             searchPhrase: nil,
@@ -87,6 +87,24 @@ class CollectionViewCoordinator: NSObject {
         }
     }
     
+    func focusOn(initViewID: String,
+                 note: Note?,
+                 position: NotePosition?,
+                 row: Int,
+                 searchPhrase: String?,
+                 withUpdates: Bool = false) -> Bool {
+        var sortedNote: SortedNote? = nil
+        if note != nil {
+            sortedNote = SortedNote(note: note!)
+        }
+        return focusOn(initViewID: initViewID,
+                       sortedNote: sortedNote,
+                       position: position,
+                       row: row,
+                       searchPhrase: searchPhrase,
+                       withUpdates: withUpdates)
+    }
+    
     /// Focus on the specified Note, by specifying either the Note itself or its position in the list.
     /// - Parameters:
     ///   - initViewID: Identifier for the initiating view.
@@ -97,7 +115,7 @@ class CollectionViewCoordinator: NSObject {
     ///
     /// - Returns: True if all went well, false if focus was not able to be completed.
     func focusOn(initViewID: String,
-                 note: Note?,
+                 sortedNote: SortedNote?,
                  position: NotePosition?,
                  row: Int,
                  searchPhrase: String?,
@@ -124,11 +142,11 @@ class CollectionViewCoordinator: NSObject {
         
         scroller = NoteScroller(collection: notenikIO!.collection!)
         
-        var noteToUse: Note? = note
+        var noteToUse: SortedNote? = sortedNote
         var positionToUse: NotePosition? = position
         
-        if note == nil && row >= 0 {
-            noteToUse = notenikIO!.getNote(at: row)
+        if sortedNote == nil && row >= 0 {
+            noteToUse = notenikIO!.getSortedNote(at: row)
         }
         
         if noteToUse != nil && (position == nil || position!.invalid) {
@@ -136,7 +154,7 @@ class CollectionViewCoordinator: NSObject {
         }
         
         if noteToUse == nil && position != nil && position!.valid {
-            noteToUse = notenikIO!.getNote(at: position!.index)
+            noteToUse = notenikIO!.getSortedNote(at: position!.index)
         }
         
         guard noteToUse != nil else {
@@ -156,7 +174,7 @@ class CollectionViewCoordinator: NSObject {
         if editVC != nil {
             editVC!.select(note: noteToUse!)
         } */
-        collectionWindowController.adjustAttachmentsMenu(noteToUse!)
+        collectionWindowController.adjustAttachmentsMenu(noteToUse!.note)
         
         navHistory!.addToHistory(another: noteToUse!)
         
@@ -164,7 +182,7 @@ class CollectionViewCoordinator: NSObject {
         
         for view in views {
             view.focusOn(initViewID: initViewID,
-                         note: noteToUse,
+                         sortedNote: noteToUse,
                          position: positionToUse,
                          io: notenikIO!,
                          searchPhrase: searchPhrase,

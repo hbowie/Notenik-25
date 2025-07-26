@@ -518,7 +518,7 @@ class ShareViewController: NSViewController {
             displayParms.extLinksOpenInNewWindows = note.collection.extLinksOpenInNewWindows
             displayParms.checkBoxMessageHandlerName = NotenikConstants.checkBoxMessageHandlerName
             let mdResults = TransformMdResults()
-            let displayString = noteDisplay.display(note, io: io!, parms: displayParms, mdResults: mdResults)
+            let displayString = noteDisplay.display(SortedNote(note: note), io: io!, parms: displayParms, mdResults: mdResults)
             if format == .htmlDoc && searchPhrase != nil && searchPhrase!.count > 0 {
                 stringToShare = StringUtils.highlightPhraseInHTML(phrase: searchPhrase!,
                                                                   html: displayString,

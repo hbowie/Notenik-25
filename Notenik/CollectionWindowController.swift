@@ -217,7 +217,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             }
             if selected != nil {
                 _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                            note: selected,
+                                            sortedNote: selected,
                                             position: position,
                                             row: -1,
                                             searchPhrase: nil)
@@ -250,13 +250,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     func windowDidBecomeKey(_ notification: Notification) {
         guard let vc = displayVC else { return }
-        guard let note = vc.note else { return }
+        guard let sortedNote = vc.sortedNote else { return }
         var filepath = ""
-        if let fp = note.noteID.getFullPath(note: note) {
+        if let fp = sortedNote.note.noteID.getFullPath(note: sortedNote.note) {
             filepath = fp
         }
-        juggler.setLastSelection(title: note.title.value,
-                                 link: note.getNotenikLink(preferringTimestamp: true),
+        juggler.setLastSelection(title: sortedNote.note.title.value,
+                                 link: sortedNote.note.getNotenikLink(preferringTimestamp: true),
                                  filepath: filepath,
                                  wc: self)
     }
@@ -766,24 +766,26 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let newFormat = fileIO.collection!.noteFileFormat
         let newHashtagsOption = fileIO.collection!.hashTagsOption
         var updated = 0
-        var (note, position) = fileIO.firstNote()
-        while note != nil {
-            note!.noteID.setNoteFileFormat(newFormat: newFormat)
-            if let tagsField = note!.getTagsAsField() {
-                if let tags = tagsField.value as? TagsValue {
-                    tags.hashtagsOption = newHashtagsOption
+        var (sortedNote, position) = fileIO.firstNote()
+        while sortedNote != nil {
+            if sortedNote!.original {
+                sortedNote!.note.noteID.setNoteFileFormat(newFormat: newFormat)
+                if let tagsField = sortedNote!.note.getTagsAsField() {
+                    if let tags = tagsField.value as? TagsValue {
+                        tags.hashtagsOption = newHashtagsOption
+                    }
+                }
+                let written = fileIO.writeNote(sortedNote!.note)
+                if written {
+                    updated += 1
+                } else {
+                    Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                                      category: "CollectionWindowController",
+                                      level: .error,
+                                      message: "Problems saving note titled \(sortedNote!.note.title)")
                 }
             }
-            let written = fileIO.writeNote(note!)
-            if written {
-                updated += 1
-            } else {
-                Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
-                                  category: "CollectionWindowController",
-                                  level: .error,
-                                  message: "Problems saving note titled \(note!.title)")
-            }
-            (note, position) = fileIO.nextNote(position)
+            (sortedNote, position) = fileIO.nextNote(position)
         }
         
         let alert2 = NSAlert()
@@ -798,19 +800,21 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard let noteIO = guardForCollectionAction() else { return }
         
         var notesToUpdate: [Note] = []
-        var (note, position) = noteIO.firstNote()
-        while note != nil {
-            var noteUpdated = false
-            for def in defsRemoved.list {
-                let field = note!.getField(def: def)
-                if field != nil {
-                    noteUpdated = true
+        var (sortedNote, position) = noteIO.firstNote()
+        while sortedNote != nil {
+            if sortedNote!.original {
+                var noteUpdated = false
+                for def in defsRemoved.list {
+                    let field = sortedNote!.note.getField(def: def)
+                    if field != nil {
+                        noteUpdated = true
+                    }
+                }
+                if noteUpdated {
+                    notesToUpdate.append(sortedNote!.note)
                 }
             }
-            if noteUpdated {
-                notesToUpdate.append(note!)
-            }
-            (note, position) = noteIO.nextNote(position)
+            (sortedNote, position) = noteIO.nextNote(position)
         }
         for noteToUpdate in notesToUpdate {
             let modNote = noteToUpdate.copy() as! Note
@@ -930,7 +934,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         var notesList: [Note] = []
         var oldFilenames: [String] = []
         var notesRenamed = 0
-        for note in noteIO.notesList {
+        for sortedNote in noteIO.notesList {
+            let note = sortedNote.note
             if let existingFilename = note.noteID.getExistingBaseDotExt() {
                 notesList.append(note)
                 oldFilenames.append(existingFilename)
@@ -1138,18 +1143,18 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                             collection: NoteCollection,
                             vc: FieldRenameViewController) {
         var updated = 0
-        var (note, position) = noteIO.firstNote()
-        while note != nil {
-            let written = noteIO.writeNote(note!)
+        var (sortedNote, position) = noteIO.firstNote()
+        while sortedNote != nil {
+            let written = noteIO.writeNote(sortedNote!.note)
             if written {
                 updated += 1
             } else {
                 Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
                                   category: "CollectionWindowController",
                                   level: .error,
-                                  message: "Problems saving note titled \(note!.title)")
+                                  message: "Problems saving note titled \(sortedNote!.note.title)")
             }
-            (note, position) = noteIO.nextNote(position)
+            (sortedNote, position) = noteIO.nextNote(position)
         }
         noteIO.persistCollectionInfo()
         vc.window!.close()
@@ -1196,13 +1201,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         
         if parms.removeOrRename {
             
-            var (note, position) = noteIO.firstNote()
-            while note != nil {
-                let oldField = note!.getField(label: parms.existingFieldLabel)
+            var (sortedNote, position) = noteIO.firstNote()
+            while sortedNote != nil {
+                let oldField = sortedNote!.note.getField(label: parms.existingFieldLabel)
                 if oldField != nil {
-                    notesToUpdate.append(note!)
+                    notesToUpdate.append(sortedNote!.note)
                 }
-                (note, position) = noteIO.nextNote(position)
+                (sortedNote, position) = noteIO.nextNote(position)
             }
                         
             for noteToUpdate in notesToUpdate {
@@ -1228,9 +1233,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = dict.removeDef(oldDef!)
             
         } else if parms.add && !parms.newFieldDefault.isEmpty {
-            var (note, position) = noteIO.firstNote()
-            while note != nil {
-                let modNote = note!.copy() as! Note
+            var (sortedNote, position) = noteIO.firstNote()
+            while sortedNote != nil {
+                let modNote = sortedNote!.note.copy() as! Note
                 let newValue = newDef!.fieldType.createValue(parms.newFieldDefault)
                 let newField = NoteField(def: newDef!, value: newValue)
                 _ = modNote.setField(newField)
@@ -1239,8 +1244,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                         populateEditFields(with: modNote)
                     }
                 }
-                _ = io!.modNote(oldNote: note!, newNote: modNote)
-                (note, position) = noteIO.nextNote(position)
+                _ = io!.modNote(oldNote: sortedNote!.note, newNote: modNote)
+                (sortedNote, position) = noteIO.nextNote(position)
             }
         }
                 
@@ -1262,14 +1267,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             return
         }
         
-        let (note, _) = noteIO.getSelectedNote()
+        let (sortedNote, _) = noteIO.getSelectedNote()
         if let newWithOptionsController =
             self.newWithOptionsStoryboard.instantiateController(withIdentifier: "newWithOptionsWC") as? NewWithOptionsWindowController {
             newWithOptionsController.showWindow(self)
             newWithOptionsController.noteIO = noteIO
             newWithOptionsController.collectionWC = self
-            if note != nil {
-                newWithOptionsController.setCurrentNote(note!)
+            if sortedNote != nil {
+                newWithOptionsController.setCurrentNote(sortedNote!.note)
             }
         } else {
             Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
@@ -1289,14 +1294,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             return
         }
         
-        let (note, _) = noteIO.getSelectedNote()
+        let (sortedNote, _) = noteIO.getSelectedNote()
         if let newWithOptionsController =
             self.newWithOptionsStoryboard.instantiateController(withIdentifier: "newWithOptionsWC") as? NewWithOptionsWindowController {
             newWithOptionsController.showWindow(self)
             newWithOptionsController.noteIO = noteIO
             newWithOptionsController.collectionWC = self
-            if note != nil {
-                newWithOptionsController.setCurrentNote(note!)
+            if sortedNote != nil {
+                newWithOptionsController.setCurrentNote(sortedNote!.note)
             }
         } else {
             Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
@@ -1318,25 +1323,23 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
-    public func seqModified(modStartingNote: Note?, rowCount: Int, reselect: Bool = true) {
+    public func seqModified(modStartingNote: SortedNote?, rowCount: Int, reselect: Bool = true) {
         newNoteRequested = false
         pendingEdits = false
         reloadCollection(self)
         if reselect {
             if modStartingNote != nil {
                 _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                            note: modStartingNote,
+                                            sortedNote: modStartingNote,
                                             position: nil, row: -1, searchPhrase: nil)
-                // select(note: modStartingNote!, position: nil, source: .nav, andScroll: true)
                 if listVC != nil && rowCount > 1 {
                     listVC!.extendSelection(rowCount: rowCount)
                 }
             } else {
-                let (note, position) = io!.firstNote()
+                let (sortedNote, position) = io!.firstNote()
                 _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                            note: note, position: position,
+                                            sortedNote: sortedNote, position: position,
                                             row: -1, searchPhrase: nil)
-                // select(note: note, position: position, source: .nav, andScroll: true)
             }
         }
     }
@@ -1414,12 +1417,12 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard bodyText.count > 0 else { return }
         guard let _ = guardForCollectionAction() else { return }
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                    note: noteToUpdate,
+                                    sortedNote: SortedNote(note: noteToUpdate),
                                     position: nil, row: -1, searchPhrase: nil)
         let (_, sel) = guardForNoteAction()
         guard let selectedNote = sel else { return }
-        var body = selectedNote.body.value
-        let updatedNote = selectedNote.copy() as! Note
+        var body = selectedNote.note.body.value
+        let updatedNote = selectedNote.note.copy() as! Note
         if !body.isEmpty {
             body.append("\n\n")
         }
@@ -1752,12 +1755,12 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         
         let today = DateValue("today")
         var notesToUpdate: [Note] = []
-        var (note, position) = io!.firstNote()
-        while note != nil {
-            if note!.hasDate() && note!.hasRecurs() && !note!.isDone && note!.daily && note!.date < today {
-                notesToUpdate.append(note!)
+        var (sortedNote, position) = io!.firstNote()
+        while sortedNote != nil {
+            if sortedNote!.note.hasDate() && sortedNote!.note.hasRecurs() && !sortedNote!.note.isDone && sortedNote!.note.daily && sortedNote!.note.date < today {
+                notesToUpdate.append(sortedNote!.note)
             }
-            (note, position) = io!.nextNote(position)
+            (sortedNote, position) = io!.nextNote(position)
         }
         for noteToUpdate in notesToUpdate {
             let modNote = noteToUpdate.copy() as! Note
@@ -1766,13 +1769,11 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             }
             _ = io!.modNote(oldNote: noteToUpdate, newNote: modNote)
         }
-        // reloadViews()
-        (note, position) = io!.firstNote()
+        (sortedNote, position) = io!.firstNote()
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                    note: note, 
+                                    sortedNote: sortedNote,
                                     position: position, row: -1, searchPhrase: nil,
                                     withUpdates: true)
-        // select(note: note, position: position, source: .nav, andScroll: true)
     }
     
     /// If we have tasks that have been completed, but not closed, then close them now.
@@ -1780,16 +1781,16 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         
         guard let noteIO = guardForCollectionAction() else { return }
         
-        var (note, position) = noteIO.firstNote()
+        var (sortedNote, position) = noteIO.firstNote()
         var notesToUpdate: [Note] = []
         let config = noteIO.collection!.statusConfig
-        while note != nil {
-            if note!.hasStatus() {
-                if note!.status.getInt() == config.doneThreshold {
-                    notesToUpdate.append(note!)
+        while sortedNote != nil {
+            if sortedNote!.note.hasStatus() {
+                if sortedNote!.note.status.getInt() == config.doneThreshold {
+                    notesToUpdate.append(sortedNote!.note)
                 }
             }
-            (note, position) = io!.nextNote(position)
+            (sortedNote, position) = io!.nextNote(position)
         }
         for noteToUpdate in notesToUpdate {
             let modNote = noteToUpdate.copy() as! Note
@@ -1804,21 +1805,21 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         
         // See if we're ready to take action
         guard let noteIO = guardForCollectionAction() else { return }
-        var (note, position) = noteIO.firstNote()
+        var (sortedNote, position) = noteIO.firstNote()
         var updated = 0
-        while note != nil {
-            if note!.hasDate() {
-                let written = noteIO.writeNote(note!)
+        while sortedNote != nil {
+            if sortedNote!.note.hasDate() {
+                let written = noteIO.writeNote(sortedNote!.note)
                 if !written {
                     Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
                                       category: "CollectionWindowController",
                                       level: .error,
-                                      message: "Problems saving note titled \(note!.title)")
+                                      message: "Problems saving note titled \(sortedNote!.note.title)")
                 } else {
                     updated += 1
                 }
             }
-            (note, position) = noteIO.nextNote(position)
+            (sortedNote, position) = noteIO.nextNote(position)
         }
         finishBatchOperation()
         reportNumberOfNotesUpdated(updated)
@@ -1913,9 +1914,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                         withUpdates: true)
             // select(note: firstNote, position: nil, source: .nav, andScroll: true)
         } else {
-            let (note, position) = io!.firstNote()
+            let (sortedNote, position) = io!.firstNote()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: note,
+                                        sortedNote: sortedNote,
                                         position: position, row: -1, searchPhrase: nil)
             // select(note: note, position: position, source: .nav, andScroll: true)
         }
@@ -1950,13 +1951,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let fromTags = TagsValue(from)
         let toTags = TagsValue(to)
         
-        var (note, position) = noteIO.firstNote()
+        var (sortedNote, position) = noteIO.firstNote()
         var updated = 0
-        while note != nil {
-            if note!.hasTags() {
+        while sortedNote != nil {
+            if sortedNote!.note.hasTags() {
                 let newTags = TagsValue()
                 var matchedTags = 0
-                for noteTag in note!.tags.tags {
+                for noteTag in sortedNote!.note.tags.tags {
                     var matchFound = false
                     for fromTag in fromTags.tags {
                         if fromTag == noteTag {
@@ -1976,18 +1977,21 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                         newTags.tags.append(toTag)
                     }
                     newTags.sort()
-                    let modNote = note!.copy() as! Note
+                    let modNote = sortedNote!.note.copy() as! Note
                     _ = modNote.setTags(newTags.value)
-                    _ = noteIO.modNote(oldNote: note!, newNote: modNote)
+                    _ = noteIO.modNote(oldNote: sortedNote!.note, newNote: modNote)
                 }
             }
-            (note, position) = noteIO.nextNote(position)
+            (sortedNote, position) = noteIO.nextNote(position)
         }
         vc.window!.close()
         finishBatchOperation()
         logInfo(msg: "Notes with tags changed = \(updated)")
         reportNumberOfNotesUpdated(updated)
     }
+    
+    var tagStartNote: SortedNote?
+    var tagStartPosition: NotePosition = NotePosition()
     
     /// Get the desired tag to be assigned to the search results.
     @IBAction func tagSearchResults (_ sender: Any) {
@@ -2016,9 +2020,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
-    var tagStartNote: Note?
-    var tagStartPosition: NotePosition = NotePosition()
-    
     /// Assign the specified tag to the current search results.
     func tagAssignNow(to: String, vc: TagsAssignViewController) {
         
@@ -2034,33 +2035,33 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
         
         var updated = 0
-        var (note, _) = searcher.nextMatching(startNew: true)
-        while note != nil {
+        var (sortedNote, _) = searcher.nextMatching(startNew: true)
+        while sortedNote != nil {
             updated += 1
-            var tagStr = note!.tags.value
+            var tagStr = sortedNote!.note.tags.value
             if !tagStr.isEmpty {
                 tagStr.append(", ")
             }
             tagStr.append(to)
-            let modNote = note!.copy() as! Note
+            let modNote = sortedNote!.note.copy() as! Note
             _ = modNote.setTags(tagStr)
-            _ = noteIO.modNote(oldNote: note!, newNote: modNote)
-            (note, _) = searcher.nextMatching(startNew: false)
+            _ = noteIO.modNote(oldNote: sortedNote!.note, newNote: modNote)
+            (sortedNote, _) = searcher.nextMatching(startNew: false)
         }
         
         vc.window!.close()
         // reloadViews()
         if tagStartNote != nil {
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: tagStartNote,
+                                        sortedNote: tagStartNote,
                                         position: tagStartPosition,
                                         row: -1, searchPhrase: nil,
                                         withUpdates: true)
             // select(note: tagStartNote, position: tagStartPosition, source: .action)
         } else {
-            let (note, position) = io!.firstNote()
+            let (sortedNote, position) = io!.firstNote()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: note,
+                                        sortedNote: sortedNote,
                                         position: position, row: -1, searchPhrase: nil)
             // select(note: note, position: position, source: .action, andScroll: true)
         }
@@ -2087,7 +2088,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let (_, sel) = guardForNoteAction()
         guard let selectedNote = sel else { return }
         let maker = NoteLineMaker()
-        let _ = maker.putNote(selectedNote, includeAttachments: true)
+        let _ = maker.putNote(selectedNote.note, includeAttachments: true)
         var str = ""
         if let writer = maker.writer as? BigStringWriter {
             str = writer.bigString
@@ -2103,7 +2104,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let (_, sel) = guardForNoteAction()
         guard let selectedNote = sel else { return }
         let maker = NoteLineMaker()
-        let _ = maker.putNote(selectedNote)
+        let _ = maker.putNote(selectedNote.note)
         var str = ""
         if let writer = maker.writer as? BigStringWriter {
             str = writer.bigString
@@ -2600,8 +2601,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard io != nil && io!.collectionOpen else { return }
         guard let noteIO = io else { return }
         guard let collection = noteIO.collection else { return }
-        let (note, _) = noteIO.getSelectedNote()
-        guard let selNote = note else { return }
+        let (sortedNote, _) = noteIO.getSelectedNote()
+        guard let selNote = sortedNote else { return }
         guard collection.dict.contains(collection.linkFieldDef) else { return }
 
         // Ask the user to pick a local file or folder
@@ -2631,19 +2632,19 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 communicateError("Link field not found", alert: true)
             }
         } else {
-            let setOK = selNote.setLink(localLink)
+            let setOK = selNote.note.setLink(localLink)
             if !setOK {
                 communicateError("Attempt to set link value for selected note failed!")
             }
-            populateEditFields(with: selNote)
-            let writeOK = noteIO.writeNote(selNote)
+            populateEditFields(with: selNote.note)
+            let writeOK = noteIO.writeNote(selNote.note)
             if !writeOK {
                 communicateError("Attempted write of updated note failed!")
             }
-            displayModifiedNote(updatedNote: selNote)
+            displayModifiedNote(updatedNote: selNote.note)
             // reloadViews()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: selNote,
+                                        sortedNote: selNote,
                                         position: nil, row: -1, searchPhrase: nil,
                                         withUpdates: true)
             // select(note: selNote, position: nil, source: .action, andScroll: true)
@@ -2652,14 +2653,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     @IBAction func wikipediaLink(_ sender: Any) {
         guard io != nil && io!.collectionOpen else { return }
-        let (note, _) = io!.getSelectedNote()
-        guard note != nil else { return }
+        let (sortedNote, _) = io!.getSelectedNote()
+        guard sortedNote != nil else { return }
         if noteTabs!.tabView.selectedTabViewItem!.label == "Edit" {
             editVC!.wikipediaLink()
         } else {
-            let modNote = note!.copy() as! Note
-            _ = modNote.setLink(StringUtils.wikify(note!.title.value))
-            let _ = recordMods(noteIO: io!, note: note!, modNote: modNote)
+            let modNote = sortedNote!.note.copy() as! Note
+            _ = modNote.setLink(StringUtils.wikify(sortedNote!.note.title.value))
+            let _ = recordMods(noteIO: io!, note: sortedNote!.note, modNote: modNote)
         }
     }
     
@@ -2676,7 +2677,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         if noteTabs!.tabView.selectedTabViewItem!.label == "Edit" {
             return editVC!.getLink()
         } else {
-            return selectedNote.link.value
+            return selectedNote.note.link.value
         }
     }
     
@@ -2693,14 +2694,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     func setCleanLink(_ clean: String) {
         guard io != nil && io!.collectionOpen else { return }
-        let (note, _) = io!.getSelectedNote()
-        guard note != nil else { return }
+        let (sortedNote, _) = io!.getSelectedNote()
+        guard sortedNote != nil else { return }
         if noteTabs!.tabView.selectedTabViewItem!.label == "Edit" {
             _ = editVC!.setLink(clean)
         } else {
-            let modNote = note!.copy() as! Note
+            let modNote = sortedNote!.note.copy() as! Note
             _ = modNote.setLink(clean)
-            let _ = recordMods(noteIO: io!, note: note!, modNote: modNote)
+            let _ = recordMods(noteIO: io!, note: sortedNote!.note, modNote: modNote)
         }
     }
     
@@ -2714,17 +2715,16 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         if noteTabs!.tabView.selectedTabViewItem!.label == "Edit" {
             editVC!.closeNote()
         } else {
-            let modNote = selNote.copy() as! Note
+            let modNote = selNote.note.copy() as! Note
             modNote.close()
-            let (chgNote, _) = io.modNote(oldNote: selNote, newNote: modNote)
+            let (chgNote, _) = io.modNote(oldNote: selNote.note, newNote: modNote)
             if chgNote == nil {
                 Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
                                   category: "CollectionWindowController",
                                   level: .fault,
-                                  message: "Problems modifying note titled \(selNote.title)")
+                                  message: "Problems modifying note titled \(selNote.note.title)")
             } else {
                 displayModifiedNote(updatedNote: chgNote!)
-                // reloadViews()
                 _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                             note: chgNote,
                                             position: nil, row: -1, searchPhrase: nil,
@@ -2742,22 +2742,22 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         incrementNote(selNote)
     }
     
-    func incrementNote(_ selNote: Note) {
+    func incrementNote(_ selNote: SortedNote) {
         guard let noteIO = guardForCollectionAction() else { return }
-        let modNote = selNote.copy() as! Note
+        let modNote = selNote.note.copy() as! Note
         let sortParm = noteIO.collection!.sortParm
         
         // Determine which field to increment
-        if !selNote.hasSeq() && !selNote.hasDate() {
+        if !selNote.note.hasSeq() && !selNote.note.hasDate() {
             return
-        } else if selNote.hasSeq() && !selNote.hasDate() {
-            incSeq(noteIO: noteIO, note: selNote, modNote: modNote)
-        } else if selNote.hasDate() && !selNote.hasDate() {
-            incrementDate(noteIO: noteIO, note: selNote, modNote: modNote)
+        } else if selNote.note.hasSeq() && !selNote.note.hasDate() {
+            incSeq(noteIO: noteIO, sortedNote: selNote, modNote: modNote)
+        } else if selNote.note.hasDate() && !selNote.note.hasDate() {
+            incrementDate(noteIO: noteIO, note: selNote.note, modNote: modNote)
         } else if sortParm == .seqPlusTitle || sortParm == .tasksBySeq {
-            incSeq(noteIO: noteIO, note: selNote, modNote: modNote)
+            incSeq(noteIO: noteIO, sortedNote: selNote, modNote: modNote)
         } else {
-            incrementDate(noteIO: noteIO, note: selNote, modNote: modNote)
+            incrementDate(noteIO: noteIO, note: selNote.note, modNote: modNote)
         }
     }
     
@@ -2765,18 +2765,18 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         
         let (nio, sel) = guardForNoteAction()
         guard let noteIO = nio, let selNote = sel else { return }
-        let modNote = selNote.copy() as! Note
+        let modNote = selNote.note.copy() as! Note
         modNote.toggleStatus()
-        let _ = recordMods(noteIO: noteIO, note: selNote, modNote: modNote)
+        let _ = recordMods(noteIO: noteIO, note: selNote.note, modNote: modNote)
     }
     
     @IBAction func menuNoteIncrementStatus(_ sender: Any) {
         
         let (nio, sel) = guardForNoteAction()
         guard let noteIO = nio, let selNote = sel else { return }
-        let modNote = selNote.copy() as! Note
+        let modNote = selNote.note.copy() as! Note
         modNote.incrementStatus()
-        let _ = recordMods(noteIO: noteIO, note: selNote, modNote: modNote)
+        let _ = recordMods(noteIO: noteIO, note: selNote.note, modNote: modNote)
     }
     
     /// Increment the Note's Date field by one day.
@@ -2801,19 +2801,16 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     ///   - noteIO: The NotenikIO module to use.
     ///   - note: The note prior to being incremented.
     ///   - modNote: A copy of the note being incremented.
-    func incSeq(noteIO: NotenikIO, note: Note, modNote: Note) {
+    func incSeq(noteIO: NotenikIO, sortedNote: SortedNote, modNote: Note) {
         guard let sequencer = Sequencer(io: noteIO) else { return }
-        let (notesInced, firstModNote) = sequencer.incrementSeq(startingNote: note)
+        let (notesInced, firstModNote) = sequencer.incrementSeq(startingNote: sortedNote)
         logInfo(msg: "\(notesInced) Notes had their Seq values incremented")
         if firstModNote != nil {
-            // displayModifiedNote(updatedNote: firstModNote!)
-            // populateEditFields(with: firstModNote!)
-            // reloadViews()
+            firstModNote!.genSortKey()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: firstModNote!,
+                                        sortedNote: firstModNote!,
                                         position: nil, row: -1, searchPhrase: nil,
                                         withUpdates: true)
-            // select(note: firstModNote!, position: nil, source: .action, andScroll: true)
         } else {
             print("  - first mod note is nil!")
         }
@@ -2822,20 +2819,18 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     @IBAction func incMajorSeq(_ sender: Any) {
         let (nio, sel) = guardForNoteAction()
         guard let noteIO = nio, let selNote = sel else { return }
-        guard selNote.hasSeq() else { return }
+        guard selNote.note.hasSeq() else { return }
         guard let sequencer = Sequencer(io: noteIO) else { return }
         
         let (notesInced, firstModNote) = sequencer.incrementSeq(startingNote: selNote, incMajor: true)
         logInfo(msg: "\(notesInced) Notes had their Seq values incremented")
         if firstModNote != nil {
-            displayModifiedNote(updatedNote: firstModNote!)
-            populateEditFields(with: firstModNote!)
-            // reloadViews()
+            displayModifiedNote(updatedNote: firstModNote!.note)
+            populateEditFields(with: firstModNote!.note)
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: firstModNote!,
+                                        sortedNote: firstModNote!,
                                         position: nil, row: -1, searchPhrase: nil,
                                         withUpdates: true)
-            // select(note: firstModNote!, position: nil, source: .action, andScroll: true)
         }
     }
     
@@ -2851,6 +2846,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     func indentBy(_ indentLevels: Int) {
         
         guard indentLevels != 0 else { return }
+        
+        // Get the range of selected rows
         guard let noteIO = guardForCollectionAction() else { return }
         guard let collection = noteIO.collection else { return }
         guard let ctabs = collectionTabs else { return }
@@ -2862,23 +2859,35 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             (lowIndex, highIndex) = listVC!.getRangeOfSelectedRows()
         }
         guard lowIndex >= 0 else { return }
-        guard let selNote = noteIO.getNote(at: lowIndex) else { return }
+        guard let selNote = noteIO.getSortedNote(at: lowIndex) else { return }
+        let seqIndex = selNote.seqIndex
         
+        // Establish context for the first (or only) note in the range
         var newSeq: SeqValue?
-        var maxSeqLevel: Int = -1
-        if selNote.hasSeq() && lowIndex > 0 {
-            let priorNote = noteIO.getNote(at: lowIndex - 1)
-            if priorNote != nil && priorNote!.hasSeq() {
-                newSeq = priorNote!.seq.dupe()
-                maxSeqLevel = selNote.seq.maxLevel
-                newSeq!.incAtLevel(level: maxSeqLevel + indentLevels, removingDeeperLevels: true)
+        if selNote.note.hasSeq() && lowIndex > 0 {
+            let priorNote = noteIO.getSortedNote(at: lowIndex - 1)
+            if priorNote != nil && priorNote!.note.hasSeq() {
+                newSeq = selNote.note.seq.dupe()
+                if newSeq != nil {
+                    _ = newSeq!.setSingleSeq(priorNote!.note.seq.getSingleSeq(seqIndex: seqIndex)!.value,
+                                             seqIndex: seqIndex)
+                }
+                // newSeq!.indent(indentLevels: indentLevels)
+                let singleNewSeq = newSeq!.getSingleSeq(seqIndex: seqIndex)
+                var maxSeqLevel: Int = -1
+                if let singleStartingSeq = selNote.note.seq.getSingleSeq(seqIndex: seqIndex) {
+                    maxSeqLevel = singleStartingSeq.maxLevel
+                    singleNewSeq!.incAtLevel(level: maxSeqLevel + indentLevels, removingDeeperLevels: true)
+                }
+
+                newSeq!.setWithLatestValues()
             }
         }
         
         // If we're indenting a range of notes, then use the Sequencer.
         if highIndex > lowIndex && newSeq != nil {
             if let sequencer = Sequencer(io: io!) {
-                let modStartingNote = sequencer.renumberRange(startingRow: lowIndex, endingRow: highIndex, newSeqValue: newSeq!.value)
+                let modStartingNote = sequencer.renumberRange(startingRow: lowIndex, endingRow: highIndex, newSeqValue: newSeq!.value, seqIndex: seqIndex)
                 let selCount = highIndex - lowIndex + 1
                 seqModified(modStartingNote: modStartingNote, rowCount: selCount, reselect: true)
                 return
@@ -2886,7 +2895,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
         
         // Continue with a single Note to indent.
-        let modNote = selNote.copy() as! Note
+        let modNote = selNote.note.copy() as! Note
         var noteModified = false
         
         if modNote.hasLevel() {
@@ -2903,12 +2912,10 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
         
         if noteModified {
-            let (note, position) = noteIO.modNote(oldNote: selNote, newNote: modNote)
+            let (note, position) = noteIO.modNote(oldNote: selNote.note, newNote: modNote)
             if (note == nil) || (position.invalid) {
                 communicateError("Trouble updating Note titled \(modNote.title.value)")
             }
-            // reloadViews()
-            // select(note: modNote, position: nil, source: .action, andScroll: true)
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: modNote,
                                         position: nil, row: -1, searchPhrase: nil,
@@ -2952,7 +2959,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard noteToShare != nil else { return }
         let writer = BigStringWriter()
         let maker = NoteLineMaker(writer)
-        let fieldsWritten = maker.putNote(noteToShare!)
+        let fieldsWritten = maker.putNote(noteToShare!.note)
         if fieldsWritten > 0 {
             let stringToShare = NSString(string: writer.bigString)
             let picker = NSSharingServicePicker(items: [stringToShare])
@@ -3000,12 +3007,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let (_, sel) = guardForNoteAction()
         guard let selectedNote = sel else { return }
         if let mediumPubController = self.mediumPubStoryboard.instantiateController(withIdentifier: "mediumpubWC") as? MediumPubWindowController {
-            mediumPubController.note = selectedNote
+            mediumPubController.note = selectedNote.note
             mediumPubController.showWindow(sender)
-            
-            // vc.window = shareController
-            // vc.io = notenikIO!
-            // vc.note = note
         } else {
             Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
                               category: "CollectionWindowController",
@@ -3018,12 +3021,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let (_, sel) = guardForNoteAction()
         guard let selectedNote = sel else { return }
         if let microBlogController = self.microBlogStoryboard.instantiateController(withIdentifier: "microblogWC") as? MicroBlogWindowController {
-            microBlogController.note = selectedNote
+            microBlogController.note = selectedNote.note
             microBlogController.showWindow(sender)
-            
-            // vc.window = shareController
-            // vc.io = notenikIO!
-            // vc.note = note
         } else {
             Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
                               category: "CollectionWindowController",
@@ -3071,12 +3070,11 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     @IBAction func goToFirstNote(_ sender: Any) {
         let (nio, _) = guardForNoteAction()
         guard let noteIO = nio else { return }
-        let (note, position) = noteIO.firstNote()
+        let (sortedNote, position) = noteIO.firstNote()
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                    note: note,
+                                    sortedNote: sortedNote,
                                     position: position,
                                     row: -1, searchPhrase: nil)
-        // select(note: note, position: position, source: .nav, andScroll: true)
     }
     
     /// Go to the next note in the list
@@ -3091,10 +3089,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             (nextNote, _) = noteIO.firstNote()
         }
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                    note: nextNote,
+                                    sortedNote: nextNote,
                                     position: nil,
                                     row: -1, searchPhrase: nil)
-        // select(note: nextNote, position: nil, source: .nav, andScroll: true)
     }
     
     @IBAction func scrollToSelected(_ sender: Any) {
@@ -3120,10 +3117,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             (priorNote, _) = noteIO.lastNote()
         }
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                    note: priorNote,
+                                    sortedNote: priorNote,
                                     position: nil,
                                     row: -1, searchPhrase: nil)
-        // select(note: priorNote, position: nil, source: .nav, andScroll: true)
     }
     
     @IBAction func goToRandomNote(_ sender: Any) {
@@ -3136,35 +3132,35 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard let collection = noteIO.collection else { return }
         var (randomNote, randomPosition) = noteIO.getSelectedNote()
         guard randomNote != nil else { return }
-        let lastTitle = randomNote!.title.value
+        let lastTitle = randomNote!.note.title.value
         var first = 0
         if noteIO.collection!.seqFieldDef != nil {
-            let (note, _) = noteIO.firstNote()
-            if note != nil && !note!.hasSeq() && noteIO.notesCount > 1 {
+            let (sortedNote, _) = noteIO.firstNote()
+            if sortedNote != nil && !sortedNote!.note.hasSeq() && noteIO.notesCount > 1 {
                 first = 1
             }
         }
-        while (noteIO.notesCount - 1) > first && randomNote!.title.value == lastTitle {
+        while (noteIO.notesCount - 1) > first && randomNote!.note.title.value == lastTitle {
             let randomIndex = Int.random(in: first..<noteIO.notesCount)
             randomPosition = NotePosition(index: randomIndex)
-            randomNote = noteIO.getNote(at: randomIndex)
+            randomNote = noteIO.getSortedNote(at: randomIndex)
             guard randomNote != nil else { return }
         }
         
         if logSelection {
             if collection.datePickedFieldDef != nil {
-                let modNote = randomNote!.copy() as! Note
+                let modNote = randomNote!.note.copy() as! Note
                 modNote.setDatePickedNow()
-                let modOK = recordMods(noteIO: noteIO, note: randomNote!, modNote: modNote)
+                let modOK = recordMods(noteIO: noteIO, note: randomNote!.note, modNote: modNote)
                 if modOK {
-                    randomNote = modNote
+                    randomNote = SortedNote(note: modNote)
                     randomPosition = noteIO.positionOfNote(randomNote!)
                 }
             }
         }
         
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                    note: randomNote,
+                                    sortedNote: randomNote,
                                     position: randomPosition,
                                     row: -1, searchPhrase: nil)
     }
@@ -3174,13 +3170,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard let collection = noteIO.collection else { return }
         guard collection.datePickedFieldDef != nil else { return }
         
-        var (note, position) = noteIO.firstNote()
+        var (sortedNote, position) = noteIO.firstNote()
         var notesToUpdate: [Note] = []
-        while note != nil {
-            if note!.hasDatePicked() {
-                notesToUpdate.append(note!)
+        while sortedNote != nil {
+            if sortedNote!.note.hasDatePicked() {
+                notesToUpdate.append(sortedNote!.note)
             }
-            (note, position) = io!.nextNote(position)
+            (sortedNote, position) = io!.nextNote(position)
         }
         for noteToUpdate in notesToUpdate {
             let modNote = noteToUpdate.copy() as! Note
@@ -3200,17 +3196,17 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                              alert: true)
             return
         }
-        let modNote = selNote.copy() as! Note
+        let modNote = selNote.note.copy() as! Note
         modNote.setDatePickedNow()
-        let _ = recordMods(noteIO: noteIO, note: selNote, modNote: modNote)
+        let _ = recordMods(noteIO: noteIO, note: selNote.note, modNote: modNote)
     }
     
     @IBAction func unpickNote(_ sender: Any) {
         let (nio, sel) = guardForNoteAction()
         guard let noteIO = nio, let selNote = sel else { return }
-        let modNote = selNote.copy() as! Note
+        let modNote = selNote.note.copy() as! Note
         modNote.clearDatePicked()
-        let _ = recordMods(noteIO: noteIO, note: selNote, modNote: modNote)
+        let _ = recordMods(noteIO: noteIO, note: selNote.note, modNote: modNote)
     }
     
     @IBAction func backwardInHistory(_ sender: Any) {
@@ -3222,7 +3218,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             return
         }
         
-        let priorNote = viewCoordinator.navHistory!.backwards(from: selNote)
+        let priorNote = viewCoordinator.navHistory!.backwards(from: selNote.note)
         if priorNote != nil {
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: priorNote,
@@ -3237,7 +3233,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     @IBAction func forwardInHistory(_ sender: Any) {
         let (_, sel) = guardForNoteAction()
         guard let selNote = sel else { return }
-        let nextNote = viewCoordinator.navHistory!.forwards(from: selNote)
+        let nextNote = viewCoordinator.navHistory!.forwards(from: selNote.note)
         if nextNote != nil {
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: nextNote,
@@ -3477,19 +3473,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     func searchUsingOptions() {
         guard searcher.hasText else { return }
         guard guardForCollectionAction() != nil else { return }
-        let (note, position) = searcher.nextMatching(startNew: true)
+        let (sortedNote, position) = searcher.nextMatching(startNew: true)
 
-        if note != nil {
+        if sortedNote != nil {
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: note,
+                                        sortedNote: sortedNote,
                                         position: position,
                                         row: -1,
                                         searchPhrase: searcher.searchText)
-            /* select(note: note,
-                   position: position,
-                   source: .action,
-                   andScroll: true,
-                   searchPhrase: searcher.searchText) */
         } else {
             let alert = NSAlert()
             alert.alertStyle = .warning
@@ -3508,18 +3499,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard let noteIO = guardForCollectionAction() else {
             return
         }
-        let (note, position) = searcher.nextMatching(startNew: false)
+        let (sortedNote, position) = searcher.nextMatching(startNew: false)
 
-        if note != nil {
+        if sortedNote != nil {
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: note,
+                                        sortedNote: sortedNote,
                                         position: position,
                                         row: -1, searchPhrase: searcher.searchText)
-            /* select(note: note,
-                   position: position,
-                   source: .action,
-                   andScroll: true,
-                   searchPhrase: searcher.searchText) */
         } else {
             let alert = NSAlert()
             alert.alertStyle = .informational
@@ -3529,10 +3515,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             let _ = alert.runModal()
             let (startingNote, startingPosition) = searcher.backToStart()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: startingNote,
+                                        sortedNote: startingNote,
                                         position: startingPosition,
                                         row: -1, searchPhrase: nil)
-            // select(note: startingNote, position: startingPosition, source: .action, andScroll: true)
             _ = noteIO.selectNote(at: startingPosition.index)
         }
     }
@@ -3563,7 +3548,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             let _ = alert.runModal()
             let (startingNote, startingPosition) = searcher.backToStart()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: startingNote,
+                                        sortedNote: startingNote,
                                         position: startingPosition,
                                         row: -1, searchPhrase: nil)
             // select(note: startingNote, position: startingPosition, source: .action, andScroll: true)
@@ -3580,7 +3565,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                     note: note,
                                     position: nil,
                                     row: -1, searchPhrase: nil)
-        // select(note: note, position: nil, source: .action, andScroll: true, searchPhrase: nil)
     }
     
     
@@ -3589,56 +3573,10 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard let noteIO = guardForCollectionAction() else { return }
         let (firstNote, firstPosition) = noteIO.firstNote()
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                    note: firstNote,
+                                    sortedNote: firstNote,
                                     position: firstPosition,
                                     row: -1, searchPhrase: nil)
-        // select(note: firstNote, position: firstPosition, source: .nav, andScroll: true)
     }
-    
-    /// React to the selection of a note, coordinating the various views as needed.
-    ///
-    /// - Parameters:
-    ///   - note:     A note, if we know which one has been selected.
-    ///   - position: A position in the collection, if we know what it is.
-    ///   - source:   An indicator of the source of the selection; if one of the views
-    ///               being coordinated is the source, then we don't need to modify it.
-    /*
-    func select(note: Note?,
-                position: NotePosition?,
-                source: NoteSelectionSource,
-                andScroll: Bool = false,
-                searchPhrase: String? = nil) {
-        
-        guard notenikIO != nil && notenikIO!.collectionOpen else { return }
-        
-        scroller = NoteScroller(collection: notenikIO!.collection!)
-        
-        var noteToUse: Note? = note
-        var positionToUse: NotePosition? = position
-        
-        if note != nil && (position == nil || position!.invalid) {
-            positionToUse = notenikIO!.positionOfNote(note!)
-        }
-        
-        if note == nil && position != nil && position!.valid {
-            noteToUse = notenikIO!.getNote(at: position!.index)
-        }
-        
-        if listVC != nil && source != .list && positionToUse != nil && positionToUse!.index >= 0 {
-            listVC!.selectRow(index: positionToUse!.index, andScroll: andScroll, checkForMods: (source != .action))
-        }
-        guard noteToUse != nil else { return }
-        
-        if displayVC != nil {
-            displayVC!.display(note: noteToUse!, io: notenikIO!, searchPhrase: searchPhrase)
-        }
-        if editVC != nil {
-            editVC!.select(note: noteToUse!)
-        }
-        adjustAttachmentsMenu(noteToUse!)
-        
-        viewCoordinator.navHistory!.addToHistory(another: noteToUse!)
-    } */
     
     /// Adjust the Attachments menu based on the attachments found in the passed note.
     func adjustAttachmentsMenu(_ possibleNote: Note?) {
@@ -3680,8 +3618,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         if sender.title == addAttachmentTitle {
             addAttachment()
         } else {
-            let attachmentURL = selNote.getURLforAttachment(attachmentName: sender.title)
-            // let attachmentURL = noteIO.getURLforAttachment(fileName: sender.title)
+            let attachmentURL = selNote.note.getURLforAttachment(attachmentName: sender.title)
             
             if attachmentURL != nil {
                 let goodOpen = NSWorkspace.shared.open(attachmentURL!)
@@ -3699,7 +3636,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let (_, sel) = guardForNoteAction()
         guard let selNote = sel else { return }
         
-        let attachmentURL = selNote.getURLforAttachment(attachmentName: titled)
+        let attachmentURL = selNote.note.getURLforAttachment(attachmentName: titled)
         
         if attachmentURL != nil {
             let goodOpen = NSWorkspace.shared.open(attachmentURL!)
@@ -3717,7 +3654,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let (_, sel1) = guardForNoteAction()
         guard let selNote = sel1 else { return }
         
-        guard let fileURL = selNote.linkAsURL else { return }
+        guard let fileURL = selNote.note.linkAsURL else { return }
         addAttachment(urlToAttach: fileURL, clearLink: true)
     }
     
@@ -3747,15 +3684,15 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     func addAttachment(urlToAttach: URL, clearLink: Bool = false) {
         let (nio, sel) = guardForNoteAction()
         guard let _ = nio, let selNote = sel else { return }
-        guard selNote.noteID.getBaseFilename() != nil else { return }
-        let noteLib: ResourceLibrary = selNote.getResourceLib()
+        guard selNote.note.noteID.getBaseFilename() != nil else { return }
+        let noteLib: ResourceLibrary = selNote.note.getResourceLib()
         let filesFolderResource = noteLib.ensureResource(type: .attachments)
         guard filesFolderResource.isAvailable else { return }
         if let attachmentController = self.attachmentStoryboard.instantiateController(withIdentifier: "attachmentWC") as? AttachmentWindowController {
             attachmentController.vc.master = self
             attachmentController.vc.setFileToCopy(urlToAttach)
             attachmentController.vc.setStorageFolder(filesFolderResource.actualPath)
-            attachmentController.vc.setNote(selNote)
+            attachmentController.vc.setNote(selNote.note)
             attachmentController.vc.setClearLinkOption(clearLink)
             attachmentController.showWindow(self)
         } else {
@@ -3856,8 +3793,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard let sel = selection else { return }
         guard let following = newNote else { return }
         
-        if sel.hasSeq() && (collection.sortParm == .seqPlusTitle || collection.sortParm == .tasksBySeq) {
-            var incSeq = sel.seq.dupe()
+        if sel.note.hasSeq() && (collection.sortParm == .seqPlusTitle || collection.sortParm == .tasksBySeq) {
+            var incSeq = sel.note.seq.dupe()
             if collection.noteIdentifier.uniqueIdRule == .auxOnly {
                 if !collection.noteIdentifier.noteIdAuxField.isEmpty {
                     if let def = collection.dict.getDef(collection.noteIdentifier.noteIdAuxField) {
@@ -3873,8 +3810,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = following.setSeq(incSeq.value)
         }
         
-        if following.collection.levelFieldDef != nil && sel.hasLevel() && !following.hasLevel() {
-            _ = following.setLevel(sel.level.value)
+        if following.collection.levelFieldDef != nil && sel.note.hasLevel() && !following.hasLevel() {
+            _ = following.setLevel(sel.note.level.value)
         }
     }
     
@@ -3887,7 +3824,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         let (outcome, _) = modIfChanged()
         guard outcome != modIfChangedOutcome.tryAgain else { return }
         applyCheckBoxUpdates()
-        duplicateNote(startingNote: selectedNote!)
+        duplicateNote(startingNote: selectedNote!.note)
     }
     
     /// Duplicate the passed Note. 
@@ -3985,20 +3922,20 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = noteIO.deleteNote(noteToDelete, preserveAttachments: false)
             notesLeftToDelete -= 1
         }
-        // reloadViews()
-        var selNote: Note?
+        
+        var selNote: SortedNote?
         if i < noteIO.notesCount {
-            selNote = noteIO.getNote(at: i)
+            selNote = noteIO.getSortedNote(at: i)
         }
         if selNote == nil {
-            selNote = noteIO.getNote(at: startingRow - 1)
+            selNote = noteIO.getSortedNote(at: startingRow - 1)
         }
         if selNote == nil {
             (selNote, _) = noteIO.firstNote()
         }
         if selNote != nil {
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: selNote,
+                                        sortedNote: selNote,
                                         position: nil,
                                         row: -1, searchPhrase: nil,
                                         withUpdates: true)
@@ -4022,17 +3959,32 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
         
         var proceed = true
-        if appPrefs.confirmDeletes {
+        var attachMsg = ""
+        var msg = ""
+        if selectedNote.note.attachments.count > 0 {
+            attachMsg = " and its \(selectedNote.note.attachments.count) attachment"
+            if selectedNote.note.attachments.count > 1 {
+                attachMsg.append("s")
+            }
+        }
+        
+        if selectedNote.note.hasSeq() && selectedNote.note.seq.multiCount > 1 {
             let alert = NSAlert()
             alert.alertStyle = .warning
-            var attachMsg = ""
-            if selectedNote.attachments.count > 0 {
-                attachMsg = " and its \(selectedNote.attachments.count) attachment"
-                if selectedNote.attachments.count > 1 {
-                    attachMsg.append("s")
-                }
+            msg =      "The note titled '\(selectedNote.note.title)' has multiple Seq values, "
+            msg.append("and so it may appear multiple times in the List and Outline views. ")
+            msg.append("Are you sure you want to delete the entire note\(attachMsg)?")
+            alert.messageText = msg
+            alert.addButton(withTitle: "OK")
+            alert.addButton(withTitle: "Cancel")
+            let response = alert.runModal()
+            if response != .alertFirstButtonReturn{
+                proceed = false
             }
-            alert.messageText = "Really delete the Note titled '\(selectedNote.title)'\(attachMsg)?"
+        } else if appPrefs.confirmDeletes || selectedNote.note.attachments.count > 0 {
+            let alert = NSAlert()
+            alert.alertStyle = .warning
+            alert.messageText = "Really delete the Note titled '\(selectedNote.note.title)'\(attachMsg)?"
             alert.addButton(withTitle: "OK")
             alert.addButton(withTitle: "Cancel")
             let response = alert.runModal()
@@ -4040,21 +3992,21 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 proceed = false
             }
         }
+        
         guard proceed else { return }
 
         pendingEdits = false
         if undoMgr != nil {
-            let undoNote = selectedNote.copy() as! Note
+            let undoNote = selectedNote.note.copy() as! Note
             undoMgr!.registerUndo(withTarget: self) {
                 targetSelf in targetSelf.restoreNote(undoNote)
             }
             undoMgr!.setActionName("Delete Note")
         }
         let (nextNote, nextPosition) = noteIO.deleteSelectedNote(preserveAttachments: false)
-        // reloadViews()
         if nextNote != nil {
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: nextNote,
+                                        sortedNote: nextNote,
                                         position: nextPosition,
                                         row: -1, searchPhrase: nil,
                                         withUpdates: true)
@@ -4113,17 +4065,17 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         pendingEdits = false
         if newNoteRequested {
             newNoteRequested = false
-            let (note, position) = io!.firstNote()
+            let (sortedNote, position) = io!.firstNote()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: note,
+                                        sortedNote: sortedNote,
                                         position: position,
                                         row: -1, searchPhrase: nil)
             // select(note: note, position: position, source: .action, andScroll: true)
         } else {
-            let (note, _) = io!.getSelectedNote()
-            guard note != nil else { return }
+            let (sortedNote, _) = io!.getSelectedNote()
+            guard sortedNote != nil else { return }
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                        note: note,
+                                        sortedNote: sortedNote,
                                         position: nil,
                                         row: -1, searchPhrase: nil)
             // select(note: note, position: nil, source: .action, andScroll: true)
@@ -4183,23 +4135,23 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                             if note!.hasAddress() {
                                 dest = note!.address
                             } else {
-                                var nextNote: Note?
+                                var nextNote: SortedNote?
                                 var nextPosition: NotePosition?
                                 (nextNote, nextPosition) = io!.nextNote(position)
                                 while dest == nil && nextNote != nil {
-                                    if nextNote!.hasAddress() {
-                                        dest = nextNote!.address
+                                    if nextNote!.note.hasAddress() {
+                                        dest = nextNote!.note.address
                                     } else {
                                         (nextNote, nextPosition) = io!.nextNote(nextPosition!)
                                     }
                                 }
                             }
-                            var priorNote: Note?
+                            var priorNote: SortedNote?
                             var priorPostion: NotePosition?
                             (priorNote, priorPostion) = io!.priorNote(position)
                             while source == nil && priorNote != nil {
-                                if priorNote!.hasAddress() {
-                                    source = priorNote!.address
+                                if priorNote!.note.hasAddress() {
+                                    source = priorNote!.note.address
                                 } else {
                                     (priorNote, priorPostion) = io!.priorNote(priorPostion!)
                                 }
@@ -4249,7 +4201,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     /// Update outputs showing the data from the updated note.
     func displayModifiedNote(updatedNote: Note) {
         if displayVC != nil {
-            displayVC!.display(note: updatedNote, io: notenikIO!)
+            displayVC!.display(sortedNote: SortedNote(note: updatedNote), io: notenikIO!)
         }
         if updatedNote.collection.mirror != nil {
             mirrorNote(updatedNote)
@@ -4333,18 +4285,20 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         reloadCollection(sender)
         guard let noteIO = guardForCollectionAction() else { return }
         var updated = 0
-        var (note, position) = noteIO.firstNote()
-        while note != nil {
-            let written = noteIO.writeNote(note!)
-            if written {
-                updated += 1
-            } else {
-                Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
-                                  category: "CollectionWindowController",
-                                  level: .error,
-                                  message: "Problems saving note titled \(note!.title)")
+        var (sortedNote, position) = noteIO.firstNote()
+        while sortedNote != nil {
+            if sortedNote!.original {
+                let written = noteIO.writeNote(sortedNote!.note)
+                if written {
+                    updated += 1
+                } else {
+                    Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                                      category: "CollectionWindowController",
+                                      level: .error,
+                                      message: "Problems saving note titled \(sortedNote!.note.title)")
+                }
             }
-            (note, position) = noteIO.nextNote(position)
+            (sortedNote, position) = noteIO.nextNote(position)
         }
         finishBatchOperation()
         reportNumberOfNotesUpdated(updated)
@@ -4353,7 +4307,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     @IBAction func textEditTemplate(_ sender: Any) {
         guard let nnkIO = guardForCollectionAction() else { return }
         if let templateURL = nnkIO.collection!.lib.getURL(type: .template) {
-            // let templatePath = nnkIO.collection!.lib.getPath(type: .template)
             NSWorkspace.shared.open(templateURL)
         }
     }
@@ -4384,7 +4337,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     /// Open the current Note in the user's preferred text editor.
     @IBAction func textEditNote(_ sender: Any) {
         let (_, sel) = guardForNoteAction()
-        guard let noteToUse = sel else { return }
+        guard let noteToUse = sel?.note else { return }
         var ok = true
         if noteToUse.noteID.hasData {
             if #available(macOS 11.0, *) {
@@ -4403,20 +4356,18 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     @IBAction func reloadNote(_ sender: Any) {
         let (nio, sel) = guardForNoteAction()
         guard let noteIO = nio, let selNote = sel else { return }
-        guard let reloaded = noteIO.reloadNote(selNote) else { return }
-        // reloadViews()
+        guard let reloaded = noteIO.reloadNote(selNote.note) else { return }
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     note: reloaded,
                                     position: nil,
                                     row: -1, searchPhrase: nil,
                                     withUpdates: true)
-        // select(note: reloaded, position: nil, source: .action, andScroll: true)
     }
     
     /// Launch a Note's Link
     @IBAction func launchLink(_ sender: Any) {
         let (_, sel) = guardForNoteAction()
-        guard let noteToUse = sel else { return }
+        guard let noteToUse = sel?.note else { return }
         launchLink(for: noteToUse)
     }
     
@@ -4438,29 +4389,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     /// Attempt to launch the passed URL.
     func launchLink(url: URL) {
         let _ = juggler.open(url: url, source: .fromWithin)
-        /*
-        let link = NotenikLink(url: url)
-        let _ = juggler.open(link: link)
-
-        if link.type == .script {
-            launchScript(fileURL: url)
-            return
-        } else if link.type == .folder {
-            link.determineCollectionType()
-            print("  - link type after collection type determination: \(link.type)")
-            if link.type == .ordinaryCollection || link.type == .webCollection {
-                let _ = juggler.openFileWithNewWindow(fileURL: url, readOnly: false)
-                return
-            } else if link.type == .parentRealm {
-                let _ = juggler.openParentRealm()
-                return
-            }
-        }
-        
-        let ok = NSWorkspace.shared.open(url)
-        if !ok {
-            communicateError("Could not open the requested url: \(url.absoluteString)", alert: true)
-        } */
     }
     
     func launchScript(fileURL: URL) {
@@ -4758,14 +4686,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                           category: "CollectionWindowController",
                           level: .info,
                           message: "\(purgeCount) Notes purged from Collection at \(io!.collection!.fullPath)")
-        // reloadViews()
-        let (note, position) = io!.firstNote()
+
+        let (sortedNote, position) = io!.firstNote()
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                    note: note,
+                                    sortedNote: sortedNote,
                                     position: position,
                                     row: -1, searchPhrase: nil,
                                     withUpdates: true)
-        // select(note: note, position: position, source: .nav, andScroll: true)
         
         let alert = NSAlert()
         alert.alertStyle = .informational
@@ -5067,21 +4994,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                         imported += 1
                     }
                 }
-                /*
-                if item.starts(with: ".") {
-                    continue
-                }
-                let fileURL = importURL.appendingPathComponent(item)
-                if ResourceFileSys.isLikelyNoteFile(fileURL: fileURL, preferredNoteExt: nil) {
-                    let addedNote = importTextFile(fileURL: fileURL,
-                                                   newLevel: nil, newSeq: nil, newKlass: nil,
-                                                   finishUp: false)
-                    if addedNote == nil {
-                        rejected += 1
-                    } else {
-                        imported += 1
-                    }
-                } */
             }
         } catch {
             communicateError("Problems reading contents of directory at \(importURL)", alert: true)
@@ -5127,17 +5039,19 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         var rejected = 0
         var (importNote, importPosition) = importIO.firstNote()
         while importNote != nil && importPosition.valid {
-            let noteCopy = Note(collection: collection)
-            importNote!.copyDefinedFields(to: noteCopy, addDefs: true)
-            let (importedNote, _) = noteIO.addNote(newNote: noteCopy)
-            if importedNote == nil {
-                rejected += 1
-                Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
-                                  category: "CollectionWindowController",
-                                  level: .error,
-                                  message: "Could not import note titled '\(importNote!.title.value)'")
-            } else {
-                imported += 1
+            if importNote!.original {
+                let noteCopy = Note(collection: collection)
+                importNote!.note.copyDefinedFields(to: noteCopy, addDefs: true)
+                let (importedNote, _) = noteIO.addNote(newNote: noteCopy)
+                if importedNote == nil {
+                    rejected += 1
+                    Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                                      category: "CollectionWindowController",
+                                      level: .error,
+                                      message: "Could not import note titled '\(importNote!.note.title.value)'")
+                } else {
+                    imported += 1
+                }
             }
             (importNote, importPosition) = importIO.nextNote(importPosition)
         }
@@ -6014,25 +5928,25 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     /// See if we're ready to do something with a selected note.
     ///
     /// - Returns: The I/O module and the selected Note (both optionals)
-    func guardForNoteAction() -> (NotenikIO?, Note?) {
+    func guardForNoteAction() -> (NotenikIO?, SortedNote?) {
                 
         applyCheckBoxUpdates()
         
         guard !pendingMod else { return (nil, nil) }
         guard io != nil && io!.collectionOpen else { return (nil, nil) }
-        var note: Note?
-        (note, _) = io!.getSelectedNote()
-        if note == nil {
+        var selNote: SortedNote?
+        (selNote, _) = io!.getSelectedNote()
+        if selNote == nil {
             let (first, _) = listVC!.getRangeOfSelectedRows()
             if first >= 0 && first < io!.notesCount {
                 _ = io!.selectNote(at: first)
-                (note, _) = io!.getSelectedNote()
+                (selNote, _) = io!.getSelectedNote()
             }
         }
-        guard note != nil else { return (io!, nil) }
+        guard selNote != nil else { return (io!, nil) }
         let (outcome, _) = modIfChanged()
         guard outcome != modIfChangedOutcome.tryAgain else { return (io!, nil) }
-        return (io!, note!)
+        return (io!, selNote!)
     }
     
 
@@ -6056,13 +5970,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard io != nil && io!.collectionOpen else { return }
         let (selNote, _) = io!.getSelectedNote()
         guard selNote != nil else { return }
-        if selNote!.hasCheckBoxUpdates {
-            let modNote = selNote!.copy() as! Note
+        if selNote!.note.hasCheckBoxUpdates {
+            let modNote = selNote!.note.copy() as! Note
             let modified = modNote.applyCheckBoxUpdates()
             if modified {
-                let (chgNote, _) = io!.modNote(oldNote: selNote!, newNote: modNote)
+                let (chgNote, _) = io!.modNote(oldNote: selNote!.note, newNote: modNote)
                 if chgNote != nil {
-                    selNote!.clearCheckBoxUpdates()
+                    selNote!.note.clearCheckBoxUpdates()
                     chgNote!.clearCheckBoxUpdates()
                     displayModifiedNote(updatedNote: chgNote!)
                     editVC!.select(note: chgNote!)
@@ -6150,9 +6064,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     /// Finish up batch operations by reloading the lists and selecting the first note
     func finishBatchOperation() {
-        let (note, position) = io!.firstNote()
+        let (sortedNote, position) = io!.firstNote()
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
-                                    note: note,
+                                    sortedNote: sortedNote,
                                     position: position,
                                     row: -1, searchPhrase: nil,
                                     withUpdates: true)

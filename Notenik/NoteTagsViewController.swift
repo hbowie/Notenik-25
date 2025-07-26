@@ -390,14 +390,14 @@ class NoteTagsViewController: NSViewController,
     }
     
     func focusOn(initViewID: String, 
-                 note: NotenikLib.Note?, 
-                 position: NotenikLib.NotePosition?,
-                 io: any NotenikLib.NotenikIO, 
+                 sortedNote: SortedNote?,
+                 position: NotePosition?,
+                 io: any NotenikIO,
                  searchPhrase: String?,
                  withUpdates: Bool = false) {
         
         guard viewID != initViewID || withUpdates else { return }
-        guard note != nil else { return }
+        guard sortedNote != nil else { return }
         guard outlineView != nil else {
             print("  - tags outline view is nil!")
             return
@@ -415,7 +415,7 @@ class NoteTagsViewController: NSViewController,
         var found = false
         while nextNode != nil && !found {
             if nextNode!.type == .note {
-                if nextNode!.note!.id == note!.id {
+                if nextNode!.note!.id == sortedNote!.note.id {
                     found = true
                 }
             }
@@ -441,7 +441,7 @@ class NoteTagsViewController: NSViewController,
                 outlineView.selectRowIndexes(iSet, byExtendingSelection: false)
             }
         } else {
-            print("  - Note ID of \(note!.id) could not be found")
+            print("  - Note ID of \(sortedNote!.note.id) could not be found")
         }
         return
     }

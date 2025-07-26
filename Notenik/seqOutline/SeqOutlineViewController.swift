@@ -31,7 +31,7 @@ class SeqOutlineViewController: NSViewController,
     
     var outlneTabSetting: OutlineTabSetting = .withSeq
     
-    var focusNote: Note?
+    var focusNote: SortedNote?
     
     var shortcutMenu: NSMenu!
     
@@ -49,6 +49,7 @@ class SeqOutlineViewController: NSViewController,
         }
     }
     
+    /// Getter and setter for the Notenik I/O module.
     var io: NotenikIO? {
         get {
             return notenikIO
@@ -66,7 +67,8 @@ class SeqOutlineViewController: NSViewController,
             }
         }
     }
-
+    
+    /// Now that we have a view, let's make some adjustments.
     override func viewDidLoad() {
         super.viewDidLoad()
         adjustFonts()
@@ -109,10 +111,12 @@ class SeqOutlineViewController: NSViewController,
         }
     }
     
+    /// Retain knowledge of user's requested setting for the Seq Outline.
     func setSeqOption(outlineTabSetting: OutlineTabSetting) {
         self.outlneTabSetting = outlineTabSetting
     }
     
+    /// Reload the fornts and the data.
     func reload() {
         adjustFonts()
         outlineView.reloadData()
@@ -123,6 +127,7 @@ class SeqOutlineViewController: NSViewController,
     var userFontName = ""
     var fontToUse: NSFont?
     
+    /// Adjust fonts and appearance.
     func adjustFonts() {
 
         monoDigitFont = NSFont.monospacedDigitSystemFont(ofSize: 13.0,
@@ -151,6 +156,7 @@ class SeqOutlineViewController: NSViewController,
         }
     }
     
+    /// Make modification sto the shortcut menu that are dependent on the nature of the collection.
     func modShortcutMenuForCollection() {
         
         if newWithOptionsIndex >= 0 {
@@ -196,6 +202,7 @@ class SeqOutlineViewController: NSViewController,
         }
     }
     
+    /// Add an item to the shortcuts menu.
     func addToShortcutMenu(actionType: NoteActionType) {
         let item = NSMenuItem(title: actionType.rawValue,
                               action: #selector(takeShortcutAction(_:)),
@@ -203,6 +210,7 @@ class SeqOutlineViewController: NSViewController,
         shortcutMenu.addItem(item)
     }
     
+    /// Expand all the nodes in the outline so that all rows are visible.
     func expandOutline() {
         var i = -1
         while (i + 1) < outlineView.numberOfRows {
@@ -217,6 +225,7 @@ class SeqOutlineViewController: NSViewController,
         }
     }
     
+    /// Collapse the outline show that only the uppermost nodes are visible.
     func collapseOutline() {
         var i = -1
         while (i + 1) < outlineView.numberOfRows {
@@ -225,14 +234,15 @@ class SeqOutlineViewController: NSViewController,
             guard let node = item as? OutlineNode2 else { continue }
             guard node.children.count > 0 else { continue }
             guard node.type == .note else { continue }
-            guard let note = node.note else { continue }
-            if note.seq.isEmpty { continue }
+            guard let sortedNote = node.sortedNote else { continue }
+            if sortedNote.seqSingleValue.isEmpty { continue }
             if outlineView.isItemExpanded(item) {
                 outlineView.collapseItem(item, collapseChildren: true)
             }
         }
     }
     
+    /// Take whatever action the user has requested from the shortcuts menu.
     @IBAction func takeShortcutAction(_ sender: Any) {
         guard let menuItem = sender as? NSMenuItem else { return }
         guard let actionType = NoteActionType(rawValue: menuItem.title) else { return }
@@ -243,35 +253,36 @@ class SeqOutlineViewController: NSViewController,
         guard row >= 0 else { return }
         guard let node = outlineView.item(atRow: row) as? OutlineNode2 else { return }
         guard node.type == .note else { return }
-        let clickedNote = node.note!
-        
+        let clickedNote = node.sortedNote!
         notesAction(actionType: actionType, io: io, collection: collection, clickedNote: clickedNote, wc: wc)
-  
     }
     
-    public func notesAction(actionType: NoteActionType, io: NotenikIO, collection: NoteCollection, clickedNote: Note?, wc: CollectionWindowController) {
+    /// Once prereqs are satisfied, take the requested action.
+    public func notesAction(actionType: NoteActionType, io: NotenikIO, collection: NoteCollection, clickedNote: SortedNote?, wc: CollectionWindowController) {
         guard outlineView.numberOfSelectedRows > 0 else { return }
+        var selSortedNotes: [SortedNote] = []
         var selNotes: [Note] = []
-        var primaryNote: Note? = clickedNote
+        var primaryNote: SortedNote? = clickedNote
         for index in outlineView.selectedRowIndexes {
             guard let node = outlineView.item(atRow: index) as? OutlineNode2 else { continue }
             guard node.type == .note else { continue }
-            selNotes.append(node.note!)
+            selSortedNotes.append(node.sortedNote!)
+            selNotes.append(node.sortedNote!.note)
         }
         if primaryNote == nil {
-            primaryNote = selNotes.first
+            primaryNote = selSortedNotes.first
         }
         switch actionType {
         case .showInFinder:
             let folderPath = io.collection!.lib.getPath(type: .collection)
-            let filePath = primaryNote!.noteID.getFullPath(note: primaryNote!)
+            let filePath = primaryNote!.noteID.getFullPath(note: primaryNote!.note)
             NSWorkspace.shared.selectFile(filePath, inFileViewerRootedAtPath: folderPath)
         case .launchLink:
-            wc.launchLink(for: primaryNote!)
+            wc.launchLink(for: primaryNote!.note)
         case .share:
             wc.shareNote(notes: selNotes)
         case .copyNotenikURL:
-            let str = primaryNote!.getNotenikLink(preferringTimestamp: false)
+            let str = primaryNote!.note.getNotenikLink(preferringTimestamp: false)
             let board = NSPasteboard.general
             board.clearContents()
             board.setString(str, forType: NSPasteboard.PasteboardType.string)
@@ -283,7 +294,7 @@ class SeqOutlineViewController: NSViewController,
         case .copyTimestamp:
             var str = "No timestamp available!"
             if collection.hasTimestamp {
-                str = primaryNote!.timestampAsString
+                str = primaryNote!.note.timestampAsString
             }
             let board = NSPasteboard.general
             board.clearContents()
@@ -291,15 +302,15 @@ class SeqOutlineViewController: NSViewController,
         case .bulkEdit:
             wc.bulkEdit(notes: selNotes)
         case .newWithOptions:
-            wc.newWithOptions(currentNote: primaryNote!)
+            wc.newWithOptions(currentNote: primaryNote!.note)
         case .duplicate:
-            wc.duplicateNote(startingNote: primaryNote!)
+            wc.duplicateNote(startingNote: primaryNote!.note)
         case .deleteRange:
             let (lo, hi) = getRangeOfSelectedNotes(io: io)
             guard lo >= 0 && hi >= lo else { return }
             wc.deleteRangeOfNotes(startingRow: lo, endingRow: hi)
         case .newChild:
-            wc.newChild(parent: primaryNote!)
+            wc.newChild(parent: primaryNote!.note)
         case .modifySeqRange:
             guard collection.seqFieldDef != nil
                     && (collection.sortParm == .seqPlusTitle || collection.sortParm == .tasksBySeq) else {
@@ -314,12 +325,13 @@ class SeqOutlineViewController: NSViewController,
             for index in outlineView.selectedRowIndexes {
                 guard let node = outlineView.item(atRow: index) as? OutlineNode2 else { continue }
                 guard node.type == .note else { continue }
-                collection.displayedNotes.append(node.note!)
+                collection.displayedNotes.append(node.sortedNote!)
             }
             wc.reloadDisplayView(self)
         }
     }
     
+    /// Get a contiguous range of selected notes. 
     func getRangeOfSelectedNotes(io: NotenikIO, withClick: Bool = true) -> (Int, Int) {
         
         guard outlineView.numberOfSelectedRows > 0 else { return (-1, -2) }
@@ -334,13 +346,13 @@ class SeqOutlineViewController: NSViewController,
         
         guard let node1 = outlineView.item(atRow: lowIndex) as? OutlineNode2 else { return  (-1, -2) }
         guard node1.type == .note else { return  (-1, -2) }
-        let lowNote = node1.note!
+        let lowNote = node1.sortedNote!
         let lowPosition = io.positionOfNote(lowNote)
         let lo = lowPosition.index
         
         guard let node2 = outlineView.item(atRow: highIndex) as? OutlineNode2 else { return (-1, -2) }
         guard node2.type == .note else { return (-1, -2) }
-        let highNote = node2.note!
+        let highNote = node2.sortedNote!
         let highPosition = io.positionOfNote(highNote)
         let hi = highPosition.index
         
@@ -426,9 +438,9 @@ class SeqOutlineViewController: NSViewController,
                      pasteboardWriterForItem item: Any)
                         -> NSPasteboardWriting? {
         if let node = item as? OutlineNode2 {
-            if let selectedNote = node.note {
+            if let selectedNote = node.sortedNote {
                 let maker = NoteLineMaker()
-                let _ = maker.putNote(selectedNote, includeAttachments: true)
+                let _ = maker.putNote(selectedNote.note, includeAttachments: true)
                 var str = ""
                 if let writer = maker.writer as? BigStringWriter {
                     str = writer.bigString
@@ -457,18 +469,18 @@ class SeqOutlineViewController: NSViewController,
         guard let wc = collectionWindowController else { return false }
         guard let io = notenikIO else { return false }
         guard let parentNode = item as? OutlineNode2 else { return false }
-        guard let parentNote = parentNode.note else { return false }
+        guard let parentNote = parentNode.sortedNote else { return false }
         
-        var noteAbove: Note?
+        var noteAbove: SortedNote?
         if parentNode.children.count == 0 || index == 0 {
             noteAbove = parentNote
         } else if index < 0 || index >= parentNode.children.count {
-            noteAbove = parentNode.children[parentNode.children.count - 1].note
+            noteAbove = parentNode.children[parentNode.children.count - 1].sortedNote
         } else {
-            noteAbove = parentNode.children[index - 1].note
+            noteAbove = parentNode.children[index - 1].sortedNote
         }
         guard noteAbove != nil else { return false }
-        let abovePosition = io.positionOfNote(noteAbove!)
+        let abovePosition = io.positionOfNote(noteAbove!.note)
         guard abovePosition.valid else { return false }
         let row = abovePosition.index + 1
         
@@ -517,15 +529,15 @@ class SeqOutlineViewController: NSViewController,
                 case .root:
                     textField.stringValue = notenikIO!.collection!.path
                 case .note:
-                    if let note = node.note {
+                    if let sortedNote = node.sortedNote {
                         if outlneTabSetting == .withSeq {
-                            if note.collection.seqFormatter.isEmpty {
-                                textField.stringValue = note.getTitle(withSeq: true, formattedSeq: false, sep: " - ")
+                            if sortedNote.note.collection.seqFormatter.isEmpty {
+                                textField.stringValue = sortedNote.getTitle(withSeq: true, formattedSeq: false, sep: " - ")
                             } else {
-                                textField.stringValue = note.getTitle(withSeq: true, formattedSeq: true, sep: " ")
+                                textField.stringValue = sortedNote.getTitle(withSeq: true, formattedSeq: true, sep: " ")
                             }
                         } else {
-                            textField.stringValue = note.getTitle(withSeq: false, sep: "")
+                            textField.stringValue = sortedNote.getTitle(withSeq: false, sep: "")
                         }
                     } else {
                         textField.stringValue = "???"
@@ -546,9 +558,9 @@ class SeqOutlineViewController: NSViewController,
         guard let node = outlineView.item(atRow: selectedIndex) as? OutlineNode2 else { return }
         switch node.type {
         case .note:
-            focusNote = node.note!
+            focusNote = node.sortedNote!
             _ = coordinator!.focusOn(initViewID: viewID,
-                                     note: node.note!,
+                                     sortedNote: node.sortedNote,
                                      position: nil,
                                      row: -1,
                                      searchPhrase: nil)
@@ -565,9 +577,9 @@ class SeqOutlineViewController: NSViewController,
         guard let node = item as? OutlineNode2 else { return }
         
         if node.type == .note {
-            let clickedNote = node.note
+            let clickedNote = node.sortedNote
             if clickedNote != nil {
-                collectionWindowController!.launchLink(for: clickedNote!)
+                collectionWindowController!.launchLink(for: clickedNote!.note)
             }
         }
     }
@@ -593,15 +605,15 @@ class SeqOutlineViewController: NSViewController,
     ///   - position: The position of the selection.
     ///   - searchPhrase: Any search phrase currently in effect.
     func focusOn(initViewID: String,
-                 note: Note?,
+                 sortedNote: SortedNote?,
                  position: NotePosition?,
                  io: NotenikIO,
                  searchPhrase: String?,
                  withUpdates: Bool = false) {
         
         guard viewID != initViewID || withUpdates else { return }
-        guard note != nil else { return }
-        focusNote = note
+        guard sortedNote != nil else { return }
+        focusNote = sortedNote
         guard outlineView != nil else {
             return
         }
@@ -620,7 +632,7 @@ class SeqOutlineViewController: NSViewController,
         var found = false
         while nextNode != nil && !found {
             if nextNode!.type == .note {
-                if nextNode!.note!.id == focusNote!.id {
+                if nextNode!.sortedNote!.note.id == focusNote!.note.id {
                     found = true
                 }
             }
@@ -653,7 +665,7 @@ class SeqOutlineViewController: NSViewController,
                 outlineView.selectRowIndexes(iSet, byExtendingSelection: false)
             }
         } else {
-            print("  - Note ID of \(focusNote!.id) could not be found")
+            print("  - Note ID of \(focusNote!.note.id) could not be found")
         }
         return
     }

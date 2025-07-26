@@ -149,11 +149,11 @@ class QuickActionViewController: NSViewController, NSComboBoxDataSource {
     func loadNoteTitles() {
         noteTitles = []
         guard let io = collectionWC?.io else { return }
-        var (note, position) = io.firstNote()
-        while note != nil {
-            noteTitles.append(note!.title.value)
-            noteTitles.append(note!.title.value.lowercased())
-            (note, position) = io.nextNote(position)
+        var (sortedNote, position) = io.firstNote()
+        while sortedNote != nil {
+            noteTitles.append(sortedNote!.note.title.value)
+            noteTitles.append(sortedNote!.note.title.value.lowercased())
+            (sortedNote, position) = io.nextNote(position)
         }
         noteTitles.sort()
     }

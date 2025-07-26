@@ -47,7 +47,7 @@ class NoteDisplayViewController: NSViewController,
     let noteDisplay = NoteDisplay()
     
     var io: NotenikIO?
-    var note: Note?
+    var sortedNote: SortedNote?
     var searchPhrase: String?
     
     var mdResults = TransformMdResults()
@@ -112,8 +112,8 @@ class NoteDisplayViewController: NSViewController,
     override func viewWillDisappear() {
         super.viewWillDisappear()
         if let scroller = wc?.scroller {
-            if note != nil {
-                scroller.displayEnd(note: note!, webView: webView)
+            if sortedNote != nil {
+                scroller.displayEnd(note: sortedNote!.note, webView: webView)
             }
         }
     }
@@ -133,13 +133,13 @@ class NoteDisplayViewController: NSViewController,
     }
     
     func focusOn(initViewID: String, 
-                 note: NotenikLib.Note?,
-                 position: NotenikLib.NotePosition?,
+                 sortedNote: SortedNote?,
+                 position: NotePosition?,
                  io: NotenikIO,
                  searchPhrase: String?,
                  withUpdates: Bool = false) {
         self.io = io
-        self.note = note
+        self.sortedNote = sortedNote
         self.searchPhrase = searchPhrase
         display()
     }
@@ -152,7 +152,7 @@ class NoteDisplayViewController: NSViewController,
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         
-        guard let ckNote = note else {
+        guard let ckNote = sortedNote?.note else {
             return
         }
         guard message.name == NotenikConstants.checkBoxMessageHandlerName else {
@@ -185,9 +185,9 @@ class NoteDisplayViewController: NSViewController,
     }
     
     /// Display the provided note
-    func display(note: Note, io: NotenikIO, searchPhrase: String? = nil) {
+    func display(sortedNote: SortedNote, io: NotenikIO, searchPhrase: String? = nil) {
         self.io = io
-        self.note = note
+        self.sortedNote = sortedNote
         self.searchPhrase = searchPhrase
         display()
     }
@@ -202,19 +202,19 @@ class NoteDisplayViewController: NSViewController,
     /// Generate the display from the last note provided
     func display() {
         webLinkFollowed(false)
-        guard note != nil else { return }
+        guard sortedNote != nil else { return }
         guard io != nil else { return }
         guard isViewLoaded else { return }
         guard let collection = io!.collection else { return }
-        if let filepath = note!.noteID.getFullPath(note: note!) {
-            CollectionJuggler.shared.setLastSelection(title: note!.title.value,
-                                                      link: note!.getNotenikLink(preferringTimestamp: true),
+        if let filepath = sortedNote!.note.noteID.getFullPath(note: sortedNote!.note) {
+            CollectionJuggler.shared.setLastSelection(title: sortedNote!.note.title.value,
+                                                      link: sortedNote!.note.getNotenikLink(preferringTimestamp: true),
                                                       filepath: filepath,
                                                       wc: wc)
         }
         
         if collection.displayMode == .continuousPartial {
-            if !collection.displayedNotes.contains(element: note!) {
+            if !collection.displayedNotes.contains(element: sortedNote!.note) {
                 collection.resetPartialDisplay()
             } 
         }
@@ -223,7 +223,7 @@ class NoteDisplayViewController: NSViewController,
             parms.imagesPath = NotenikConstants.filesFolderName
         }
             
-        parms.setFrom(note: note!)
+        parms.setFrom(note: sortedNote!.note)
         parms.checkBoxMessageHandlerName = NotenikConstants.checkBoxMessageHandlerName
         
         mdResults = TransformMdResults()
@@ -236,7 +236,7 @@ class NoteDisplayViewController: NSViewController,
             imagePref = .light
         }
         var displayHTML = ""
-        displayHTML = noteDisplay.display(note!, io: io!, parms: parms, mdResults: mdResults, imagePref: imagePref)
+        displayHTML = noteDisplay.display(sortedNote!, io: io!, parms: parms, mdResults: mdResults, imagePref: imagePref)
         var html = ""
         if searchPhrase == nil || searchPhrase!.isEmpty {
             html = displayHTML
@@ -252,7 +252,7 @@ class NoteDisplayViewController: NSViewController,
         // See if any derived Note fields need to be updated.
         if AppPrefs.shared.parseUsingNotenik && (collection.minutesToReadDef != nil || collection.wikilinksDef != nil || collection.backlinksDef != nil) {
             var modified = false
-            let modNote = note!.copy() as! Note
+            let modNote = sortedNote!.note.copy() as! Note
             
             // See if Minutes to Read have changed.
             if collection.minutesToReadDef != nil {
@@ -276,11 +276,11 @@ class NoteDisplayViewController: NSViewController,
             }
             
             if modified {
-                let (updatedNote, _) = io!.modNote(oldNote: note!, newNote: modNote)
+                let (updatedNote, _) = io!.modNote(oldNote: sortedNote!.note, newNote: modNote)
                 if updatedNote == nil {
                     communicateError("Attempt to modify derived values failed")
                 } else {
-                    let displayHTML = noteDisplay.display(updatedNote!, io: io!, parms: parms, mdResults: mdResults, imagePref: imagePref)
+                    let displayHTML = noteDisplay.display(SortedNote(note: updatedNote!), io: io!, parms: parms, mdResults: mdResults, imagePref: imagePref)
                     if searchPhrase == nil || searchPhrase!.isEmpty {
                         html = displayHTML
                     } else {
@@ -347,8 +347,8 @@ class NoteDisplayViewController: NSViewController,
         }
         
         if let scroller = wc?.scroller {
-            if note != nil {
-                scroller.displayStart(note: note!, webView: webView)
+            if sortedNote != nil {
+                scroller.displayStart(note: sortedNote!.note, webView: webView)
             }
         }
         
@@ -359,8 +359,8 @@ class NoteDisplayViewController: NSViewController,
     
     func scroll() {
         if let scroller = wc?.scroller {
-            if note != nil {
-                scroller.displayStart(note: note!, webView: webView)
+            if sortedNote != nil {
+                scroller.displayStart(note: sortedNote!.note, webView: webView)
             }
         }
     }

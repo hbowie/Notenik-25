@@ -47,7 +47,7 @@ class SeqView: MacEditView {
         set {
             if formatter != nil && formattedField != nil {
                 let seqValue = SeqValue(newValue, seqParms: seqParms)
-                let (formatted, _) = formatter!.format(seq: seqValue, full: true)
+                let (formatted, _) = formatter!.format(seq: seqValue.firstSeq, full: true)
                 let backToOriginal = formatter!.unformat(formatted)
                 if backToOriginal != newValue {
                     formatter = nil
@@ -98,7 +98,7 @@ class SeqView: MacEditView {
         textChanging = true
         if id == originalFieldID {
             let seqValue = SeqValue(textField.stringValue, seqParms: seqParms)
-            let (formatted, _) = formatter!.format(seq: seqValue, full: true)
+            let (formatted, _) = formatter!.format(seq: seqValue.firstSeq, full: true)
             formattedField!.stringValue = formatted
         } else {
             let unformatted = formatter!.unformat(formattedField!.stringValue)
