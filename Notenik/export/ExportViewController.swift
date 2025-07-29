@@ -355,6 +355,9 @@ class ExportViewController: NSViewController {
         }
         parms.setFrom(note: note)
         parms.displayMode = .continuous
+        parms.wikiLinks.format = .common
+        parms.wikiLinks.prefix = "#"
+        parms.wikiLinks.suffix = ""
         
         let mdResults = TransformMdResults()
         

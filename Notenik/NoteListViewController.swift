@@ -705,12 +705,13 @@ class NoteListViewController:   NSViewController,
         guard !programmaticSelection else { return }
         let row = tableView.selectedRow
         guard row >= 0 else { return }
-        guard let sortedNote = io!.getSortedNote(at: row) else { return }
+        let (sortedNote, notePosition) = io!.selectNote(at: row)
+        guard sortedNote != nil else { return }
         guard coordinator != nil else { return }
         guard collectionWindowController != nil else { return }
         _ = coordinator!.focusOn(initViewID: viewID,
-                             sortedNote: nil,
-                             position: nil,
+                             sortedNote: sortedNote!,
+                             position: notePosition,
                              row: row,
                              searchPhrase: nil)
         lastRowSelected = row

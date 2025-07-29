@@ -553,11 +553,16 @@ class SeqOutlineViewController: NSViewController,
     func outlineViewSelectionDidChange(_ notification: Notification) {
         
         guard let outlineView = notification.object as? NSOutlineView else { return }
+        guard let io = notenikIO else { return }
         guard collectionWindowController != nil else { return }
         let selectedIndex = outlineView.selectedRow
         guard let node = outlineView.item(atRow: selectedIndex) as? OutlineNode2 else { return }
         switch node.type {
         case .note:
+            let notePosition = io.positionOfNote(node.sortedNote!)
+            if notePosition.valid {
+                _ = io.selectNote(at: notePosition.index)
+            }
             focusNote = node.sortedNote!
             _ = coordinator!.focusOn(initViewID: viewID,
                                      sortedNote: node.sortedNote,

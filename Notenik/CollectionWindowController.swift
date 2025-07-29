@@ -2860,26 +2860,20 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
         guard lowIndex >= 0 else { return }
         guard let selNote = noteIO.getSortedNote(at: lowIndex) else { return }
-        let seqIndex = selNote.seqIndex
         
         // Establish context for the first (or only) note in the range
         var newSeq: SeqValue?
+        var newSingleSeq: SeqSingleValue?
         if selNote.note.hasSeq() && lowIndex > 0 {
             let priorNote = noteIO.getSortedNote(at: lowIndex - 1)
             if priorNote != nil && priorNote!.note.hasSeq() {
                 newSeq = selNote.note.seq.dupe()
-                if newSeq != nil {
-                    _ = newSeq!.setSingleSeq(priorNote!.note.seq.getSingleSeq(seqIndex: seqIndex)!.value,
-                                             seqIndex: seqIndex)
-                }
-                // newSeq!.indent(indentLevels: indentLevels)
-                let singleNewSeq = newSeq!.getSingleSeq(seqIndex: seqIndex)
+                newSingleSeq = priorNote!.seqSingleValue.dupe()
                 var maxSeqLevel: Int = -1
-                if let singleStartingSeq = selNote.note.seq.getSingleSeq(seqIndex: seqIndex) {
-                    maxSeqLevel = singleStartingSeq.maxLevel
-                    singleNewSeq!.incAtLevel(level: maxSeqLevel + indentLevels, removingDeeperLevels: true)
-                }
-
+                let singleStartingSeq = selNote.seqSingleValue
+                maxSeqLevel = singleStartingSeq.maxLevel
+                newSingleSeq!.incAtLevel(level: maxSeqLevel + indentLevels, removingDeeperLevels: true)
+                _ = newSeq!.setSingleSeq(newSingleSeq!.value, seqIndex: selNote.seqIndex)
                 newSeq!.setWithLatestValues()
             }
         }
@@ -2887,7 +2881,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         // If we're indenting a range of notes, then use the Sequencer.
         if highIndex > lowIndex && newSeq != nil {
             if let sequencer = Sequencer(io: io!) {
-                let modStartingNote = sequencer.renumberRange(startingRow: lowIndex, endingRow: highIndex, newSeqValue: newSeq!.value, seqIndex: seqIndex)
+                let modStartingNote = sequencer.renumberRange(startingRow: lowIndex, endingRow: highIndex, newSeqValue: newSeq!.value)
                 let selCount = highIndex - lowIndex + 1
                 seqModified(modStartingNote: modStartingNote, rowCount: selCount, reselect: true)
                 return
