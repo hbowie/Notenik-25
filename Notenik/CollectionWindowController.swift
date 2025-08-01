@@ -2881,7 +2881,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         // If we're indenting a range of notes, then use the Sequencer.
         if highIndex > lowIndex && newSeq != nil {
             if let sequencer = Sequencer(io: io!) {
-                let modStartingNote = sequencer.renumberRange(startingRow: lowIndex, endingRow: highIndex, newSeqValue: newSeq!.value)
+                let modStartingNote = sequencer.renumberRange(startingRow: lowIndex,
+                                                              endingRow: highIndex,
+                                                              newSeqValue: newSeq!.value)
                 let selCount = highIndex - lowIndex + 1
                 seqModified(modStartingNote: modStartingNote, rowCount: selCount, reselect: true)
                 return
