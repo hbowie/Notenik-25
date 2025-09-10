@@ -138,6 +138,7 @@ class NewWithOptionsViewController: NSViewController {
     
     @IBAction func levelSelected(_ sender: Any) {
         adjustSeq()
+        adjustKlass()
     }
     
     @IBAction func increaseLevel(_ sender: Any) {
@@ -147,6 +148,7 @@ class NewWithOptionsViewController: NSViewController {
             levelPopup.selectItem(at: newLevel)
         }
         adjustSeq()
+        adjustKlass()
     }
     
     @IBAction func decreaseLevel(_ sender: Any) {
@@ -156,6 +158,7 @@ class NewWithOptionsViewController: NSViewController {
             levelPopup.selectItem(at: newLevel)
         }
         adjustSeq()
+        adjustKlass()
     }
     
     func adjustSeq() {
@@ -180,6 +183,15 @@ class NewWithOptionsViewController: NSViewController {
         
         newSeq.incByLevels(originalLevel: currLevel!, newLevel: newLevel)
         seqField.stringValue = newSeq.value
+    }
+    
+    func adjustKlass() {
+        guard collection != nil else { return }
+        guard io != nil else { return }
+        guard klassComboBox.numberOfItems >= levelPopup.numberOfItems else { return }
+        let newLevelInt = levelPopup.indexOfSelectedItem + levelConfig.low
+        guard let newKlass = io!.klassForLevel(newLevelInt) else { return }
+        klassComboBox.stringValue = newKlass
     }
     
     @IBAction func proceed(_ sender: Any) {

@@ -2898,6 +2898,12 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             let newLevel = modNote.level.dupe()
             newLevel.add(levelsToAdd: indentLevels, config: collection.levelConfig)
             noteModified = modNote.setLevel(newLevel)
+            if let newKlass = noteIO.klassForLevel(newLevel.level) {
+                let klassModified = modNote.setKlass(newKlass)
+                if klassModified {
+                    noteModified = true
+                }
+            }
         }
         
         if newSeq != nil {
