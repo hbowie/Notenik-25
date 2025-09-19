@@ -115,6 +115,13 @@ class ViewFactory {
             } else {
                 return LongTextView()
             }
+        case NotenikConstants.longTitleCommon:
+            if auxLongText {
+                let longView = AuxTextView(properLabel: def.fieldLabel.properForm, typeString: def.fieldType.typeString)
+                return longView
+            } else {
+                return LongTitleView()
+            }
         case NotenikConstants.lookupType:
             return LookupView(def: def)
         case NotenikConstants.minutesToReadCommon:
