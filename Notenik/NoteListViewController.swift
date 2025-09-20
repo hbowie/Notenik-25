@@ -240,7 +240,6 @@ class NoteListViewController:   NSViewController,
         if tableView.clickedRow > highIndex || tableView.clickedRow < lowIndex {
             return 
         }
-        
         collectionWindowController!.seqModify(startingRow: lowIndex, endingRow: highIndex)
     }
     
@@ -581,10 +580,8 @@ class NoteListViewController:   NSViewController,
         if let sortedNote = notenikIO?.getSortedNote(at: row) {
             let note = sortedNote.note
             var indent = 0
-            var seqValue: SeqValue?
             if let collection = notenikIO?.collection {
                 if collection.sortBySeq {
-                    seqValue = note.seq
                     if note.hasLevel() {
                         let config = collection.levelConfig
                         let levelValue = note.level
@@ -592,8 +589,6 @@ class NoteListViewController:   NSViewController,
                         indent = level - config.low
                     }
                     indent = sortedNote.depth
-                } else if collection.sortParm == .datePlusSeq {
-                    seqValue = note.seqAsTimeOfDay
                 }
             }
             if !lnfCol1Title.isEmpty && lnfCol1Title == tableColumn?.title {
@@ -666,17 +661,24 @@ class NoteListViewController:   NSViewController,
     }
     
     func getSeqDisplay(sortedNote: SortedNote, indent: Int) -> String {
+        
+        guard let collection = notenikIO?.collection else { return sortedNote.seqSingleValue.value }
+        
+        if collection.sortParm == .datePlusSeq {
+            return sortedNote.note.seqAsTimeOfDay.valueToDisplay()
+        }
+        
+        if !collection.sortBySeq {
+            return sortedNote.seqSingleValue.value
+        }
+        
         var displayValue = ""
         var seqSingleValue = sortedNote.seqSingleValue
-        if let collection = notenikIO?.collection {
-            let (formatted, skipped) = collection.seqFormatter.format(seq: seqSingleValue, full: true)
-            if skipped > 0 {
-                displayValue = AppPrefs.shared.indentSpaces(level: indent)
-            }
-            displayValue.append(formatted)
-        } else {
-            displayValue = sortedNote.note.seq.value
+        let (formatted, skipped) = collection.seqFormatter.format(seq: seqSingleValue, full: true)
+        if skipped > 0 {
+            displayValue = AppPrefs.shared.indentSpaces(level: indent)
         }
+        displayValue.append(formatted)
         return displayValue
     }
     
