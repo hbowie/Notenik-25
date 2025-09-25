@@ -183,7 +183,19 @@ class ShareViewController: NSViewController {
     /// User said OK -- Let's do the Sharing now
     @IBAction func okButtonPressed(_ sender: Any) {
         
-        guard !notes.isEmpty && window != nil && io != nil else {
+        guard !notes.isEmpty else {
+            communicateError("No note to share", alert: true)
+            window!.close()
+            return
+        }
+        
+        guard window != nil else {
+            communicateError("No window available")
+            return
+        }
+        
+        guard io != nil else {
+            communicateError("No i/o module available")
             return
         }
         
@@ -667,5 +679,22 @@ class ShareViewController: NSViewController {
     
     @IBAction func cancelButtonPressed(_ sender: Any) {
         window!.close()
+    }
+    
+    /// Log an error message and optionally display an alert message.
+    func communicateError(_ msg: String, alert: Bool=false) {
+        
+        Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                          category: "ShareViewController",
+                          level: .error,
+                          message: msg)
+        
+        if alert {
+            let dialog = NSAlert()
+            dialog.alertStyle = .warning
+            dialog.messageText = msg
+            dialog.addButton(withTitle: "OK")
+            let _ = dialog.runModal()
+        }
     }
 }
