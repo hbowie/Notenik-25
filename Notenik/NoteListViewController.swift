@@ -674,7 +674,7 @@ class NoteListViewController:   NSViewController,
         
         var displayValue = ""
         var seqSingleValue = sortedNote.seqSingleValue
-        let (formatted, skipped) = collection.seqFormatter.format(seq: seqSingleValue, full: true)
+        let (formatted, skipped) = collection.seqFormatter.format(seq: seqSingleValue, klassDef: nil, full: true)
         if skipped > 0 {
             displayValue = AppPrefs.shared.indentSpaces(level: indent)
         }
