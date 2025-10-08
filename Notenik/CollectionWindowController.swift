@@ -2190,7 +2190,11 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             let vcard = item.string(forType: vcardType)
             let url = item.string(forType: urlType)
             let title = item.string(forType: urlNameType)
-            let fileRefURL = item.string(forType: fileURLType)
+            let fileRefURLStr = item.string(forType: fileURLType)
+            var fileRefURL: URL?
+            if fileRefURLStr != nil {
+                fileRefURL = URL(string: fileRefURLStr!)
+            }
             
             let note = Note(collection: collection)
             
@@ -2219,23 +2223,22 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 }
             } else if fileRefURL != nil {
                 logInfo(msg: "Processing pasted item as File Ref URL")
-                let fileURL = URL(fileURLWithPath: fileRefURL!).standardized
-                let likelyText = ResourceFileSys.isLikelyNoteFile(fileURL: fileURL, preferredNoteExt: collection.preferredExt)
-                let fileName = fileURL.deletingPathExtension().lastPathComponent
-                let ext = fileURL.pathExtension
+                let likelyText = ResourceFileSys.isLikelyNoteFile(fileURL: fileRefURL!, preferredNoteExt: collection.preferredExt)
+                let fileName = fileRefURL!.deletingPathExtension().lastPathComponent
+                let ext = fileRefURL!.pathExtension
                 if ext == "opml" {
                     let defaultTitle = StringUtils.wordDemarcation(fileName,
                                                                    caseMods: ["u", "u", "l"],
                                                                    delimiter: " ")
                     
                     let opmlToBody = OPMLtoBody()
-                    let (body, title) = opmlToBody.importFrom(fileURL,
+                    let (body, title) = opmlToBody.importFrom(fileRefURL!,
                                                               defaultTitle: defaultTitle)
                     _ = note.setTitle(title)
                     _ = note.setBody(body)
                 } else if ext == "vcf" {
                     let contacts = ContactCards()
-                    let contactNotes = contacts.parse(vCards: fileURL, collection: collection)
+                    let contactNotes = contacts.parse(vCards: fileRefURL!, collection: collection)
                     for contactNote in contactNotes {
                         dailyNotesMods(note: contactNote)
                         let addedNote = addPastedNote(contactNote)
@@ -2253,7 +2256,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                                     note: dropNote,
                                                     position: nil, row: -1, searchPhrase: nil)
                         // select(note: dropNote, position: nil, source: .action, andScroll: true)
-                        addAttachment(urlToAttach: fileURL)
+                        addAttachment(urlToAttach: fileRefURL!)
                         if firstNotePasted == nil {
                             firstNotePasted = dropNote
                         }
@@ -2263,15 +2266,15 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                                         caseMods: ["u", "u", "l"],
                                                         delimiter: " ")
                     _ = note.setTitle(defaultTitle)
-                    let localLink = collection.makeLinkRelative(startingLink: fileURL.absoluteString)
+                    let localLink = collection.makeLinkRelative(startingLink: fileRefURL!.absoluteString)
                     _ = note.setLink(localLink)
                 } else if collection.dailyNotesType == .folders {
-                    let text = try? String(contentsOf: fileURL, encoding: .utf8)
+                    let text = try? String(contentsOf: fileRefURL!, encoding: .utf8)
                     if text != nil && !text!.isEmpty {
                         _ = note.setBody(text!)
                     }
                 } else {
-                    let addedNote = importTextFile(fileURL: fileURL,
+                    let addedNote = importTextFile(fileURL: fileRefURL!,
                                                    newLevel: newLevel, newSeq: newSeq, newKlass: newKlass,
                                                    finishUp: false)
                     if addedNote != nil {
