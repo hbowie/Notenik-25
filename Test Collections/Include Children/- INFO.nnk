@@ -12,7 +12,7 @@ Sort Blank Dates Last: true
 
 Other Fields Allowed: false
 
-Last Index Selected: 4
+Last Index Selected: 8
 
 Mirror Auto Index: false
 
@@ -48,5 +48,5 @@ Hash Tags: notenik-field
 
 Window Numbers: 1301.0;176.0;947.0;1000.0;500.0;
 
-Column Widths: author: 100, 200, 1000; datemod: 100, 180, 250; title: 200, 445, 1500; rank: 50, 80, 250; x: 12, 20, 50; seq: 30, 80, 250; statusdigit: 20, 30, 50; klass: 60, 80, 150; date: 80, 120, 500; tags: 50, 100, 1200; dateadded: 100, 180, 250; 
+Column Widths: tags: 50, 100, 1200; rank: 50, 80, 250; klass: 60, 80, 150; title: 200, 445, 1500; date: 80, 120, 500; author: 100, 200, 1000; seq: 30, 80, 250; dateadded: 100, 180, 250; x: 12, 20, 50; datemod: 100, 180, 250; statusdigit: 20, 30, 50; 
 
