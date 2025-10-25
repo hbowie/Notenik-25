@@ -3,7 +3,11 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 11/12/21.
-//  Copyright © 2021 PowerSurge Publishing. All rights reserved.
+
+//  Copyright © 2021 - 2025 Herb Bowie (https://hbowie.net)
+//
+//  This programming code is published as open source software under the
+//  terms of the MIT License (https://opensource.org/licenses/MIT).
 //
 
 import Cocoa
@@ -134,9 +138,22 @@ class NewWithOptionsViewController: NSViewController {
                 titleField.stringValue = date
         }
     }
+    
+    var changingKlass = false
 
+    @IBAction func klassSelected(_ sender: Any) {
+        guard let noteIO = io else { return }
+        let selectedKlass = klassComboBox.stringValue
+        guard !selectedKlass.isEmpty else { return }
+        guard let impliedLevel = noteIO.levelForKlass(selectedKlass) else { return }
+        changingKlass = true
+        levelPopup.selectItem(at: impliedLevel - levelConfig.low)
+        adjustSeq()
+        changingKlass = false
+    }
     
     @IBAction func levelSelected(_ sender: Any) {
+        guard !changingKlass else { return }
         adjustSeq()
         adjustKlass()
     }
