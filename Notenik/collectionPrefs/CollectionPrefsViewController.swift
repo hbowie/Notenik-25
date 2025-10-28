@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 4/5/19.
-//  Copyright © 2019 - 2024 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -31,6 +31,7 @@ class CollectionPrefsViewController: NSViewController {
     @IBOutlet var fileExtComboBox:      NSComboBox!
     @IBOutlet var fileFormatComboBox:   NSComboBox!
     @IBOutlet var tagsHandlingPopup:    NSPopUpButton!
+    @IBOutlet var tagsDisplayPopup: NSPopUpButton!
     @IBOutlet var collectionShortcut:   NSTextField!
     @IBOutlet var noteTitleDisplayPopUp: NSPopUpButton!
     @IBOutlet var mirrorAutoIndexCkBox: NSButton!
@@ -148,6 +149,7 @@ class CollectionPrefsViewController: NSViewController {
         extPicker.setFileExt(collection!.preferredExt)
         setFileFormat(collection!.noteFileFormat.rawValue)
         setHashTags(collection!.hashTagsOption)
+        setTagsDisplay(collection!.tagsDisplayOption)
         setMirrorAutoIndex(collection!.mirrorAutoIndex)
         setBodyLabel(collection!.bodyLabel)
         setMinBodyEdit(collection!.minBodyEditViewHeight)
@@ -376,6 +378,19 @@ class CollectionPrefsViewController: NSViewController {
         }
     }
     
+    func setTagsDisplay(_ opt: TagsDisplayOption) {
+        switch opt {
+        case .aboveTitle:
+            tagsDisplayPopup.selectItem(at: 0)
+        case .belowTitle:
+            tagsDisplayPopup.selectItem(at: 1)
+        case .replNavUp:
+            tagsDisplayPopup.selectItem(at: 2)
+        case .noDisplay:
+            tagsDisplayPopup.selectItem(at: 3)
+        }
+    }
+    
     func setOtherFieldsAllowed(_ allowed: Bool) {
         if allowed {
             otherFieldsCkBox.state = .on
@@ -534,6 +549,19 @@ class CollectionPrefsViewController: NSViewController {
             collection!.hashTagsOption = .inlineHashtags
         default:
             collection!.hashTagsOption = .notenikField
+        }
+        
+        switch tagsDisplayPopup.indexOfSelectedItem {
+        case 0:
+            collection!.tagsDisplayOption = .aboveTitle
+        case 1:
+            collection!.tagsDisplayOption = .belowTitle
+        case 2:
+            collection!.tagsDisplayOption = .replNavUp
+        case 3:
+            collection!.tagsDisplayOption = .noDisplay
+        default:
+            collection!.tagsDisplayOption = .aboveTitle
         }
         
         collection!.otherFields = otherFieldsCkBox.state == NSControl.StateValue.on
