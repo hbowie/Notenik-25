@@ -242,6 +242,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         juggler!.userRequestsOpenCollection()
     }
     
+    @IBAction func quotesToBiblio(_ sender: NSMenuItem) {
+        juggler!.quotesToBiblio()
+    }
+    
     @IBAction func menuFileOpenEssential(_ sender: NSMenuItem) {
         juggler!.openEssentialCollection()
     }

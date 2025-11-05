@@ -1140,6 +1140,80 @@ class CollectionJuggler: NSObject {
         return true
     }
     
+    func quotesToBiblio() {
+        
+        
+        var quotesURL: URL? = nil
+        var biblioURL: URL? = nil
+        var existingURL: URL? = nil
+        
+        // Let user select input quotations.
+        var openPanel = NSOpenPanel();
+        openPanel.title = "Select a Notenik Collection containing Quotes"
+        openPanel.prompt = "Select Input Quotes"
+        let parent = osdir.directoryURL
+        if parent != nil {
+            openPanel.directoryURL = parent!
+        }
+        openPanel.showsResizeIndicator = true
+        openPanel.showsHiddenFiles = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = false
+        openPanel.allowsMultipleSelection = false
+        
+        var result = openPanel.runModal()
+        if result == .OK {
+            quotesURL = openPanel.url!
+        } else {
+            return
+        }
+        
+        // Let user select existing biblio collection.
+        openPanel = NSOpenPanel();
+        openPanel.title = "Optionally Select an Existing Biblio Collection"
+        openPanel.prompt = "Select Existing Biblio"
+        if parent != nil {
+            openPanel.directoryURL = parent!
+        }
+        openPanel.showsResizeIndicator = true
+        openPanel.showsHiddenFiles = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = false
+        openPanel.allowsMultipleSelection = false
+        
+        result = openPanel.runModal()
+        if result == .OK {
+            existingURL = openPanel.url!
+        }
+        
+        // Let user select output biblio collection.
+        openPanel = NSOpenPanel();
+        openPanel.title = "Select an Output Biblio Collection"
+        openPanel.prompt = "Select Output Collection"
+        if parent != nil {
+            openPanel.directoryURL = parent!
+        }
+        openPanel.showsResizeIndicator = true
+        openPanel.showsHiddenFiles = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = false
+        openPanel.allowsMultipleSelection = false
+        
+        result = openPanel.runModal()
+        if result == .OK {
+            biblioURL = openPanel.url!
+        } else {
+            return
+        }
+        
+        if let quotesToBiblio = QuotesToBiblio(quotesURL: quotesURL!, biblioURL: biblioURL!, existingURL: existingURL!) {
+            quotesToBiblio.transform()
+        }
+    }
+    
     /// Attempt to open a Notenik collection, starting with a file path.
     ///
     /// - Parameters:
