@@ -1,0 +1,21 @@
+Title ID	Timestamp
+frontmatter	20250918195831
+chapter1	20251111010401
+navbar	20250921175553
+memotoself	20251019194207
+bigsurandtheorangesofhieronymusbosch	20251107233153
+indexofnames	20251106182820
+pageheader	20250921180112
+titleofyourbook	20251110183524
+indexoftopics	20250918201339
+enemiesofartandartist	20251107233153
+bodytext	20250915162557
+backmatter	20250918200852
+millerhenry	20251019194056
+search	20250921175859
+firstchapter	20251111010401
+introduction	20250915162531
+tableofcontents	20250921175046
+whatarewehereforifnotto	20251019194318
+pagefooter	20250921181715
+bibliography	20250915162453

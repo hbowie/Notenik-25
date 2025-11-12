@@ -1,0 +1,723 @@
+/* --------------------------------------------------
+
+  Light/DarK Styling and other variables
+
+* -------------------------------------------------- */
+:root {
+    --mono-font: Consolas, Menlo, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    --standard-border-radius: 5px;
+}
+:root {
+    color-scheme: light dark;
+    --background-color: #FFFFFF;
+    --text-color: #000000;
+    --link-color: Blue;
+    --link-hover-color: Blue;
+    --background-hover-color: #f0f0f0;
+    --link-visited-color: Purple;
+    --link-active-color: Red;
+    --background-active-color: #e0e0e0;
+    --code-color: #d81b60;
+    --preformatted-color: #444;
+    --accent-bg: #f5f7ff;
+    --border: #898EA4;
+    --highlight-color: Gainsboro;
+    --bg: #fff;
+}
+a.ext-link::after {
+    content: "";
+    width: 0.9em;
+    height: 0.9em;
+    margin-left: 0.2em;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z'/%3E%3Cpath fill-rule='evenodd' d='M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-block;
+}
+@media screen and (prefers-color-scheme: dark) { 
+  :root {
+    --background-color: #000000;
+    --text-color: #F0F0F0;
+    --link-color: #93d5ff;
+    --link-hover-color: #94d8ff;
+    --background-hover-color: #282828;
+    --link-visited-color: #cab7ff;
+    --link-active-color: #94d8ff;
+    --background-active-color: #363636;
+    --code-color: #f06292;
+    --preformatted-color: #ccc;
+    --accent-bg: #2b2b2b;
+    --highlight-color: DimGray;
+    --bg: #212121;
+  }
+    a.ext-link::after {file:///Users/hbowie/Fonts/MB%20Type%20Library%20230211/WOFF2%20font%20files%20(best%20for%20web)/Century%20Supra%20B/sample.html
+        content: "";
+        width: 0.9em;
+        height: 0.9em;
+        margin-left: 0.2em;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' stroke='%23F0F0F0' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z'/%3E%3Cpath fill-rule='evenodd' d='M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z'/%3E%3C/svg%3E");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        display: inline-block;
+    }
+}
+/* --------------------------------------------------
+
+  Font Choices
+
+* -------------------------------------------------- */
+body {
+  font-family: "Century Supra B", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15pt;
+  font-weight: normal;
+  font-style: normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Heliotrope 3", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+code {
+    font-family: var(--mono-font);
+    color: var(--code-color);
+}
+/* --------------------------------------------------
+
+  Non-font Styling for body, paragraphs, horizontal rules
+  and headings
+
+* -------------------------------------------------- */
+body {
+  tab-size: 4;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: max(1.0rem, ((100% - 33em) / 2));
+  margin-right: max(1.0rem, ((100% - 33em) / 2));
+  max-width: 33em; 
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.45;
+}
+p {
+    margin-top: 0.2em;
+    margin-bottom: 0.7em;
+}
+hr {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0.7em;
+    margin-bottom: 0.2em;
+}
+h1 {
+    text-align: center;
+    font-size: 2.0em;
+}
+h2 {
+    text-align: left;
+    font-size: 1.8em;
+}
+h3 {
+    text-align: left;
+    font-size: 1.6em;
+    margin-bottom: 1em;
+}
+h4 {
+    text-align: left;
+    font-size: 1.4em;
+}
+h5 {
+    text-align: left;
+    font-size: 1.2em;
+}
+h6 {
+    text-align: left;
+    font-size: 1.0em;
+}
+
+/* --------------------------------------------------
+
+  Link Styling
+
+* -------------------------------------------------- */
+
+a {
+    color: var(--link-color);
+}
+a:focus {
+    color: var(--link-hover-color);
+    background: var(--background-hover-color);
+}
+a:hover {
+    color: var(--link-hover-color);
+    background: var(--background-hover-color);
+}
+a:active {
+    color: var(--link-active-color);
+    background: var(--background-active-color);
+}
+a:visited {
+    color: var(--link-visited-color);
+}
+
+a.wiki-link {
+    text-decoration: none;
+    border-bottom: 1px dotted;
+}
+
+a.hashtag {
+    text-decoration: none;
+    border-bottom: 1px dotted;
+}
+
+a.ext-link {
+    text-decoration: none;
+    border-bottom: 1px dotted;
+}
+
+p.quote-from a {
+    text-decoration: none;
+    border-bottom: 1px dotted;
+}
+
+a.nav-link:link {
+    text-decoration: none;
+    border-bottom: none;
+}
+
+a.nav-link:visited {
+    text-decoration: none;
+    border-bottom: none;
+}
+
+nav ul li a.wiki-link {
+    text-decoration: none;
+    border-bottom: none;
+}
+
+.nnk-header .wiki-link {
+	text-decoration: none;
+	border-bottom: none; 
+}
+
+.nnk-footer a:link {
+    text-decoration: none;
+    border-bottom: none;
+    color: var(--text-color);
+}
+
+a.implicit {
+	text-decoration: none;
+	border: none;
+}
+a.implicit:hover {
+	color: var(--link-hover-color);
+	text-decoration: none;
+	border-bottom: 1px dotted var(--link-hover-color);
+}
+
+/* --------------------------------------------------
+
+  Quote styling
+
+* -------------------------------------------------- */
+/*
+blockquote {
+  border-left: 0.4em dotted #999; 
+  border-left: none;
+  margin-left: 1em;
+  padding-left: 1em;
+} */
+
+blockquote {
+    margin: 0.25em 0;
+    padding: 0.35em 40px;
+    line-height: 1.45;
+    position: relative;
+    /* color: #383838; */
+}
+
+blockquote:before {
+    display: block;
+    padding-left: 10px;
+    content: "\201C";
+    font-size: 80px;
+    position: absolute;
+    left: -20px;
+    top: -20px;
+    color: var(--highlight-color);
+}
+
+blockquote.attribution-following {
+	margin-bottom: 0;
+}
+.quote-from {
+    margin-block-start: 0.1rem;
+    margin-block-end: 0.5rem;
+    margin: 0rem 0 1.5em 0;
+    padding: 0.25rem 4.6em;
+    font-size: 0.9em;
+    line-height: 1.45;
+    position: relative;
+}
+.quote-from:before {
+    display: block;
+    padding-left: 3.4em;
+    content: "\2014";
+    position: absolute;
+    left: 0;
+}
+figure.notenik-quote-attrib {
+    margin-left: 2em;
+    margin-right: 2em;
+    margin-bottom: 2em;
+}
+figure.notenik-quote-attrib blockquote {
+  border-left: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+figure.notenik-quote-attrib figcaption {
+    text-align: right;
+}
+
+cite.notenik-cite-major {
+  font-style: italic;
+}
+cite.notenik-cite-minor {
+  font-style: normal;
+}
+
+/* --------------------------------------------------
+
+  Footer styling
+
+* -------------------------------------------------- */
+
+footer.nnk-footer {
+    clear: both;
+    border-top: 1px dashed var(--text-color);
+    margin-top: 1em;
+    font-size: 0.8em;
+    font-weight: lighter;
+    text-align: center;
+}
+
+footer.nnk-footer p {
+    padding-top: 0.5em;
+}
+
+/* --------------------------------------------------
+
+  ???
+
+* -------------------------------------------------- */
+
+.search-results {
+    background-color: var(--highlight-color);
+}
+/* End of darkModeAdjustments code. */
+/* The following CSS comes from the displayCSS method of the
+   DisplayPrefs class within Notenik.                        */
+
+
+img { max-width: 100%; border: 4px solid gray; }
+
+body > footer {
+    margin-top: 4rem;
+    text-align: center;
+}
+/* Consolidate box styling */
+aside, pre, progress {
+  background-color: var(--accent-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--standard-border-radius);
+  margin-bottom: 1rem;
+}
+aside {
+  font-size: 1rem;
+  width: 30%;
+  padding: 0 15px;
+  margin-inline-start: 15px;
+  float: right;
+}
+*[dir="rtl"] aside {
+  float: left;
+}
+
+/* Make aside full-width on mobile */
+@media only screen and (max-width: 720px) {
+  aside {
+    width: 100%;
+    float: none;
+    margin-inline-start: 0;
+  }
+}
+
+figure {
+  margin-left: 0.2em;
+  padding-left: 0.2em;
+}
+table, th, td {
+  border: 2px solid gray;
+}
+table {
+  border-collapse: collapse;
+  margin-bottom: 0.7em;
+}
+th, td {
+  padding: 6px;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+p.nnk-tags-repl-nav-up {
+		font-style: italic;
+}
+p.nnk-tags {
+		font-style: italic;
+		width: 100%;
+		text-align: right;
+		clear: both;
+}
+
+/* --------------------------------------------------
+
+  Lists
+
+* -------------------------------------------------- */
+
+li { margin-top: 0.2em; margin-bottom: 0.2em; }
+ul.checklist { list-style-type: none; }
+ul.tags-list { list-style-type: none; }
+ul.tags-cloud {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  line-height: 2.5rem;
+}
+ul.tags-cloud a {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  position: relative;
+  border-radius: 15px;
+  background-color: var(--highlight-color);
+  padding: 2px 12px 2px 12px;
+  margin: 10px 10px 10px 10px;
+  min-width: 40px;
+  text-align: center;
+}
+ul.notenik-toc {
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
+}
+ol.notenik-biblio-list {
+  list-style-type: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+ol.notenik-biblio-list li {
+  margin-left: 3em;
+  text-indent: -3em;
+  margin-bottom: 1em;
+}
+ul.outline-ul {
+    list-style-type: none;
+}
+ul.outline-list {
+    list-style-type: none;
+}
+ul.outline-ul-within-details {
+    list-style-type: none;
+}
+li.outline-li-bullet {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
+details {
+    margin-left: 2.2em;
+}
+summary {
+    margin-left: -2.2em;
+    margin-bottom: 0;
+}
+details > summary:first-of-type {
+    list-style-position: outside;
+}
+
+/* --------------------------------------------------
+
+	Tables
+
+* -------------------------------------------------- */
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 1em;
+}
+
+caption {
+	border: 0;
+	font-size: 1.2em;
+	font-weight: bold;
+	margin-top: 0.4em;
+	margin-bottom: 0.2em;
+	text-align: center;
+}
+
+th {
+	border: 1px var(--highlight-color) solid;
+	text-align: left;
+	padding: 5px;
+}
+
+td {
+	border: 1px var(--highlight-color) solid;
+	text-align: left;
+	vertical-align: top;
+	padding: 5px;
+}
+
+/* --------------------------------------------------
+
+  Other stuff
+
+* -------------------------------------------------- */
+
+.notenik-aka {
+    font-style: italic;
+    text-align: center;
+    margin-top: 0;
+}
+table.notenik-calendar {
+  table-layout: fixed;
+  width: 100%;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+td.notenik-calendar-day-data {
+  vertical-align: top;
+}
+p.notenik-calendar-day-of-month {
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: right;
+  font-size: 1.2em;
+}
+p.notenik-calendar-day-contents {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+.heading-1-details {
+    margin-left: 2.2em;
+}
+.heading-2-details {
+    margin-left: 2.2em;
+}
+.heading-3-details {
+    margin-left: 2.2em;
+}
+.heading-4-details {
+    margin-left: 2.2em;
+}
+.heading-5-details {
+    margin-left: 2.2em;
+}
+.heading-6-details {
+    margin-left: 2.2em;
+}
+
+.heading-1-summary {
+    margin-left: -2.2em;
+    margin-bottom: 0.5em;
+}
+.heading-2-summary {
+    margin-left: -2.2em;
+    margin-bottom: 0.5em;
+}
+.heading-3-summary {
+    margin-left: -2.2em;
+    margin-bottom: 0.5em;
+}
+.heading-4-summary {
+    margin-left: -2.2em;
+    margin-bottom: 0.5em;
+}
+.heading-5-summary {
+    margin-left: -2.2em;
+    margin-bottom: 0.5em;
+}
+.heading-6-summary {
+    margin-left: -2.2em;
+    margin-bottom: 0.5em;
+}
+pre {
+    
+}
+
+pre {
+  padding: 1rem 1.4rem;
+  max-width: 100%;
+  overflow-x: auto;
+  color: var(--preformatted-color);
+}
+
+/* Fix embedded code within pre */
+pre code {
+  color: var(--preformatted-color);
+  background: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Classes for notices */
+.notice {
+  background: var(--accent-bg);
+  border: 2px solid var(--border);
+  border-radius: var(--standard-border-radius);
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+article, fieldset, dialog {
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: var(--standard-border-radius);
+  margin-bottom: 1rem;
+}
+
+article h2:first-child,
+section h2:first-child,
+article h3:first-child,
+section h3:first-child {
+  margin-top: 1rem;
+}
+
+/* Make the header bg full width, but the content inline with body */
+body > header {
+  background-color: var(--accent-bg);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+  padding: 0 0.5rem 2rem 0.5rem;
+  grid-column: 1 / -1;
+}
+
+body > header > *:only-child {
+  margin-block-start: 2rem;
+}
+
+body > header h1 {
+  max-width: 1200px;
+  margin: 1rem auto;
+}
+
+body > header p {
+  max-width: 40rem;
+  margin: 1rem auto;
+}
+
+header.nnk-header {
+    background-color: var(--background-color);
+    text-align: center;
+    border-bottom: none;
+    max-width: none;
+    padding: 0 0 0 0;
+}
+
+/* Format navigation */
+header > nav {
+  font-size: 1rem;
+  line-height: 2;
+  padding: 1rem 0 0 0;
+}
+
+/* Use flexbox to allow items to wrap, as needed */
+header > nav ul,
+header > nav ol {
+  align-content: space-around;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* List items are inline elements, make them behave more like blocks */
+header > nav ul li,
+header > nav ol li {
+  display: inline-block;
+}
+
+header > nav a,
+header > nav a:visited {
+  margin: 0 0.5rem 1rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--standard-border-radius);
+  color: var(--text);
+  display: inline-block;
+  padding: 0.1rem 1rem;
+  text-decoration: none;
+}
+
+header > nav a:hover,
+header > nav a.current,
+header > nav a[aria-current="page"],
+header > nav a[aria-current="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+  cursor: pointer;
+}
+
+/* Reduce nav side on mobile */
+@media only screen and (max-width: 720px) {
+  header > nav a {
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+    line-height: 1;
+  }
+}
+
+nav.nnk-nav {
+    float: right;
+    font-style: italic;
+}
+
+nav.nnk-nav ul {
+    margin-top: 0;
+}
+
+nav.nnk-nav ul li {
+    display: inline;
+}
+
+nav.nnk-nav ul li a {
+    text-decoration: none;
+    border-bottom: none;
+}
+

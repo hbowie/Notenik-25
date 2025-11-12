@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="AUq-ri-ccH">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="AUq-ri-ccH">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24412"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -70,7 +70,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eAV-v8-UY6">
-                                <rect key="frame" x="20" y="236" width="263" height="18"/>
+                                <rect key="frame" x="22" y="237" width="259" height="16"/>
                                 <buttonCell key="cell" type="radio" title="The Notenik folder within iCloud Drive  " bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="tU8-s0-DLO">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -99,7 +99,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MUK-1r-d8v">
-                                <rect key="frame" x="18" y="163" width="192" height="18"/>
+                                <rect key="frame" x="20" y="164" width="188" height="16"/>
                                 <buttonCell key="cell" type="radio" title="A location of your choosing" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="ciL-3U-rjk">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -121,7 +121,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bwq-d4-3fe">
-                                <rect key="frame" x="13" y="13" width="80" height="32"/>
+                                <rect key="frame" x="20" y="20" width="66" height="24"/>
                                 <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ElA-IM-6U1">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -137,7 +137,7 @@ Gw
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WcF-Yf-wkG">
-                                <rect key="frame" x="360" y="13" width="80" height="32"/>
+                                <rect key="frame" x="367" y="20" width="66" height="24"/>
                                 <buttonCell key="cell" type="push" title="Next" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0gZ-6e-05S">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -225,7 +225,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y7p-gD-3xY">
-                                <rect key="frame" x="13" y="13" width="80" height="32"/>
+                                <rect key="frame" x="20" y="20" width="66" height="24"/>
                                 <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="X1b-xi-gb4">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -241,7 +241,7 @@ Gw
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9nL-1l-ZWs">
-                                <rect key="frame" x="357" y="13" width="80" height="32"/>
+                                <rect key="frame" x="364" y="20" width="66" height="24"/>
                                 <buttonCell key="cell" type="push" title="Next" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ugI-VX-BZi">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -254,7 +254,7 @@ Gw
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hKH-J5-MXa">
-                                <rect key="frame" x="279" y="13" width="80" height="32"/>
+                                <rect key="frame" x="286" y="20" width="66" height="24"/>
                                 <buttonCell key="cell" type="push" title="Back" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="g64-YL-1Bn">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -314,7 +314,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ahe-45-wjV">
-                                <rect key="frame" x="17" y="229" width="281" height="25"/>
+                                <rect key="frame" x="20" y="229" width="274" height="24"/>
                                 <popUpButtonCell key="cell" type="push" title="Type" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="q4S-qZ-gJP" id="yNK-01-rwC">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="message"/>
@@ -329,7 +329,7 @@ Gw
                                 </constraints>
                             </popUpButton>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hdV-hP-nt1">
-                                <rect key="frame" x="13" y="13" width="80" height="32"/>
+                                <rect key="frame" x="20" y="20" width="66" height="24"/>
                                 <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dmk-p6-ejs">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -345,7 +345,7 @@ Gw
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mT6-wL-SB9">
-                                <rect key="frame" x="357" y="13" width="80" height="32"/>
+                                <rect key="frame" x="364" y="20" width="66" height="24"/>
                                 <buttonCell key="cell" type="push" title="Next" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jYc-Bf-5CA">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -358,7 +358,7 @@ Gw
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3jp-vj-nK4">
-                                <rect key="frame" x="279" y="13" width="80" height="32"/>
+                                <rect key="frame" x="286" y="20" width="66" height="24"/>
                                 <buttonCell key="cell" type="push" title="Back" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wK5-0D-PDh">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -371,7 +371,7 @@ Gw
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="60n-cl-cPd">
-                                <rect key="frame" x="18" y="132" width="411" height="75"/>
+                                <rect key="frame" x="18" y="128" width="411" height="75"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="75" id="N3H-IP-PdF"/>
                                 </constraints>

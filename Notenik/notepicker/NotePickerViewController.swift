@@ -546,7 +546,11 @@ class NotePickerViewController: NSViewController,
             target = "\(shortcutToUse)/\(title)"
         }
         if note.hasKlass() && note.klass.quote {
-            strToPasteboard("{:include-quote:\(target)}", paste: true)
+            if note.hasAuthor() {
+                strToPasteboard("{:include-quote:\(target)}", paste: true)
+            } else {
+                strToPasteboard("{:include-quotebiblio:\(target)}", paste: true)
+            }
         } else {
             strToPasteboard("{:include:\(target)}", paste: true)
         }

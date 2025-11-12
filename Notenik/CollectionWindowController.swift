@@ -2134,6 +2134,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard let collection = noteIO.collection else { return 0 }
         let seqDef = collection.seqFieldDef
         
+        var seqAbove: SeqValue?
+        var seqDepthDiff = 0
         var newLevel: LevelValue?
         var newSeq: SeqValue?
         var newKlass: KlassValue?
@@ -2142,12 +2144,15 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         if row > 0 && dropOperation == .above && seqDef != nil && collection.dailyNotesType == .none
             && (collection.sortParm == .seqPlusTitle || collectionTabs!.selectedTabViewItemIndex == 2) {
             let seqType = seqDef!.fieldType as! SeqType
-            var seqAbove = seqType.createValue() as! SeqValue
+            seqAbove = seqType.createValue() as? SeqValue
             let noteAbove = noteIO.getNote(at: row - 1)
             var levelAbove: LevelValue = LevelValue()
             if noteAbove != nil {
                 seqAbove = noteAbove!.seq
                 levelAbove = noteAbove!.level
+                if seqAbove != nil {
+                    seqDepthDiff = levelAbove.getInt() - seqAbove!.numberOfLevels
+                }
                 newLevel = noteAbove!.level
                 if noteAbove!.hasKlass() {
                     newKlass = KlassValue(noteAbove!.klass.value)
@@ -2166,7 +2171,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 }
             }
             if noteAbove != nil {
-                newSeq = seqAbove.dupe()
+                newSeq = seqAbove!.dupe()
             }
             if newSeq != nil && newLevel != nil {
                 newSeq!.incByLevels(originalLevel: levelAbove, newLevel: newLevel!)
@@ -2317,13 +2322,35 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                     }
                 }
             } else {
-                if newLevel != nil {
+                // Add New Note
+                var levelSet = false
+                var klassSet = false
+                var seqSet = false
+                if note.hasKlass() && newLevel != nil {
+                    let impliedLevel = noteIO.levelForKlass(note.klass.value)
+                    if impliedLevel != nil && impliedLevel! > 0 {
+                        _ = note.setLevel(impliedLevel!)
+                        levelSet = true
+                        klassSet = true
+                        var modSeq: SeqValue? = nil
+                        if seqAbove != nil {
+                            modSeq = seqAbove!.dupe()
+                        }
+                        if modSeq != nil {
+                            let levelToInc = impliedLevel! - seqDepthDiff
+                            modSeq!.incAtLevel(level: levelToInc - 1, removingDeeperLevels: true)
+                            _ = note.setSeq(modSeq!.value)
+                            seqSet = true
+                        }
+                    }
+                }
+                if newLevel != nil && !levelSet {
                     _ = note.setLevel(newLevel!)
                 }
-                if newSeq != nil {
+                if newSeq != nil && !seqSet {
                     _ = note.setSeq(newSeq!.value)
                 }
-                if newKlass != nil && !note.hasKlass() {
+                if newKlass != nil && !note.hasKlass() && !klassSet {
                     _ = note.setKlass(newKlass!.value)
                 }
                 let addedNote = addPastedNote(note)
