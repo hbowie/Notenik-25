@@ -38,6 +38,8 @@ class NoteListViewController:   NSViewController,
     var newChildIndex = -1
     var newWithOptionsIndex = -1
     var seqModIndex = -1
+    var renumberDisplaySeqIndex = -1
+    var assignAttributionIndex = -1
     
     var window: CollectionWindowController? {
         get {
@@ -138,6 +140,18 @@ class NoteListViewController:   NSViewController,
     
     func modShortcutMenuForCollection() {
         
+        if assignAttributionIndex >= 0 {
+            if shortcutMenu.numberOfItems > assignAttributionIndex {
+                shortcutMenu.removeItem(at: assignAttributionIndex)
+            }
+        }
+        
+        if renumberDisplaySeqIndex >= 0 {
+            if shortcutMenu.numberOfItems > renumberDisplaySeqIndex {
+                shortcutMenu.removeItem(at: renumberDisplaySeqIndex)
+            }
+        }
+        
         if newWithOptionsIndex >= 0 {
             if shortcutMenu.numberOfItems > newWithOptionsIndex {
                 shortcutMenu.removeItem(at: newWithOptionsIndex)
@@ -178,6 +192,16 @@ class NoteListViewController:   NSViewController,
                 || collection.seqFieldDef != nil {
             newWithOptionsIndex = shortcutMenu.numberOfItems
             shortcutMenu.addItem(withTitle: "New with Options...", action: #selector(newWithOptions(_:)), keyEquivalent: "")
+        }
+        
+        if collection.displaySeqFieldDef != nil {
+            renumberDisplaySeqIndex = shortcutMenu.numberOfItems
+            shortcutMenu.addItem(NSMenuItem(title: "Renumber Display Seq", action: #selector(renumberDisplaySeq(_:)), keyEquivalent: ""))
+        }
+        
+        if collection.attribFieldDef != nil {
+            assignAttributionIndex = shortcutMenu.numberOfItems
+            shortcutMenu.addItem(withTitle: "Assign Attribution", action: #selector(assignAttribution(_:)), keyEquivalent: "")
         }
     
     }
@@ -243,7 +267,49 @@ class NoteListViewController:   NSViewController,
         collectionWindowController!.seqModify(startingRow: lowIndex, endingRow: highIndex)
     }
     
-    /// Bulk edit a set of selected Notes. 
+    /// Renumber the display seq field.
+    @objc private func renumberDisplaySeq(_ sender: AnyObject) {
+ 
+        guard collectionWindowController != nil else { return }
+        guard tableView.numberOfSelectedRows > 0 else { return }
+        guard let collection = notenikIO?.collection else { return }
+        
+        guard collection.displaySeqFieldDef != nil else {
+            return
+        }
+
+        // Get the full range of selected notes.
+        let (lowIndex, highIndex) = getRangeOfSelectedRows()
+        guard lowIndex >= 0 else { return }
+        // Make sure the user clicked somewhere within this range.
+        if tableView.clickedRow > highIndex || tableView.clickedRow < lowIndex {
+            return
+        }
+        collectionWindowController!.renumberDisplaySeq(startingRow: lowIndex, endingRow: highIndex)
+    }
+    
+    /// Renumber the display seq field.
+    @objc private func assignAttribution(_ sender: AnyObject) {
+ 
+        guard collectionWindowController != nil else { return }
+        guard tableView.numberOfSelectedRows > 0 else { return }
+        guard let collection = notenikIO?.collection else { return }
+        
+        guard collection.attribFieldDef != nil else {
+            return
+        }
+
+        // Get the full range of selected notes.
+        let (lowIndex, highIndex) = getRangeOfSelectedRows()
+        guard lowIndex >= 0 else { return }
+        // Make sure the user clicked somewhere within this range.
+        if tableView.clickedRow > highIndex || tableView.clickedRow < lowIndex {
+            return
+        }
+        collectionWindowController!.assignAttribution(startingRow: lowIndex, endingRow: highIndex)
+    }
+    
+    /// Bulk edit a set of selected Notes.
     @IBAction func bulkEdit(_ sender: Any) {
         guard let wc = collectionWindowController else { return }
         guard let io = notenikIO else { return }

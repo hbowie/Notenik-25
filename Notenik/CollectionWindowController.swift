@@ -221,7 +221,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                             position: position,
                                             row: -1,
                                             searchPhrase: nil)
-                // select(note: selected, position: position, source: .nav, andScroll: true)
             }
             
             buildReportsActionMenu()
@@ -1321,6 +1320,138 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         } else {
             Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos", category: "CollectionWindowController", level: .fault, message: "Couldn't get a Seq Mod Window Controller")
         }
+    }
+    
+    func renumberDisplaySeq(startingRow: Int, endingRow: Int) {
+        guard let noteIO = guardForCollectionAction() else { return }
+        
+        var notesToUpdate: [Note] = []
+        
+        guard let firstNote = noteIO.getSortedNote(at: startingRow) else { return }
+        
+        var thisKlassOnly: String? = nil
+        var thisLevelOnly = -1
+        
+        if firstNote.note.hasKlass() {
+            thisKlassOnly = firstNote.note.klass.value
+        }
+        
+        if firstNote.note.hasLevel() {
+            thisLevelOnly = firstNote.note.level.getInt()
+        }
+
+        notesToUpdate.append(firstNote.note)
+        
+        var nextRow = startingRow + 1
+        while nextRow <= endingRow {
+            
+            // Get the sorted note for the next row
+            guard let nextNote = noteIO.getSortedNote(at: nextRow) else {
+                nextRow = endingRow
+                break
+            }
+            
+            var renumber = true
+            if thisKlassOnly != nil && nextNote.note.klass.value != thisKlassOnly! {
+                renumber = false
+            }
+            if thisLevelOnly >= 0 && nextNote.note.level.getInt() != thisLevelOnly {
+                renumber = false
+            }
+            
+            if renumber {
+                notesToUpdate.append(nextNote.note)
+            }
+            
+            nextRow += 1
+        }
+        
+        var seqToApply = 0
+        for noteToUpdate in notesToUpdate {
+            let modNote = noteToUpdate.copy() as! Note
+            seqToApply += 1
+            _ = modNote.setDisplaySeq(String(seqToApply))
+            _ = noteIO.modNote(oldNote: noteToUpdate, newNote: modNote)
+        }
+        
+        communicateSuccess("Display Seq Renumbered from 1 to \(seqToApply)")
+        
+        finishBatchOperation()
+    }
+    
+    func assignAttribution(startingRow: Int, endingRow: Int) {
+        guard let noteIO = guardForCollectionAction() else { return }
+        
+        guard let collection = noteIO.collection else { return }
+        guard noteIO.collectionOpen else { return }
+        guard collection.seqFieldDef != nil else { return }
+        guard collection.levelFieldDef != nil else { return }
+        let sortParm = collection.sortParm
+        guard sortParm == .seqPlusTitle || sortParm == .custom else { return }
+        
+        var notesToUpdate: [Note] = []
+        var newAttribs: [String] = []
+        
+        var authorNote: Note?
+        var workNote: Note?
+        var quoteNote: Note?
+        
+        var startingNote: SortedNote?
+        
+        var nextRow = startingRow
+        while nextRow <= endingRow {
+            
+            // Get the sorted note for the next row
+            guard let nextNote = noteIO.getSortedNote(at: nextRow) else {
+                nextRow = endingRow
+                break
+            }
+            
+            if startingNote == nil {
+                startingNote = nextNote
+            }
+            
+            if nextNote.note.hasKlass() {
+                switch nextNote.note.klass.value {
+                case NotenikConstants.authorKlass:
+                    authorNote = nextNote.note
+                    workNote = nil
+                    quoteNote = nil
+                case NotenikConstants.workKlass:
+                    workNote = nextNote.note
+                    let markedUp = Markedup(format: .markdown)
+                    let quoteFromDriver = QuoteFromDriver()
+                    quoteFromDriver.formatFrom(writer: markedUp, quoteNote: quoteNote, authorNote: authorNote, workNote: workNote)
+                    notesToUpdate.append(nextNote.note)
+                    newAttribs.append(markedUp.code)
+                case NotenikConstants.quoteKlass, NotenikConstants.quotationKlass:
+                    let markedUp = Markedup(format: .markdown)
+                    let quoteFromDriver = QuoteFromDriver()
+                    quoteFromDriver.formatFrom(writer: markedUp, quoteNote: nextNote.note, authorNote: authorNote, workNote: workNote)
+                    notesToUpdate.append(nextNote.note)
+                    newAttribs.append(markedUp.code)
+                default:
+                    break
+                }
+            }
+ 
+            nextRow += 1
+        }
+        
+        var i = 0
+        while i < notesToUpdate.count && i < newAttribs.count {
+            let modNote = notesToUpdate[i].copy() as! Note
+            _ = modNote.setAttribution(newAttribs[i])
+            _ = noteIO.modNote(oldNote: notesToUpdate[i], newNote: modNote)
+            i += 1
+        }
+        
+        communicateSuccess("\(newAttribs.count) notes had their attributions updated", alert: true)
+        
+        _ = viewCoordinator.focusOn(initViewID: collectionViewID,
+                                    sortedNote: startingNote,
+                                    position: nil, row: -1, searchPhrase: nil)
+    
     }
     
     public func seqModified(modStartingNote: SortedNote?, rowCount: Int, reselect: Bool = true) {
@@ -6103,5 +6234,4 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                     row: -1, searchPhrase: nil,
                                     withUpdates: true)
     }
-    
 }
