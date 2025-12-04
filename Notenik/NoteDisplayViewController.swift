@@ -275,6 +275,16 @@ class NoteDisplayViewController: NSViewController,
                 }
             }
             
+            // See if note inclusions have changed.
+            if collection.inclusionsDef != nil && !mdResults.mkdownContext!.includedNotes.isEmpty {
+                let newIncludes = mdResults.mkdownContext!.includedLinks.links
+                let trans = Transmogrifier(io: io!)
+                let mods = trans.updateInclusions(for: modNote, links: newIncludes)
+                if mods {
+                    modified = true
+                }
+            }
+            
             if modified {
                 let (updatedNote, _) = io!.modNote(oldNote: sortedNote!.note, newNote: modNote)
                 if updatedNote == nil {
