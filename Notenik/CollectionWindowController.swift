@@ -1827,6 +1827,36 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         
     }
     
+    @IBAction func generateIncludedBy(_ sender: Any) {
+        
+        // Make sure we're in a position to perform this operation.
+        guard let noteIO = guardForCollectionAction() else { return }
+        guard let collection = noteIO.collection else { return }
+        guard collection.includedByDef != nil else {
+            communicateError("Included By must first be defined as a field for this Collection",
+                             alert: true)
+            return
+        }
+        
+        let mogi = Transmogrifier(io: noteIO)
+        let includedByCount = mogi.generateIncludedBy()
+        
+        // Now let the user see the results.
+        finishBatchOperation()
+        reloadCollection(self)
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        if includedByCount == 0 {
+            alert.messageText = "No Included By links were generated"
+        } else if includedByCount == 1 {
+            alert.messageText = "1 Included By link was generated"
+        } else {
+            alert.messageText = "\(includedByCount) Included By links were generated"
+        }
+        alert.addButton(withTitle: "OK")
+        let _ = alert.runModal()
+    }
+    
     /// Renumber the Collection's sequence numbers based on the level and position of each note.
     @IBAction func renumberSeqBasedOnLevel(_ sender: Any) {
         outlineUpdatesBasedOnLevel(updateSeq: true, tagsAction: .ignore)
