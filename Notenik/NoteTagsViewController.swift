@@ -431,7 +431,13 @@ class NoteTagsViewController: NSViewController,
                 parentNode = parent
             }
             if parentNode != nil {
-                outlineView.expandItem(parentNode)
+                if outlineView == nil {
+                    print("OUTLINE VIEW IS NIL!!!")
+                }
+                // parentNode!.display()
+                if !outlineView.isItemExpanded(parentNode) {
+                    // outlineView.expandItem(parentNode)
+                }
             } else {
                 print("  - could not find a parent!")
             }

@@ -95,6 +95,7 @@ class SeqView: MacEditView {
     
     func textDidChange(id: String) {
         guard !textChanging else { return }
+        guard formatter != nil else { return } 
         textChanging = true
         if id == originalFieldID {
             let seqValue = SeqValue(textField.stringValue, seqParms: seqParms)
