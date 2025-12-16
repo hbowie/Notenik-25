@@ -1140,21 +1140,25 @@ class CollectionJuggler: NSObject {
         return true
     }
     
+    /// Convert quotations in Quotes format to Bibliography format.
     func quotesToBiblio() {
-        
         
         var quotesURL: URL? = nil
         var biblioURL: URL? = nil
         var existingURL: URL? = nil
         
+        let parent = osdir.directoryURL
+        
         // Let user select input quotations.
         var openPanel = NSOpenPanel();
-        openPanel.title = "Select a Notenik Collection containing Quotes"
-        openPanel.prompt = "Select Input Quotes"
-        let parent = osdir.directoryURL
-        if parent != nil {
+        if let quotesURL = AppPrefs.shared.quotesForBiblio {
+            openPanel.directoryURL = quotesURL
+        } else if parent != nil {
             openPanel.directoryURL = parent!
         }
+        openPanel.title = "Select a Notenik Collection containing Quotes"
+        openPanel.prompt = "Select Input Quotes"
+        
         openPanel.showsResizeIndicator = true
         openPanel.showsHiddenFiles = false
         openPanel.canChooseDirectories = true
@@ -1165,17 +1169,20 @@ class CollectionJuggler: NSObject {
         var result = openPanel.runModal()
         if result == .OK {
             quotesURL = openPanel.url!
+            AppPrefs.shared.quotesForBiblio = quotesURL!.deletingLastPathComponent()
         } else {
             return
         }
         
         // Let user select existing biblio collection.
         openPanel = NSOpenPanel();
-        openPanel.title = "Optionally Select an Existing Biblio Collection"
-        openPanel.prompt = "Select Existing Biblio"
-        if parent != nil {
+        if let existingBiblioURL = AppPrefs.shared.existingBiblio {
+            openPanel.directoryURL = existingBiblioURL
+        } else if parent != nil {
             openPanel.directoryURL = parent!
         }
+        openPanel.title = "Optionally Select an Existing Biblio Collection"
+        openPanel.prompt = "Select Existing Biblio"
         openPanel.showsResizeIndicator = true
         openPanel.showsHiddenFiles = false
         openPanel.canChooseDirectories = true
@@ -1186,15 +1193,18 @@ class CollectionJuggler: NSObject {
         result = openPanel.runModal()
         if result == .OK {
             existingURL = openPanel.url!
+            AppPrefs.shared.existingBiblio = existingURL!.deletingLastPathComponent()
         }
         
         // Let user select output biblio collection.
         openPanel = NSOpenPanel();
-        openPanel.title = "Select an Output Biblio Collection"
-        openPanel.prompt = "Select Output Collection"
-        if parent != nil {
+        if let outputBiblioURL = AppPrefs.shared.outputBiblio {
+            openPanel.directoryURL = outputBiblioURL
+        } else if parent != nil {
             openPanel.directoryURL = parent!
         }
+        openPanel.title = "Select an Output Biblio Collection"
+        openPanel.prompt = "Select Output Collection"
         openPanel.showsResizeIndicator = true
         openPanel.showsHiddenFiles = false
         openPanel.canChooseDirectories = true
@@ -1205,12 +1215,14 @@ class CollectionJuggler: NSObject {
         result = openPanel.runModal()
         if result == .OK {
             biblioURL = openPanel.url!
+            AppPrefs.shared.outputBiblio = biblioURL!.deletingLastPathComponent()
         } else {
             return
         }
         
         if let quotesToBiblio = QuotesToBiblio(quotesURL: quotesURL!, biblioURL: biblioURL!, existingURL: existingURL!) {
-            quotesToBiblio.transform()
+            let quotesAdded = quotesToBiblio.transform()
+            communicateInfo("\(quotesAdded) quotes converted to bibliography format", alert: true)
         }
     }
     
@@ -1640,6 +1652,23 @@ class CollectionJuggler: NSObject {
             path.removeLast()
         }
         return path
+    }
+    
+    /// Log an error message and optionally display an alert message.
+    func communicateInfo(_ msg: String, alert: Bool=false) {
+        
+        Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                          category: "CollectionJuggler",
+                          level: .info,
+                          message: msg)
+        
+        if alert {
+            let dialog = NSAlert()
+            dialog.alertStyle = .informational
+            dialog.messageText = msg
+            dialog.addButton(withTitle: "OK")
+            let _ = dialog.runModal()
+        }
     }
     
     /// Log an error message and optionally display an alert message.
