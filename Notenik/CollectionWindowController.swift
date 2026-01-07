@@ -5727,10 +5727,10 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
-    func exportToICal(startingRow: Int, endingRow: Int) {
+    func exportToICal(selection: SelectedNotes) {
         guard let noteIO = guardForCollectionAction() else { return }
         let driver = NotesToTextDriver(io: noteIO, format: .iCal)
-        let notesExported = driver.toText(startingRow: startingRow, endingRow: endingRow)
+        let notesExported = driver.toText(selection: selection)
         var written = false
         if notesExported > 0 {
             written = driver.quickExport()

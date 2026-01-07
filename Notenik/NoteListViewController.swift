@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 1/21/19.
-//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2026 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -209,16 +209,9 @@ class NoteListViewController:   NSViewController,
     @objc private func exportToICal(_ sender: AnyObject) {
         guard collectionWindowController != nil else { return }
         guard tableView.numberOfSelectedRows > 0 else { return }
-
-        // Get the full range of selected notes.
-        let (lowIndex, highIndex) = getRangeOfSelectedRows()
-        guard lowIndex >= 0 else { return }
-        // Make sure the user clicked somewhere within this range.
-        if tableView.clickedRow > highIndex || tableView.clickedRow < lowIndex {
-            return
-        }
-        
-        collectionWindowController!.exportToICal(startingRow: lowIndex, endingRow: highIndex)
+        guard let io = notenikIO else { return }
+        let selected = SelectedNotes(io: io, selected: tableView.selectedRowIndexes)
+        collectionWindowController!.exportToICal(selection: selected)
     }
     
     @objc public func continuousDisplay(_ sender: AnyObject) {
