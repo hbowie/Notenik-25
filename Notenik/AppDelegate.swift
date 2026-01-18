@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 1/21/19.
-//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2026 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -55,6 +55,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
     let expStoryboard:              NSStoryboard = NSStoryboard(name: "ViewExperiment", bundle: nil)
     
     var logController: LogWindowController?
+    
+    // -----------------------------------------------------------
+    //
+    // MARK: Launch routines
+    //
+    // -----------------------------------------------------------
     
     func applicationWillFinishLaunching(_ notification: Notification) {
         docController = NoteDocumentController()
@@ -127,6 +133,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         
     }
     
+    // -----------------------------------------------------------
+    //
+    // MARK: Open routines
+    //
+    // -----------------------------------------------------------
+    
+    @IBAction func menuFileOpenAction(_ sender: NSMenuItem) {
+        juggler!.userRequestsOpenCollection()
+    }
+    
+    @IBAction func menuFileOpenAny(_ sender: NSMenuItem) {
+        juggler!.userRequestsOpenAny()
+    }
+    
     /// Open an iCloud item that's been selected by the user from the submenu created above.
     @objc func openICloudItem(_ sender: NSMenuItem) {
         let urlToOpen = notenikFolderList!.getICloudURLFromFolderName(sender.title)
@@ -135,13 +155,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         }
     }
     
-    /// Standard open when passed a list of URLs. 
+    @IBAction func menuFileOpenEssential(_ sender: NSMenuItem) {
+        juggler!.openEssentialCollection()
+    }
+    
+    @IBAction func menuFileOpenGeneral(_ sender: NSMenuItem) {
+        juggler!.openGeneralNotes()
+    }
+    
+    /// NSApplicationDelegate method to open a list of passed URLs.
     func application(_ application: NSApplication, open urls: [URL]) {
         if stage == "1" {
             launchURLs = urls
         } else {
             _ = juggler!.open(urls: urls, source: .fromWithout)
         }
+    }
+    
+    @IBAction func menuFileOpenParentRealm(_ sender: Any) {
+        _ = juggler!.openParentRealm()
     }
     
     /// To handle events from Notenik's URL scheme.
@@ -237,29 +269,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
     @IBAction func menuFileNewWebsiteAction(_ sender: NSMenuItem) {
         juggler!.userRequestsNewWebsite()
     }
-
-    @IBAction func menuFileOpenAction(_ sender: NSMenuItem) {
-        juggler!.userRequestsOpenCollection()
-    }
     
     @IBAction func quotesToBiblio(_ sender: NSMenuItem) {
         juggler!.quotesToBiblio()
     }
     
-    @IBAction func menuFileOpenEssential(_ sender: NSMenuItem) {
-        juggler!.openEssentialCollection()
-    }
-    
-    @IBAction func menuFileOpenGeneral(_ sender: NSMenuItem) {
-        juggler!.openGeneralNotes()
-    }
-    
     @IBAction func addGeneralFromClipboard(_ sender: Any) {
         juggler!.addGeneralFromClipboard()
-    }
-    
-    @IBAction func menuFileOpenParentRealm(_ sender: Any) {
-        _ = juggler!.openParentRealm()
     }
     
     @IBAction func menuFileClone(_ sender: Any) {

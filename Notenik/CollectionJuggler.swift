@@ -79,6 +79,12 @@ class CollectionJuggler: NSObject {
         super.init()
     }
     
+    // -----------------------------------------------------------
+    //
+    // MARK: Startup Routines
+    //
+    // -----------------------------------------------------------
+    
     /// Startup called by AppDelegate
     func startup() {
         if self.logStoryboard.instantiateController(withIdentifier: "logWC") is LogWindowController {
@@ -290,6 +296,54 @@ class CollectionJuggler: NSObject {
     //
     // -----------------------------------------------------------
     
+    /// Respond to a user request to open another Collection. Present the user
+    /// with an Open Panel to allow the selection of a folder containing an
+    /// existing Notenik Collection.
+    func userRequestsOpenCollection(requestedParent: URL? = nil) {
+        let openPanel = NSOpenPanel();
+        openPanel.title = "Select a Notenik Collection"
+        if requestedParent != nil {
+            openPanel.directoryURL = requestedParent!
+        } else {
+            let parent = osdir.directoryURL
+            if parent != nil {
+                openPanel.directoryURL = parent!
+            }
+        }
+        openPanel.showsResizeIndicator = true
+        openPanel.showsHiddenFiles = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = false
+        openPanel.allowsMultipleSelection = false
+        let result = openPanel.runModal()
+        if result == .OK {
+            MultiFileIO.shared.registerBookmark(url: openPanel.url!)
+            _ = self.openFileWithNewWindow(fileURL: openPanel.url!, readOnly: false)
+        }
+    }
+    
+    func userRequestsOpenAny() {
+        let openPanel = NSOpenPanel();
+        openPanel.title = "Select a Notenik File or Folder"
+        let parent = osdir.directoryURL
+        if parent != nil {
+            openPanel.directoryURL = parent!
+        }
+        openPanel.showsResizeIndicator = true
+        openPanel.showsHiddenFiles = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = true
+        openPanel.allowsMultipleSelection = true
+        let result = openPanel.runModal()
+        if result == .OK {
+            // MultiFileIO.shared.registerBookmark(url: openPanel.url!)
+            _ = open(urls: openPanel.urls, source: .fromWithout)
+            // _ = self.openFileWithNewWindow(fileURL: openPanel.url!, readOnly: false)
+        }
+    }
+    
     /// Let the user select a folder to be opened.
     func openFolder() -> Bool {
         var opens = 0
@@ -344,6 +398,7 @@ class CollectionJuggler: NSObject {
         return true
     }
     
+    /// Give the user a chance to select the desired folder, if Notenik does not already have access.
     func explicitFolderOpen(requestedParent: URL) -> NotenikLink? {
         let openPanel = NSOpenPanel();
         openPanel.title = "Open a Notenik Folder"
@@ -1089,33 +1144,6 @@ class CollectionJuggler: NSObject {
         dialog.messageText = "Notenik Access Granted to \(url.path)"
         dialog.addButton(withTitle: "OK")
         let _ = dialog.runModal()
-    }
-    
-    /// Respond to a user request to open another Collection. Present the user
-    /// with an Open Panel to allow the selection of a folder containing an
-    /// existing Notenik Collection. 
-    func userRequestsOpenCollection(requestedParent: URL? = nil) {
-        let openPanel = NSOpenPanel();
-        openPanel.title = "Select a Notenik Collection"
-        if requestedParent != nil {
-            openPanel.directoryURL = requestedParent!
-        } else {
-            let parent = osdir.directoryURL
-            if parent != nil {
-                openPanel.directoryURL = parent!
-            }
-        }
-        openPanel.showsResizeIndicator = true
-        openPanel.showsHiddenFiles = false
-        openPanel.canChooseDirectories = true
-        openPanel.canCreateDirectories = false
-        openPanel.canChooseFiles = false
-        openPanel.allowsMultipleSelection = false
-        let result = openPanel.runModal()
-        if result == .OK {
-            MultiFileIO.shared.registerBookmark(url: openPanel.url!)
-            _ = self.openFileWithNewWindow(fileURL: openPanel.url!, readOnly: false)
-        }
     }
     
     func openNoteFile(link: NotenikLink) -> Bool {

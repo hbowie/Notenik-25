@@ -90,7 +90,7 @@
                                         <menuItem isSeparatorItem="YES" id="9kU-pU-TjF"/>
                                         <menuItem title="Open…" keyEquivalent="o" id="IAo-SY-fd9">
                                             <connections>
-                                                <action selector="menuFileOpenAction:" target="Voe-Tx-rLC" id="80C-8Z-SfC"/>
+                                                <action selector="menuFileOpenAny:" target="Voe-Tx-rLC" id="e6p-y5-7jx"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Open Project Folder..." keyEquivalent="o" id="qGi-li-dJF">
@@ -2243,13 +2243,13 @@ CA
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTK-bV-70K">
-                                <rect key="frame" x="0.0" y="0.0" width="479" height="48"/>
+                                <rect key="frame" x="0.0" y="0.0" width="479" height="44"/>
                                 <clipView key="contentView" id="caU-8Q-uow">
-                                    <rect key="frame" x="1" y="1" width="477" height="46"/>
+                                    <rect key="frame" x="1" y="1" width="477" height="42"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="fwC-s0-qs1" id="Zqh-F5-OQn">
-                                            <rect key="frame" x="0.0" y="0.0" width="477" height="46"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="477" height="42"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
