@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 1/26/19.
-//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2026 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -2294,10 +2294,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard let noteIO = guardForCollectionAction() else { return 0 }
         guard let collection = noteIO.collection else { return 0 }
         let seqDef = collection.seqFieldDef
+        let levelDef = collection.levelFieldDef
         
         var seqAbove: SeqValue?
+        var depthAbove = 1
         var seqDepthDiff = 0
         var newLevel: LevelValue?
+        var newDepth = 1
         var newSeq: SeqValue?
         var newKlass: KlassValue?
                             
@@ -2310,13 +2313,21 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             var levelAbove: LevelValue = LevelValue()
             if noteAbove != nil {
                 seqAbove = noteAbove!.seq
+                depthAbove = noteAbove!.depth
                 levelAbove = noteAbove!.level
                 if seqAbove != nil {
                     seqDepthDiff = levelAbove.getInt() - seqAbove!.numberOfLevels
                 }
                 newLevel = noteAbove!.level
+                newDepth = noteAbove!.depth
                 if noteAbove!.hasKlass() {
-                    newKlass = KlassValue(noteAbove!.klass.value)
+                    if noteAbove!.klass.value == NotenikConstants.headerKlass && collection.klassDefs.hasKlass(NotenikConstants.itemKlass) {
+                        newKlass = KlassValue(NotenikConstants.itemKlass)
+                        newDepth += 1
+                        newLevel!.increment(config: collection.levelConfig)
+                    } else {
+                        newKlass = KlassValue(noteAbove!.klass.value)
+                    }
                 }
             }
             let noteBelow = noteIO.getNote(at: row)
@@ -2335,7 +2346,11 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 newSeq = seqAbove!.dupe()
             }
             if newSeq != nil && newLevel != nil {
-                newSeq!.incByLevels(originalLevel: levelAbove, newLevel: newLevel!)
+                if levelDef != nil {
+                    newSeq!.incByLevels(originalLevel: levelAbove, newLevel: newLevel!)
+                } else {
+                    newSeq!.incByLevels(originalLevel: LevelValue(i: depthAbove, config: collection.levelConfig), newLevel: LevelValue(i: newDepth, config: collection.levelConfig))
+                }
             }
         }
         
@@ -2455,6 +2470,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 } else {
                     logInfo(msg: "Processing pasted item as Note")
                     attachmentPaths = strToNote(str: str!, note: note, defaultTitle: nil)
+                    if newKlass != nil && newKlass!.value == NotenikConstants.itemKlass && note.hasDate() && note.hasStatus() && collection.klassDefs.hasKlass(NotenikConstants.actionKlass)  {
+                        newKlass!.set(NotenikConstants.actionKlass)
+                    }
                 }
             } else {
                 logInfo(msg: "Not sure how to handle this pasted item")
@@ -4701,6 +4719,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         lister.setSortParm(sortParm)
         noteIO.persistCollectionInfo()
         juggler.updateSortMenu()
+        collectionTabs?.selectedTabViewItemIndex = 0
+        listVC?.modShortcutMenuForCollection()
     }
     
     func setSortDescending(_ descending: Bool) {

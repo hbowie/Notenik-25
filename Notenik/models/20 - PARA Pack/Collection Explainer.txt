@@ -1,0 +1,19 @@
+Title:  Collection Explainer
+
+Seq:    0.1
+
+Class:  item
+
+Body:
+
+This collection is meant to be used as a sort of personal organizer. It has several special features. 
+
+1. It can be viewed as an outline, sorting its notes by *Seq + Title* and activating the *Outline* tab. 
+
+2. It has three special classes: `header` can be used for an outline header, serving as a parent for other notes; `item` can be used for a note with useful information that is placed beneath a header; `action` can be used for action items that include dates, status values, and possibly recurrence schemes. 
+
+3. It is initially setup to follow the [[PARA Method]], with headers for an INBOX, and for PROJECTS, AREAS, RESOURCES and an ARCHIVE.
+
+4. There is also a DAILY WEBSITES header, which is a handy place to stash any items you wish to tag with `Launch at Startup`. 
+
+5. Once you add some `action` items, you may find it useful to change the collection sort (at least temporarily) to *Tasks by Date*, which will then show you all of your dated action items at the top of the list, sorted in date order.

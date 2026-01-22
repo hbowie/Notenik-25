@@ -1,0 +1,7 @@
+Title:  PARA Method
+
+Seq:    30.1
+
+Link:   https://fortelabs.com/blog/para/
+
+Class:  item

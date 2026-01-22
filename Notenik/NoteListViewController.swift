@@ -833,9 +833,14 @@ class NoteListViewController:   NSViewController,
         case .tasksByDate:
             addXColumn(at: 0)
             addDateColumn(at: 1)
-            addSeqColumn(at: 2)
-            _ = addTitleColumn(at: 3)
-            trimColumns(to: 4)
+            if collection.outlineTabSetting != .withSeq {
+                addSeqColumn(at: 2)
+                _ = addTitleColumn(at: 3)
+                trimColumns(to: 4)
+            } else {
+                _ = addTitleColumn(at: 2)
+                trimColumns(to: 3)
+            }
         case .tasksBySeq:
             addXColumn(at: 0)
             addSeqColumn(at: 1)
