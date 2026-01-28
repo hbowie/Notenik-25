@@ -199,7 +199,7 @@ class CollectionJuggler: NSObject {
                 if returnCode == NSApplication.ModalResponse.OK {
                     return firstUseConfirmed(firstUseInfo: firstUseInfo)
                 } else {
-                    print("First Use Window returned a code of: \(returnCode)")
+                    // print("First Use Window returned a code of: \(returnCode)")
                 }
             }
             

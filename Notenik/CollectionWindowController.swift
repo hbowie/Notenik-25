@@ -4713,6 +4713,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     func setSortParm(_ sortParm: NoteSortParm) {
         guard var noteIO = notenikIO else { return }
         guard let lister = listVC else { return }
+        let (selectedNote, _) = noteIO.getSelectedNote()
+        var noteTitle = ""
+        if selectedNote != nil {
+            noteTitle = selectedNote!.note.title.value
+            if sortParm == .tasksByDate && !selectedNote!.note.hasDate() {
+                noteTitle = ""
+            }
+        }
         noteIO.sortParm = sortParm
         noteIO.sortDescending = false
         searcher.scope = .all
@@ -4721,6 +4729,11 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         juggler.updateSortMenu()
         collectionTabs?.selectedTabViewItemIndex = 0
         listVC?.modShortcutMenuForCollection()
+        if !noteTitle.isEmpty {
+            selectNoteTitled(noteTitle)
+        } else {
+            selectFirstNote()
+        }
     }
     
     func setSortDescending(_ descending: Bool) {
