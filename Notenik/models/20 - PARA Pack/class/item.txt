@@ -6,7 +6,7 @@ Tags:
 
 Link: 
 
-Class: info
+Class: item
 
 Body: 
 

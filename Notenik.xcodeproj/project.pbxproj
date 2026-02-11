@@ -295,6 +295,7 @@
 		9CE0BEC32BDC6F34007EEE8B /* BulkEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CE0BEC22BDC6F34007EEE8B /* BulkEdit.storyboard */; };
 		9CE0BEC52BDC6FAF007EEE8B /* BulkEditWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE0BEC42BDC6FAF007EEE8B /* BulkEditWindowController.swift */; };
 		9CE0BEC72BDC6FD4007EEE8B /* BulkEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE0BEC62BDC6FD4007EEE8B /* BulkEditViewController.swift */; };
+		9CE286182F38007D00822CBC /* NSMenuItem+RSCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE286172F38007D00822CBC /* NSMenuItem+RSCore.swift */; };
 		9CE32504224D48180051CA1F /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CE32503224D48180051CA1F /* Preferences.storyboard */; };
 		9CE32505224D48180051CA1F /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CE32503224D48180051CA1F /* Preferences.storyboard */; };
 		9CE32507224D561E0051CA1F /* PrefsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE32506224D561E0051CA1F /* PrefsWindowController.swift */; };
@@ -569,6 +570,7 @@
 		9CE0BEC22BDC6F34007EEE8B /* BulkEdit.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BulkEdit.storyboard; sourceTree = "<group>"; };
 		9CE0BEC42BDC6FAF007EEE8B /* BulkEditWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkEditWindowController.swift; sourceTree = "<group>"; };
 		9CE0BEC62BDC6FD4007EEE8B /* BulkEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulkEditViewController.swift; sourceTree = "<group>"; };
+		9CE286172F38007D00822CBC /* NSMenuItem+RSCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMenuItem+RSCore.swift"; sourceTree = "<group>"; };
 		9CE32503224D48180051CA1F /* Preferences.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
 		9CE32506224D561E0051CA1F /* PrefsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsWindowController.swift; sourceTree = "<group>"; };
 		9CE32509224D58360051CA1F /* Log.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Log.storyboard; sourceTree = "<group>"; };
@@ -796,6 +798,7 @@
 				9CC41CD4229CA61700E92A66 /* Credits.rtf */,
 				9C60E6D721F64B3C00C332ED /* Main.storyboard */,
 				9C60E6D121F64B3B00C332ED /* AppDelegate.swift */,
+				9CE286172F38007D00822CBC /* NSMenuItem+RSCore.swift */,
 				9CA5C84527EBB7DB007CDA96 /* AppHasSelectedNote.swift */,
 				9CA5C84727EBC966007CDA96 /* AppGetSelectedNoteTitle.swift */,
 				9CA5C84927EBCA1A007CDA96 /* AppGetSelectedNoteBacklink.swift */,
@@ -1355,7 +1358,7 @@
 				TargetAttributes = {
 					9C60E6CD21F64B3B00C332ED = {
 						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 2620;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
 								enabled = 1;
@@ -1568,6 +1571,7 @@
 				9CD3262822330C8A00D06B77 /* ViewFactory.swift in Sources */,
 				9CADA0232861475C00E71990 /* EditPrefsWindowController.swift in Sources */,
 				9C568DF223230B17005D6B0A /* WorkTitleDataSource.swift in Sources */,
+				9CE286182F38007D00822CBC /* NSMenuItem+RSCore.swift in Sources */,
 				9C15A11428774E7900D5E6EF /* DateInsertViewController.swift in Sources */,
 				9C9094C52249A664002207EB /* NoteDocumentController.swift in Sources */,
 				9CD32624223308C400D06B77 /* StringView.swift in Sources */,
@@ -1934,11 +1938,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = Notenik;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Notenik/Notenik.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 932;
+				CURRENT_PROJECT_VERSION = 936;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1954,10 +1959,11 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 18.3.3;
+				MARKETING_VERSION = 18.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -1966,11 +1972,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = Notenik;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Notenik/Notenik.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 932;
+				CURRENT_PROJECT_VERSION = 936;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1986,7 +1993,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 18.3.3;
+				MARKETING_VERSION = 18.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -69,6 +69,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         
+        NSMenuItem.disableIcons()
+        
         appPrefs = AppPrefs.shared
         
         if #available(macOS 10.14, *) {
