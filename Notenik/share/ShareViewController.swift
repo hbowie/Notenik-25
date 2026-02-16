@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 4/15/19.
-//  Copyright © 2019 - 2025 Herb Bowie (https://powersurgepub.com)
+//  Copyright © 2019 - 2026 Herb Bowie (https://powersurgepub.com)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -40,6 +40,10 @@ class ShareViewController: NSViewController {
     let microValue = "micro"
     let templateValue = "template"
     
+    let absoluteWikilinksValue = "absolute-wikilinks"
+    let siteAddressValue = "site-address"
+    let sitePathValue = "site-path"
+    
     let clipboardValue = "clipboard"
     let fileValue = "file"
     let browserValue = "browser"
@@ -75,6 +79,10 @@ class ShareViewController: NSViewController {
     @IBOutlet var destinationBrowserButton: NSButton!
     
     @IBOutlet var templateNamePopupButton: NSPopUpButton!
+    
+    @IBOutlet var absoluteWikilinksCheckbox: NSButton!
+    @IBOutlet var siteAddressField: NSTextField!
+    @IBOutlet var sitePathField: NSTextField!
     
     var io: NotenikIO? {
         get {
@@ -137,6 +145,17 @@ class ShareViewController: NSViewController {
             destinationFileButton.state = .on
         } else {
             destinationBrowserButton.state = .on
+        }
+        
+        let absWL = defaults.bool(forKey: absoluteWikilinksValue)
+        if absWL {
+            absoluteWikilinksCheckbox.state = .on
+        }
+        if let siteAddress = defaults.string(forKey: siteAddressValue) {
+            siteAddressField.stringValue = siteAddress
+        }
+        if let sitePath = defaults.string(forKey: sitePathValue) {
+            sitePathField.stringValue = sitePath
         }
     }
     
@@ -202,6 +221,10 @@ class ShareViewController: NSViewController {
         let displayParms = DisplayParms()
         displayParms.setFrom(note: notes[0])
         let mkdownOptions = displayParms.genMkdownOptions()
+        
+        if absoluteWikilinksCheckbox.state == .on && !siteAddressField.stringValue.isEmpty {
+            mkdownOptions.wikiLinks.makeAbsolute(site: siteAddressField.stringValue, path: sitePathField.stringValue)
+        }
         
         // Set desired output format
         var format: MarkedupFormat = .htmlDoc
@@ -347,6 +370,10 @@ class ShareViewController: NSViewController {
             destinationSelector = browserValue
         }
         defaults.set(destinationSelector, forKey: destinationKey)
+        
+        defaults.set(absoluteWikilinksCheckbox.state == .on, forKey: absoluteWikilinksValue)
+        defaults.set(siteAddressField.stringValue, forKey: siteAddressValue)
+        defaults.set(sitePathField.stringValue, forKey: sitePathValue)
         
         window!.close()
     }
