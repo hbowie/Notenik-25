@@ -322,9 +322,9 @@ class NoteTagsViewController: NSViewController,
                             || sortParm == .tasksBySeq
                             || sortParm == .datePlusSeq
                             || sortParm == .tagsPlusSeq {
-                            textField.stringValue = node.note!.getTitle(withSeq: true, full: true, sep: " - ")
+                            textField.stringValue = node.note!.getTitle(withSeq: true, full: true, sep: " - ", titleFormat: .plain)
                         } else {
-                            textField.stringValue = node.note!.title.value
+                            textField.stringValue = node.note!.title.getTitle(format: .plain)
                         }
                     } else {
                         textField.stringValue = "???"

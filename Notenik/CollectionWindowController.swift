@@ -4552,9 +4552,10 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         var ok = true
         if noteToUse.noteID.hasData {
             if #available(macOS 11.0, *) {
-                ok = NSWorkspace.shared.open(noteToUse.noteID.getURL(note: noteToUse)!)
+                // print("Attempting to open via URL: \(noteToUse.noteID.getURL(note: noteToUse)!)")
+                ok = NSWorkspace.shared.open(noteToUse.noteID.getURL(note: noteToUse, preferExisting: true)!)
             } else {
-                ok = NSWorkspace.shared.openFile(noteToUse.noteID.getFullPath(note: noteToUse)!)
+                ok = NSWorkspace.shared.openFile(noteToUse.noteID.getFullPath(note: noteToUse, preferExisting: true)!)
             }
         }
         if !ok {

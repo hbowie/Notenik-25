@@ -1,0 +1,12 @@
+Title: <title>
+
+Long Title: <longtitle>
+
+Tags: <tags>
+
+Link: <link>
+
+Seq: <seq>
+
+Body: 
+

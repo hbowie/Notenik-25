@@ -654,7 +654,7 @@ class NoteListViewController:   NSViewController,
                 modifyCellView(cellView: cellView, value: note.lastNameFirst)
             } else if tableColumn?.title == "Title" ||
                 tableColumn?.title == note.collection.titleFieldDef.fieldLabel.properForm {
-                let title = note.title.value
+                let title = note.title.getTitle(format: .plain)
                 var displayValue = ""
                 if indent > 0 {
                     displayValue = AppPrefs.shared.indentSpaces(level: indent)
@@ -694,7 +694,7 @@ class NoteListViewController:   NSViewController,
                 modifyCellView(cellView: cellView, value: note.datePickedValue, mono: true)
             } else if notenikIO != nil && notenikIO!.collection != nil {
                 if tableColumn?.title == notenikIO!.collection!.titleFieldDef.fieldLabel.properForm {
-                    modifyCellView(cellView: cellView, value: note.title.value)
+                    modifyCellView(cellView: cellView, value: note.getTitle(titleFormat: .plain))
                 } else if notenikIO!.collection!.rankFieldDef != nil && tableColumn?.title == notenikIO!.collection!.rankFieldDef!.fieldLabel.properForm {
                     modifyCellView(cellView: cellView, value: note.rank.value)
                 } else if tableColumn?.title == notenikIO!.collection!.tagsFieldDef.fieldLabel.properForm {
