@@ -133,6 +133,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         
         juggler!.checkGrantAndLoadShortcuts()
         
+        juggler!.setupMenuBarExtra()
+        
     }
     
     // -----------------------------------------------------------

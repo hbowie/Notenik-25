@@ -58,6 +58,8 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
     
     @IBOutlet var allowDotsButton: NSPopUpButton!
     
+    @IBOutlet var menuBarExtraButton: NSPopUpButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if appPrefs.confirmDeletes {
@@ -103,6 +105,13 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
             allowDotsButton.selectItem(at: 1)
         case true:
             allowDotsButton.selectItem(at: 0)
+        }
+        
+        switch appPrefs.menuBarExtra {
+        case false:
+            menuBarExtraButton.selectItem(at: 1)
+        case true:
+            menuBarExtraButton.selectItem(at: 0)
         }
         
         indentSpacesPopUpButton.removeAllItems()
@@ -180,6 +189,18 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
         }
     }
     
+    
+    @IBAction func menuBarExtraUpdated(_ sender: Any) {
+        switch menuBarExtraButton.indexOfSelectedItem {
+        case 0:
+            appPrefs.menuBarExtra = true
+        case 1:
+            appPrefs.menuBarExtra = false
+        default:
+            appPrefs.menuBarExtra = false
+        }
+        CollectionJuggler.shared.setupMenuBarExtra()
+    }
     
     @available(macOS 10.14, *)
     @IBAction func appAppearanceSelected(_ sender: Any) {

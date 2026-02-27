@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 1/26/19.
-//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2026 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -36,6 +36,9 @@ class CollectionJuggler: NSObject {
     var displayModeMenu: NSMenu!
     var outlineTabMenu: NSMenu!
     
+    var menuBarExtra: NSStatusItem?
+    var extraMenu: NSMenu?
+    
     let modelsPath = "/models"
     let introModelPath = "/02 - Notenik Intro"
     var introModelFullPath = ""
@@ -59,8 +62,7 @@ class CollectionJuggler: NSObject {
     
     var docController: NoteDocumentController?
     
-    var windows: Array<CollectionWindowController> = Array()
-    var highestWindowNumber = -1
+    var juggledItems = WindowJuggler()
     
     var initialWindow: CollectionWindowController?
     var initialWindowUsed = false
@@ -211,7 +213,6 @@ class CollectionJuggler: NSObject {
     
     func firstUseConfirmed(firstUseInfo: FirstUseInfo) -> URL? {
         
-        var io = FileIO()
         var collectionURL: URL?
         
         var folderName = "Notes"
@@ -288,6 +289,152 @@ class CollectionJuggler: NSObject {
         let ok = relo.copyOrMoveCollection(from: introModelFullPath, to: collectionURL!.path, move: false)
         guard ok else { return "" }
         return collectionURL!.path
+    }
+    
+    /// Setup the  extra Notenik menu on the right side of the menu bar. This will be available when Notenik is running,
+    /// even when it is not the frontmost application.
+    func setupMenuBarExtra() {
+        
+        if !appPrefs.menuBarExtra {
+            menuBarExtra = nil
+            extraMenu = nil
+            return
+        }
+
+        if menuBarExtra == nil {
+            menuBarExtra = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+            if let button = menuBarExtra?.button {
+                button.image = NSImage(systemSymbolName: "n.circle", accessibilityDescription: "Notenik")
+            }
+            extraMenu = nil
+        }
+
+        if extraMenu == nil {
+            extraMenu = NSMenu(title: "Notenik Menu Bar Extras")
+            menuBarExtra!.menu = extraMenu
+        }
+        
+        adjustMenuBarExtra()
+    }
+    
+    /// Rebuild menu for the menu bar extra entry, showing current info.
+    func adjustMenuBarExtra() {
+        
+        if !appPrefs.menuBarExtra {
+            menuBarExtra = nil
+            extraMenu = nil
+            return
+        }
+
+        guard let menu = extraMenu else { return }
+        menu.removeAllItems()
+        
+        // Add Essential and General collections at the very top.
+        
+        if let essentialURL = appPrefs.essentialURL {
+            let essentialItem = NSMenuItem(title: "\(essentialURL.lastPathComponent) (E)",
+                                           action: #selector(openExtraItem(_:)),
+                                           keyEquivalent: "")
+            essentialItem.isEnabled = true
+            essentialItem.target = self
+            menu.addItem(essentialItem)
+        }
+        
+        if let generalURL = appPrefs.generalURL {
+            let generalItem = NSMenuItem(title: "\(generalURL.lastPathComponent) (G)",
+                                         action: #selector(openExtraItem(_:)),
+                                         keyEquivalent: "")
+            generalItem.isEnabled = true
+            generalItem.target = self
+            menu.addItem(generalItem)
+        }
+        
+        // Next, add open windows.
+        if !juggledItems.isEmpty {
+        
+            menu.addItem(NSMenuItem.separator())
+
+            for item in juggledItems {
+                guard let cwc = item.cwc else { continue }
+                guard let window = cwc.window else { continue }
+                guard let io = cwc.io else { continue }
+                guard io.collectionOpen else { continue }
+                guard !window.title.hasSuffix(" (E)") else { continue }
+                guard !window.title.hasSuffix(" (G)") else { continue }
+                let windowItem = NSMenuItem(title: window.title,
+                                            action: #selector(openExtraItem(_:)),
+                                            keyEquivalent: "")
+                windowItem.isEnabled = true
+                windowItem.target = self
+                menu.addItem(windowItem)
+            }
+        }
+        
+        // Next, add recent docs.
+        
+        let docController = NoteDocumentController.shared
+        let recentDocs = docController.recentDocumentURLs
+        
+        recentCollections = []
+        for url in recentDocs {
+            guard url != AppPrefs.shared.essentialURL else { continue }
+            guard url != AppPrefs.shared.generalURL else { continue }
+            let existingItem = juggledItems.findItem(withURL: url)
+            guard existingItem == nil || existingItem!.cwc == nil else { continue }
+            if recentCollections.isEmpty {
+                menu.addItem(NSMenuItem.separator())
+            }
+            let recentCollection = RecentCollection(url: url)
+            recentCollections.append(recentCollection)
+        }
+        
+        recentCollections.sort()
+        for recent in recentCollections {
+            let recentItem = NSMenuItem(title: recent.title,
+                                        action: #selector(openExtraItem(_:)),
+                                        keyEquivalent: "")
+            recentItem.isEnabled = true
+            recentItem.target = self
+            menu.addItem(recentItem)
+        }
+        
+        // And then add the Knowledge Base.
+        menu.addItem(NSMenuItem.separator())
+        let kbItem = NSMenuItem(title: "Knowledge Base",
+                                action: #selector(openExtraItem(_:)),
+                                                  keyEquivalent: "")
+        kbItem.isEnabled = true
+        kbItem.target = self
+        menu.addItem(kbItem)
+        
+        menuBarExtra!.menu = extraMenu
+        
+    }
+    
+    var recentCollections: [RecentCollection] = []
+    
+    @objc func openExtraItem(_ sender: NSMenuItem) {
+        if sender.title.hasSuffix(" (E)") {
+            openEssentialCollection()
+            return
+        } else if sender.title.hasSuffix(" (G)") {
+            openGeneralNotes()
+            return
+        } else if sender.title == "Knowledge Base" {
+            _ = openKB()
+            return
+        } else if let window = juggledItems.findWindow(withTitle: sender.title) {
+            if let window = window.cwc?.window {
+                window.makeKeyAndOrderFront(nil)
+                return
+            }
+        }
+        for recent in recentCollections {
+            if recent.title == sender.title {
+                _ = open(url: recent.url, source: .fromWithout)
+                return
+            }
+        }
     }
     
     // -----------------------------------------------------------
@@ -530,18 +677,16 @@ class CollectionJuggler: NSObject {
     func openParentRealm(parentURL: URL) -> CollectionWindowController? {
         
         let parentPath = parentURL.path
+        
         // If the collection is already open, then close it before
         // we re-open it.
-        for window in windows {
-            guard let windowCollection = window.io?.collection else { continue }
-            let windowPath = windowCollection.fullPath
-            if windowPath == parentPath && window.window != nil {
+        if let item = juggledItems.findItem(withPath: parentPath) {
+            if let windowController = item.cwc {
                 Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
                                   category: "CollectionJuggler",
                                   level: .info,
-                                  message: "Closing Project Folder at \(windowPath)")
-                window.window!.close()
-                break
+                                  message: "Closing Project Folder at \(parentPath)")
+                windowController.close()
             }
         }
         
@@ -549,7 +694,7 @@ class CollectionJuggler: NSObject {
         AppPrefs.shared.parentRealmPath = parentURL.path
         appPrefs.parentRealmParentURL = parentURL.deletingLastPathComponent()
         let realmScanner = RealmScanner()
-        let ok = realmScanner.openRealm(path: parentURL.path)
+        let ok = realmScanner.openRealm(path: parentPath)
         if ok {
             if self.docController != nil {
                 self.docController!.noteNewRecentDocumentURL(parentURL)
@@ -888,53 +1033,59 @@ class CollectionJuggler: NSObject {
     
     /// Adjust all the open windows to reflect any changes in the UI appearance.
     func adjustEditWindows() {
-        for window in windows {
-            let editing = window.noteTabs!.tabView.selectedTabViewItem!.label == "Edit"
-            guard let noteIO = window.io else { continue }
-            var klassName: String?
-            var note = window.editVC!.selectedNote
-            if editing {
-                let (outcome, modNote) = window.modIfChanged()
-                if modNote != nil {
-                    note = modNote
-                }
-                guard outcome != .tryAgain else { continue }
-            }
-            if note != nil && note!.hasKlass() {
-                klassName = note!.klass.value
-            }
-            let holdPendingEdits = window.pendingEdits
-            window.pendingEdits = false
-            window.editVC!.containerViewBuilt = false
-            window.editVC!.configureEditView(noteIO: noteIO, klassName: klassName)
-            if note != nil {
-                _ = window.viewCoordinator.focusOn(initViewID: "juggler",
-                                                   note: note,
-                                                   position: nil, row: -1, searchPhrase: nil)
-                /* window.select(note: note,
-                              position: nil,
-                              source: .action,
-                              andScroll: true,
-                              searchPhrase: nil) */
-                window.pendingEdits = holdPendingEdits
+        for item in juggledItems {
+            if let window = item.cwc {
+                let editing = window.noteTabs!.tabView.selectedTabViewItem!.label == "Edit"
+                guard let noteIO = window.io else { continue }
+                var klassName: String?
+                var note = window.editVC!.selectedNote
                 if editing {
-                    window.openEdits(self)
+                    let (outcome, modNote) = window.modIfChanged()
+                    if modNote != nil {
+                        note = modNote
+                    }
+                    guard outcome != .tryAgain else { continue }
+                }
+                if note != nil && note!.hasKlass() {
+                    klassName = note!.klass.value
+                }
+                let holdPendingEdits = window.pendingEdits
+                window.pendingEdits = false
+                window.editVC!.containerViewBuilt = false
+                window.editVC!.configureEditView(noteIO: noteIO, klassName: klassName)
+                if note != nil {
+                    _ = window.viewCoordinator.focusOn(initViewID: "juggler",
+                                                       note: note,
+                                                       position: nil, row: -1, searchPhrase: nil)
+                    /* window.select(note: note,
+                     position: nil,
+                     source: .action,
+                     andScroll: true,
+                     searchPhrase: nil) */
+                    window.pendingEdits = holdPendingEdits
+                    if editing {
+                        window.openEdits(self)
+                    }
                 }
             }
         }
     }
     
     func adjustListViews() {
-        for window in windows {
-            if let lvc = window.listVC {
-                lvc.reload()
+        for item in juggledItems {
+            if let window = item.cwc {
+                if let lvc = window.listVC {
+                    lvc.reload()
+                }
             }
         }
     }
     
     func displayRefresh() {
-        for window in windows {
-            window.reloadDisplayView(self)
+        for item in juggledItems {
+            if let window = item.cwc {
+                window.reloadDisplayView(self)
+            }
         }
     }
     
@@ -1003,7 +1154,8 @@ class CollectionJuggler: NSObject {
     }
     
     func assignWindowTitles() {
-        for window in windows {
+        for item in juggledItems {
+            guard let window = item.cwc else { continue }
             guard let windowCollection = window.io?.collection else { continue }
             windowCollection.determineSpecialFlags()
             window.assignWindowTitle()
@@ -1285,14 +1437,13 @@ class CollectionJuggler: NSObject {
         }
         // If the collection is already open, then simply bring
         // that window to the front.
-        for window in windows {
-            guard let windowCollection = window.io?.collection else { continue }
-            guard let windowURL = windowCollection.fullPathURL else { continue }
-            if folderURLsEqual(url1: windowURL, url2: collectionURL)
-                && !windowCollection.isRealmCollection
-                && window.window != nil {
-                window.window!.makeKeyAndOrderFront(self)
-                return window
+        if let item = juggledItems.findWindow(withURL: collectionURL) {
+            if let windowCollection = item.cwc!.io?.collection {
+                if !windowCollection.isRealmCollection
+                    && item.cwc!.window != nil {
+                    item.cwc!.window!.makeKeyAndOrderFront(self)
+                    return item.cwc
+                }
             }
         }
         
@@ -1338,47 +1489,20 @@ class CollectionJuggler: NSObject {
     /// - Parameter window: A Collection Window Controller.
     /// - Returns: A unique window number assigned to this window.
     func registerWindow(window: CollectionWindowController) {
-        for nextWindow in windows {
-            if nextWindow as AnyObject === window as AnyObject {
-                return
-            }
-        }
-        highestWindowNumber += 1
-        window.windowNumber = highestWindowNumber
-        self.windows.append(window)
-        if self.windows.count > 1 {
-            let oldWindow = self.windows[self.windows.count - 2]
-            let oldWindowPosition = oldWindow.window?.frame
-            let newWindowPosition = oldWindowPosition?.offsetBy(dx: 50, dy: -50)
-            if (newWindowPosition != nil) {
-                window.window?.setFrame(newWindowPosition!, display: true)
-            }
-        }
+        
+        juggledItems.registerWindow(window: window)
         if window.windowNumber == 0 && window.io == nil {
             initialWindow = window
         }
+        adjustMenuBarExtra()
     }
     
     /// Take appropriate actions when a Collection window is closing.
     func windowClosing(wc: CollectionWindowController) {
+        
         setLastSelection(title: "", link: "", filepath: "", wc: nil)
-        var windowCount = 0
-        for nextWC in windows {
-            if nextWC.window == nil {
-                // Don't count it
-            } else {
-                if nextWC as AnyObject === wc as AnyObject {
-                    // This is the closing window -- don't count it
-                } else if !nextWC.window!.isVisible {
-                    // Don't count it if it is not visible
-                } else if nextWC.io == nil {
-                    // Don't count it if no i/o module
-                } else if nextWC.io!.collectionOpen {
-                    // Count it if collection is open
-                    windowCount += 1
-                }
-            }
-        }
+        let windowCount = juggledItems.windowClosing(withController: wc)
+        adjustMenuBarExtra()
         if windowCount == 0 {
             navBoard()
         }

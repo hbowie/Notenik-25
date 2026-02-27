@@ -44,6 +44,8 @@
 		9C0B643A23888D6700869FAA /* TagsMassChangeWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C0B643823888D6700869FAA /* TagsMassChangeWindowController.swift */; };
 		9C0B643C23888D9E00869FAA /* TagsMassChangeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C0B643B23888D9E00869FAA /* TagsMassChangeViewController.swift */; };
 		9C0B643D23888D9E00869FAA /* TagsMassChangeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C0B643B23888D9E00869FAA /* TagsMassChangeViewController.swift */; };
+		9C0C76922F4E524A00EE7523 /* JuggledWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C0C76912F4E524A00EE7523 /* JuggledWindow.swift */; };
+		9C0C76962F4E531C00EE7523 /* WindowJuggler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C0C76952F4E531C00EE7523 /* WindowJuggler.swift */; };
 		9C0E23C02E7B21EF00D05CFB /* LongTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C0E23BF2E7B21EF00D05CFB /* LongTitleView.swift */; };
 		9C10831425AA67B8004B33CA /* News.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C10831325AA67B8004B33CA /* News.storyboard */; };
 		9C10831A25AA784A004B33CA /* NewsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C10831925AA784A004B33CA /* NewsWindowController.swift */; };
@@ -222,6 +224,7 @@
 		9CA5C84627EBB7DB007CDA96 /* AppHasSelectedNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5C84527EBB7DB007CDA96 /* AppHasSelectedNote.swift */; };
 		9CA5C84827EBC966007CDA96 /* AppGetSelectedNoteTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5C84727EBC966007CDA96 /* AppGetSelectedNoteTitle.swift */; };
 		9CA5C84A27EBCA1B007CDA96 /* AppGetSelectedNoteBacklink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5C84927EBCA1A007CDA96 /* AppGetSelectedNoteBacklink.swift */; };
+		9CA5DEB32F50FAD200F6DBA5 /* RecentCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5DEB22F50FAD200F6DBA5 /* RecentCollection.swift */; };
 		9CA80797229EE97100C5D673 /* GeneralPrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA80796229EE97100C5D673 /* GeneralPrefsViewController.swift */; };
 		9CA80798229EE97100C5D673 /* GeneralPrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA80796229EE97100C5D673 /* GeneralPrefsViewController.swift */; };
 		9CAD6A4922DF806800531D90 /* TagsExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD6A4822DF806800531D90 /* TagsExportViewController.swift */; };
@@ -374,6 +377,8 @@
 		9C0B643423885E9900869FAA /* TagsMassChange.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TagsMassChange.storyboard; sourceTree = "<group>"; };
 		9C0B643823888D6700869FAA /* TagsMassChangeWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsMassChangeWindowController.swift; sourceTree = "<group>"; };
 		9C0B643B23888D9E00869FAA /* TagsMassChangeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsMassChangeViewController.swift; sourceTree = "<group>"; };
+		9C0C76912F4E524A00EE7523 /* JuggledWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuggledWindow.swift; sourceTree = "<group>"; };
+		9C0C76952F4E531C00EE7523 /* WindowJuggler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowJuggler.swift; sourceTree = "<group>"; };
 		9C0E23BF2E7B21EF00D05CFB /* LongTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongTitleView.swift; sourceTree = "<group>"; };
 		9C10831325AA67B8004B33CA /* News.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = News.storyboard; sourceTree = "<group>"; };
 		9C10831925AA784A004B33CA /* NewsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsWindowController.swift; sourceTree = "<group>"; };
@@ -514,6 +519,7 @@
 		9CA5C84527EBB7DB007CDA96 /* AppHasSelectedNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHasSelectedNote.swift; sourceTree = "<group>"; };
 		9CA5C84727EBC966007CDA96 /* AppGetSelectedNoteTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGetSelectedNoteTitle.swift; sourceTree = "<group>"; };
 		9CA5C84927EBCA1A007CDA96 /* AppGetSelectedNoteBacklink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGetSelectedNoteBacklink.swift; sourceTree = "<group>"; };
+		9CA5DEB22F50FAD200F6DBA5 /* RecentCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCollection.swift; sourceTree = "<group>"; };
 		9CA80796229EE97100C5D673 /* GeneralPrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralPrefsViewController.swift; sourceTree = "<group>"; };
 		9CAD6A4822DF806800531D90 /* TagsExportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsExportViewController.swift; sourceTree = "<group>"; };
 		9CAD6A4E22DF9ACD00531D90 /* PrefsTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsTabViewController.swift; sourceTree = "<group>"; };
@@ -805,6 +811,9 @@
 				9CEAB6FA27F35DEB003866EA /* AppGetSelectedNoteFilePath.swift */,
 				9CE8340427ECD4C500724931 /* AppAddNote.swift */,
 				9CF256CA21FD0FF000D9F06A /* CollectionJuggler.swift */,
+				9C0C76952F4E531C00EE7523 /* WindowJuggler.swift */,
+				9C0C76912F4E524A00EE7523 /* JuggledWindow.swift */,
+				9CA5DEB22F50FAD200F6DBA5 /* RecentCollection.swift */,
 				9C00AD622658158A002B6A0F /* CustomURLActor.swift */,
 				9CF256CC21FD175E00D9F06A /* CollectionWindowController.swift */,
 				9C3816282C63FF51002DB6C4 /* CollectionViewCoordinator.swift */,
@@ -1551,6 +1560,7 @@
 				9C1E0C9522E4F7FA0025C99C /* AttachmentViewController.swift in Sources */,
 				9C6D7036295778AE003F5924 /* ImportViewController.swift in Sources */,
 				9C7995BF288773D2003C22D5 /* GetNoteTitleIntentHandler.swift in Sources */,
+				9C0C76962F4E531C00EE7523 /* WindowJuggler.swift in Sources */,
 				9CD400D02A3A52CE00347106 /* AuxTextView.swift in Sources */,
 				9C822BA222D6DC71008EF106 /* TagsTokenDelegate.swift in Sources */,
 				9C50D83B2B3CCABD00DBF2DB /* ReportRunner.swift in Sources */,
@@ -1621,6 +1631,7 @@
 				9C2BDBC72764188200E2041C /* IncludeChildrenView.swift in Sources */,
 				9C857C6423830F1600EDB93C /* FavoritesPrefsViewController.swift in Sources */,
 				9C5BE16C277166E60013C0D3 /* SeqModWindowController.swift in Sources */,
+				9CA5DEB32F50FAD200F6DBA5 /* RecentCollection.swift in Sources */,
 				9C4F7C7029D1D25C002E7A80 /* TextFormatView.swift in Sources */,
 				9C06454E2730C4C7008943A5 /* DefsRemoved.swift in Sources */,
 				9CDB5635259BAE9B00AB93A4 /* MediumPubViewController.swift in Sources */,
@@ -1688,6 +1699,7 @@
 				9C1BE27422EB9444006FDFEC /* ScriptViewController.swift in Sources */,
 				9CB60BC322650A89003B5655 /* ShareWindowController.swift in Sources */,
 				9C969DE428887B230002618C /* GetNoteFilePathIntentHandler.swift in Sources */,
+				9C0C76922F4E524A00EE7523 /* JuggledWindow.swift in Sources */,
 				9C553C612266A0D50008D176 /* StatusView.swift in Sources */,
 				9C9361492B7846650077BA22 /* IdPrefsWindowController.swift in Sources */,
 				9CA5C84827EBC966007CDA96 /* AppGetSelectedNoteTitle.swift in Sources */,
@@ -1943,7 +1955,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 940;
+				CURRENT_PROJECT_VERSION = 941;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1959,7 +1971,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 18.5.0;
+				MARKETING_VERSION = 18.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1977,7 +1989,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 940;
+				CURRENT_PROJECT_VERSION = 941;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1993,7 +2005,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 18.5.0;
+				MARKETING_VERSION = 18.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
