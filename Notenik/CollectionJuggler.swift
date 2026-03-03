@@ -370,6 +370,28 @@ class CollectionJuggler: NSObject {
             }
         }
         
+        // Now add the last script, if any
+        if lastScript != nil {
+            menu.addItem(NSMenuItem.separator())
+            var scriptTitle = lastScript!.lastPathComponent
+            let pathcomponents = lastScript!.pathComponents
+            var ix = pathcomponents.count - 2
+            if ix >= 0 {
+                scriptTitle.insert(contentsOf: "\(pathcomponents[ix]) / ", at: scriptTitle.startIndex)
+            }
+            ix -= 1
+            if ix >= 0 && pathcomponents[ix + 1] == "scripts" {
+                scriptTitle.insert(contentsOf: "\(pathcomponents[ix]) / ", at: scriptTitle.startIndex)
+            }
+            
+            let scriptItem = NSMenuItem(title: scriptTitle,
+                                        action: #selector(openExtraItem(_:)),
+                                        keyEquivalent: "")
+            scriptItem.isEnabled = true
+            scriptItem.target = self
+            menu.addItem(scriptItem)
+        }
+        
         // Next, add recent docs.
         
         let docController = NoteDocumentController.shared
@@ -408,11 +430,12 @@ class CollectionJuggler: NSObject {
         menu.addItem(kbItem)
         
         menuBarExtra!.menu = extraMenu
-        
     }
     
     var recentCollections: [RecentCollection] = []
     
+    /// Respond to a user selection from the menu bar extra.
+    /// - Parameter sender: The selected menu item.
     @objc func openExtraItem(_ sender: NSMenuItem) {
         if sender.title.hasSuffix(" (E)") {
             openEssentialCollection()
@@ -425,9 +448,15 @@ class CollectionJuggler: NSObject {
             return
         } else if let window = juggledItems.findWindow(withTitle: sender.title) {
             if let window = window.cwc?.window {
-                window.makeKeyAndOrderFront(nil)
+                window.orderFrontRegardless()
                 return
             }
+        } else if lastScript != nil && sender.title.hasSuffix(lastScript!.pathExtension) {
+            ensureScriptController()
+            guard scriptWindowController != nil else { return }
+            scriptWindowController!.scriptOpenInput(lastScript!, goNow: false)
+            scriptWindowController!.window!.orderFrontRegardless()
+            return
         }
         for recent in recentCollections {
             if recent.title == sender.title {
@@ -1441,7 +1470,7 @@ class CollectionJuggler: NSObject {
             if let windowCollection = item.cwc!.io?.collection {
                 if !windowCollection.isRealmCollection
                     && item.cwc!.window != nil {
-                    item.cwc!.window!.makeKeyAndOrderFront(self)
+                    item.cwc!.window!.orderFrontRegardless()
                     return item.cwc
                 }
             }
@@ -1586,6 +1615,7 @@ class CollectionJuggler: NSObject {
         guard scriptWindowController != nil else { return }
         scriptWindowController!.showWindow(self)
         lastScript = fileURL
+        adjustMenuBarExtra()
         scriptWindowController!.scriptOpenInput(fileURL, goNow: goNow)
     }
     
