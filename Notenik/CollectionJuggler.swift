@@ -191,6 +191,7 @@ class CollectionJuggler: NSObject {
     /// Looks like this is the first time that this user has launched Notenik.
     func firstUseSuggestion() -> (URL?) {
         
+        guard fm.ubiquityIdentityToken != nil else { return nil }
         if let firstUseWC = self.firstUseStoryboard.instantiateController(withIdentifier: "firstuseWC") as? FirstUseWindowController {
             firstUseWindowController = firstUseWC
             firstUseWC.juggler = self

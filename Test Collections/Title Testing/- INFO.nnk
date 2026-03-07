@@ -2,7 +2,7 @@ Title: Test Collections / Title Testing 2
 
 Title Set by User: false
 
-Link: /Users/hbowie/Xcode/Notenik/Test Collections/Title Testing 2
+Link: /Users/hbowie/Xcode/Notenik/Test Collections/Title Testing
 
 Sort Parm: 1
 
@@ -12,7 +12,7 @@ Sort Blank Dates Last: true
 
 Other Fields Allowed: false
 
-Last Index Selected: 21
+Last Index Selected: 5
 
 Mirror Auto Index: false
 
@@ -48,7 +48,7 @@ Note File Format: nnk
 
 Hash Tags: notenik-field
 
-Window Numbers: 1326.0;0.0;1234.0;704.0;527.0;
+Window Numbers: 633.0;115.0;1234.0;704.0;527.0;
 
-Column Widths: datemod: 100, 180, 250; date: 80, 120, 500; klass: 60, 80, 150; rank: 50, 80, 250; title: 200, 445, 1500; seq: 30, 80, 1500; x: 12, 20, 50; tags: 50, 100, 1200; statusdigit: 20, 30, 50; author: 100, 200, 1000; dateadded: 100, 180, 250; 
+Column Widths: statusdigit: 20, 30, 50; date: 80, 120, 500; rank: 50, 80, 250; title: 200, 445, 1500; seq: 30, 80, 1500; klass: 60, 80, 150; author: 100, 200, 1000; dateadded: 100, 180, 250; tags: 50, 100, 1200; datemod: 100, 180, 250; x: 12, 20, 50; 
 

@@ -69,6 +69,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         
+        // Using code from Brent Simmons, get rid of all of the menu item icons
         NSMenuItem.disableIcons()
         
         appPrefs = AppPrefs.shared
