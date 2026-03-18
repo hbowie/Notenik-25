@@ -2,4 +2,4 @@ Title:  This is a *long* title
 
 Long Title: This is a *really* long title.
 
-Seq:    5.1
+Seq:    6.1

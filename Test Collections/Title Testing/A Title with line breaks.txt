@@ -1,0 +1,3 @@
+Title:  A Title<br /> with<br /> line breaks
+
+Seq:    4.1

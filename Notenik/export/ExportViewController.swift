@@ -4,7 +4,7 @@
 //
 //  Created by Herb Bowie on 7/18/19.
 //
-//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2026 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -34,6 +34,7 @@ class ExportViewController: NSViewController {
     let webBookEPUBFolder = "Web Book as EPUB Folder"
     let webBookSite = "Web Book as Site"
     let webBookEPUB = "Web Book as EPUB"
+    let webPresentation = "Web Presentation"
     
     let osdir     = OpenSaveDirectory.shared
     
@@ -112,6 +113,7 @@ class ExportViewController: NSViewController {
         formatPopup.addItem(withTitle: webBookEPUBFolder)
         formatPopup.addItem(withTitle: webBookSite)
         formatPopup.addItem(withTitle: webBookEPUB)
+        formatPopup.addItem(withTitle: webPresentation)
         startOfExportScripts = formatPopup.numberOfItems
         formatPopup.selectItem(at: 0)
         
@@ -178,6 +180,9 @@ class ExportViewController: NSViewController {
             case webBookSite:
                 fileExtCombo.selectItem(withObjectValue: html)
                 splitTagsCheckBox.state = .off
+            case webPresentation:
+                fileExtCombo.selectItem(withObjectValue: html)
+                splitTagsCheckBox.state = .off
             default:
                 break
             }
@@ -241,6 +246,11 @@ class ExportViewController: NSViewController {
             case webBookEPUBFolder:
                 format = .webBookEPUBFolder
                 generateWebBook(exportFormat: format)
+                window.close()
+                return
+            case webPresentation:
+                format = .webPresentation
+                publishWebPresentation()
                 window.close()
                 return
             default:
@@ -449,6 +459,40 @@ class ExportViewController: NSViewController {
             }
         }
         
+    }
+    
+    func publishWebPresentation() {
+        
+        guard let collection = io?.collection else { return }
+        
+        let dialog = NSOpenPanel()
+        
+        if !collection.webPresentationPath.isEmpty {
+            let webPresentationURL = URL(fileURLWithPath: collection.webPresentationPath)
+            let parent = webPresentationURL.deletingLastPathComponent()
+            dialog.directoryURL = parent
+        }
+        
+        dialog.title                   = "Choose an Output Folder for your Web Presentation"
+        dialog.showsResizeIndicator    = true
+        dialog.showsHiddenFiles        = false
+        dialog.allowsMultipleSelection = false
+        dialog.canChooseDirectories    = true
+        dialog.canChooseFiles          = false
+        dialog.canCreateDirectories    = true
+        
+        let response = dialog.runModal()
+         
+        if response == .OK {
+            let presentationURL = dialog.url!
+            let maker = WebBookMaker(input: collection.fullPathURL!, output: presentationURL, webBookType: .webPresentation)
+            if maker != nil {
+                collection.webPresentationPath = presentationURL.path
+                collection.webBookAsEPUB = false
+                let filesWritten = maker!.generate()
+                informUserOfImportExportResults(operation: "Publish Web Presentation", ok: true, numberOfNotes: filesWritten, path: presentationURL.path)
+            }
+        }
     }
     
     /// Let the user know the results of an import/export operation

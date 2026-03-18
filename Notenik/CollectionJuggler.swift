@@ -1483,6 +1483,9 @@ class CollectionJuggler: NSObject {
         let wc = assignIOtoWindow(io: io)
         if wc != nil && !windowNumbers.isEmpty {
             wc!.setNumbers(windowNumbers)
+            if let window = wc!.window {
+                window.orderFrontRegardless()
+            }
         }
         notenikFolderList.add(collection)
         return wc

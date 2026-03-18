@@ -118,6 +118,35 @@ class NoteDisplayViewController: NSViewController,
         }
     }
     
+    override func keyDown(with event: NSEvent) {
+        
+        guard wc != nil else {
+            super.keyDown(with: event)
+            return
+        }
+        
+        let chars = event.charactersIgnoringModifiers
+        if chars == " " {
+            wc!.goToNextNote(self)
+            return
+        }
+        
+        let s   =   event.charactersIgnoringModifiers!
+        let s1  =   s.unicodeScalars
+        let s2  =   s1[s1.startIndex].value
+        let s3  =   Int(s2)
+        switch s3 {
+        case NSUpArrowFunctionKey:
+            wc!.goToPriorNote(self)
+            return
+        case NSDownArrowFunctionKey:
+            wc!.goToNextNote(self)
+            return
+        default:
+            super.keyDown(with: event)
+        }
+    }
+    
     // -----------------------------------------------------------
     //
     // MARK: Compliance with CollectionView.
