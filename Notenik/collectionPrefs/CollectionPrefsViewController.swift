@@ -163,13 +163,13 @@ class CollectionPrefsViewController: NSViewController {
         case .continuous:
             displayModePopUp.selectItem(at: 2)
         case .continuousPartial:
-            displayModePopUp.selectItem(at: 3)
+            displayModePopUp.selectItem(at: 3) // ???
         case .presentation:
-            displayModePopUp.selectItem(at: 4)
+            displayModePopUp.selectItem(at: 3)
         case .quotations:
-            displayModePopUp.selectItem(at: 5)
+            displayModePopUp.selectItem(at: 4)
         case .custom:
-            displayModePopUp.selectItem(at: 6)
+            displayModePopUp.selectItem(at: 5)
         }
         setMathJax(collection!.mathJax)
         setImgLocal(collection!.imgLocal)
