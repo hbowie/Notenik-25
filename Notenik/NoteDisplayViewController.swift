@@ -52,6 +52,7 @@ class NoteDisplayViewController: NSViewController,
     
     var mdResults = TransformMdResults()
     
+    var displayBoost = false
     var parms = DisplayParms()
     
     /// Set up the view for this controller.
@@ -254,6 +255,7 @@ class NoteDisplayViewController: NSViewController,
             
         parms.setFrom(note: sortedNote!.note)
         parms.checkBoxMessageHandlerName = NotenikConstants.checkBoxMessageHandlerName
+        parms.displayBoost = displayBoost
         
         mdResults = TransformMdResults()
         

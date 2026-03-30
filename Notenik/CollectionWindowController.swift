@@ -56,7 +56,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     var defsRemoved         = DefsRemoved()
     
     var viewCoordinator:    CollectionViewCoordinator!
-    // var navHistory:         NavHistory?
     
     var webLinkFollowed     = false
     var windowNumber        = 0
@@ -99,6 +98,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     var modInProgress = false
     
     var emailPromised = false
+    
+    var displayBoost = false
     
     var splitViewController: NoteSplitViewController?
     
@@ -399,6 +400,35 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 displayVC!.wc = self
                 viewCoordinator.addView(newView: displayVC!)
             }
+        }
+    }
+    
+    @IBAction func presentationToggle(_sender: Any) {
+        guard let collection = notenikIO?.collection else { return }
+        if collection.sortParm != .seqPlusTitle {
+            setSortParm(.seqPlusTitle)
+        }
+        if collection.displayMode != .presentation {
+            setDisplayTo(.presentation)
+        }
+        guard let splits = splitViewController else { return }
+        if splits.leftViewCollapsed {
+            // Toggle presentation off
+            displayBoost = false
+            if displayVC != nil {
+                displayVC!.displayBoost = false
+                displayVC!.display()
+            }
+            changeLeftViewVisibility(makeVisible: true, narrow: false)
+        } else {
+            // Toggle presentation on
+            displayBoost = true
+            if displayVC != nil {
+                displayVC!.displayBoost = true
+                logInfo(msg: "Boosting Font Size with a factor of \(collection.boostFactor)")
+                displayVC!.display()
+            }
+            changeLeftViewVisibility(makeVisible: false, narrow: false)
         }
     }
     
@@ -3206,6 +3236,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 searchPhrase = displayVC!.searchPhrase
             }
             vc.searchPhrase = searchPhrase
+            vc.displayBoost = displayBoost
         } else {
             Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
                               category: "CollectionWindowController",
@@ -3450,7 +3481,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                         note: nextNote,
                                         position: nil,
                                         row: -1, searchPhrase: nil)
-            // select(note: nextNote, position: nil, source: .nav, andScroll: true)
         } else {
             communicateError("Navigation History Exhausted", alert: true)
         }

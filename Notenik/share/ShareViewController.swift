@@ -55,7 +55,7 @@ class ShareViewController: NSViewController {
     
     var notes: [Note] = []
     var searchPhrase: String?
-    // var stringToShare = "No data available"
+    var displayBoost = false
 
     @IBOutlet var contentBodyOnlyButton: NSButton!
     @IBOutlet var contentEntireNoteButton: NSButton!
@@ -556,6 +556,7 @@ class ShareViewController: NSViewController {
             displayParms.curlyApostrophes = note.collection.curlyApostrophes
             displayParms.extLinksOpenInNewWindows = note.collection.extLinksOpenInNewWindows
             displayParms.checkBoxMessageHandlerName = NotenikConstants.checkBoxMessageHandlerName
+            displayParms.displayBoost = displayBoost
             let mdResults = TransformMdResults()
             let displayString = noteDisplay.display(SortedNote(note: note), io: io!, parms: displayParms, mdResults: mdResults)
             if format == .htmlDoc && searchPhrase != nil && searchPhrase!.count > 0 {

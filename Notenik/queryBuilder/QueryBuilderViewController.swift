@@ -221,7 +221,7 @@ class QueryBuilderViewController: NSViewController {
         templateWriter = Markedup(format: .htmlDoc)
         templateWriter.templateOutput(filename: "\(qName).html")
         templateWriter.startDoc(withTitle: "Notenik Query",
-                        withCSS: displayPrefs.displayCSS,
+                        withCSS: displayPrefs.displayCSS(),
                         linkToFile: false,
                         withJS: nil)
         templateWriter.heading(level: 1, text: collection.title)
