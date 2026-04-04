@@ -468,7 +468,8 @@ class ShareViewController: NSViewController {
                                       context: context)
             if format == .htmlDoc {
                 let markedup = Markedup(format: .htmlDoc)
-                markedup.startDoc(withTitle: note.title.value, withCSS: nil)
+                let headInfo = MarkedupHeadInfo(withTitle: note.title.plain)
+                markedup.startDoc(headInfo: headInfo)
                 markedup.append(html)
                 markedup.finishDoc()
                 stringToShare = markedup.code

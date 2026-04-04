@@ -220,10 +220,8 @@ class QueryBuilderViewController: NSViewController {
         let columnIndices = determineColumns()
         templateWriter = Markedup(format: .htmlDoc)
         templateWriter.templateOutput(filename: "\(qName).html")
-        templateWriter.startDoc(withTitle: "Notenik Query",
-                        withCSS: displayPrefs.displayCSS(),
-                        linkToFile: false,
-                        withJS: nil)
+        let headInfo = MarkedupHeadInfo(withTitle: "Notenik Query", cssCode: displayPrefs.displayCSS())
+        templateWriter.startDoc(headInfo: headInfo)
         templateWriter.heading(level: 1, text: collection.title)
         templateWriter.heading(level: 2, text: qName)
         templateWriter.startParagraph()

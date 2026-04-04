@@ -46,7 +46,8 @@ class NewsViewController: NSViewController, WKUIDelegate, WKNavigationDelegate {
                 css.append("\nh4 { font-weight: 600; font-size: \(bodySize)pt }")
             }
         }
-        code.startDoc(withTitle: docTitle, withCSS: css)
+        let headInfo = MarkedupHeadInfo(withTitle: docTitle, cssCode: css)
+        code.startDoc(headInfo: headInfo)
         code.heading(level: 1, text: docTitle)
         
         if let newsURL = Bundle.main.url(forResource: "notenik-news", withExtension: "html") {

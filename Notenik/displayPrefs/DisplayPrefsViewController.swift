@@ -254,7 +254,8 @@ class DisplayPrefsViewController: NSViewController {
                                            bodyFont: displayPrefs.bodySpecs.getLatestFont(),
                                            headingsFont: displayPrefs.headingSpecs.getLatestFont(),
                                            headingsSize: displayPrefs.headingSpecs.getLatestSize())
-        code.startDoc(withTitle: nil, withCSS: css)
+        let headInfo = MarkedupHeadInfo(withTitle: nil, cssCode: css)
+        code.startDoc(headInfo: headInfo)
         let md = """
         # Great Quotes (h1)
         
