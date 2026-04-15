@@ -77,6 +77,8 @@ class ViewFactory {
             return DurationView()
         case NotenikConstants.folderCommon:
             return ComboView(def: def)
+        case NotenikConstants.imageLayoutCommon:
+            return ImageLayoutView()
         case NotenikConstants.imageNameCommon:
             return ImageNameView()
         case NotenikConstants.includeChildrenCommon:

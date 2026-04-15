@@ -11,4 +11,6 @@ Body:
 + `1`  — Used for Title slide
 + `2` — Used for presentation materials
 
-*Note that, with the right Collection setting, the level value also determines the heading level that will be used*
+Note that, with the right Collection setting, the level value also determines the heading level that will be used.
+
+However the heading level associated with the first `slide` note will be used for all slides, no matter their level values. 

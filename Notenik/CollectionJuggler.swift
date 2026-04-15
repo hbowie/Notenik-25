@@ -301,8 +301,6 @@ class CollectionJuggler: NSObject {
             extraMenu = nil
             return
         }
-        
-        print("CollectionJuggler.setupMenuBarExtra appPrefs menuBarExtra = \(appPrefs.menuBarExtra)")
 
         if menuBarExtra == nil {
             menuBarExtra = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)

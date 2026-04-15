@@ -12,6 +12,8 @@ Image Name:
 
 Image Name Dark: 
 
+Image Layout: 
+
 Script: 
 
 Body: 

@@ -277,6 +277,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = saveNumbers()
         }
         finishFileCoordination()
+        if let tempIO = io {
+            tempIO.tempCleanup()
+        }
     }
     
     /// Save position of window as a string by concatenating a series of formatted doubles.

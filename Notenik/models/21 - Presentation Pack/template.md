@@ -16,6 +16,8 @@ Image Name: <imagename>
 
 Image Name Dark: <imagename>
 
+Image Layout: <imagelayout>
+
 Script: <longtext>
 
 Body: 
