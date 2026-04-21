@@ -5,6 +5,8 @@ Tags:   Software.Groovy
 Backlinks: And another Wiki link
 Backlinks: Here's a Wikilink
 
+Wiki Links: Here's a Wikilink
+
 Body:
 
 A note-taking system cunningly devised by Herb Bowie. 
@@ -12,3 +14,5 @@ A note-taking system cunningly devised by Herb Bowie.
 Learn more at [Notenik.app](https://notenik.app).
 
 You can delete this starting Note after creating one or two of your own.
+
+Link to [[Here's a Wikilink]].

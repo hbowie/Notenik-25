@@ -1,10 +1,10 @@
-Title: <title> 
+Title: <title>
 
-Tags: <tags> 
+Tags: <tags>
 
-Backlinks: <backlinks> 
+Backlinks: <backlinks>
 
-Wiki Links: <wikilinks> 
+Wiki Links: <wikilinks>
 
-Body:  
+Body: 
 
