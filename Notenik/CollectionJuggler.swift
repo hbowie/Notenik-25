@@ -32,9 +32,12 @@ class CollectionJuggler: NSObject {
     let appPrefs  = AppPrefs.shared
     let appPrefsCocoa = AppPrefsCocoa.shared
     let osdir     = OpenSaveDirectory.shared
+    private let editingAppList = EditingAppList()
+    
     var sortMenu: NSMenu!
     var displayModeMenu: NSMenu!
     var outlineTabMenu: NSMenu!
+    var editAppMenu: NSMenu!
     
     var menuBarExtra: NSStatusItem?
     var extraMenu: NSMenu?
@@ -98,6 +101,7 @@ class CollectionJuggler: NSObject {
                               message: "Couldn't get a Log Window Controller! at startup")
         }
         notenikFolderList = NotenikFolderList.shared
+        loadEditingApps()
     }
     
     func makeRecentDocsKnown(_ recentDocumentURLs: [URL]) {
@@ -1798,6 +1802,99 @@ class CollectionJuggler: NSObject {
                 i += 1
             }
         }
+    }
+    
+    func getEditingAppList() -> EditingAppList {
+        loadEditingApps()
+        return editingAppList
+    }
+    
+    var editingAppsLoadedFromPrefs = false
+    
+    func loadEditingApps() {
+        if !editingAppsLoadedFromPrefs {
+            let editingAppsConcat = appPrefs.editingAppsConcat
+            editingAppList.set(concat: editingAppsConcat)
+            editingAppsLoadedFromPrefs = true
+        }
+        adjustEditingAppsMenu()
+    }
+    
+    func addEditingApps() {
+        let openPanel = NSOpenPanel();
+        openPanel.title = "Select Editing App(s)"
+        openPanel.showsResizeIndicator = true
+        openPanel.showsHiddenFiles = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = true
+        openPanel.allowsMultipleSelection = true
+        let result = openPanel.runModal()
+        if result != .OK { return }
+        let urls = openPanel.urls
+        for url in urls {
+            if url.pathExtension.lowercased() == "app" {
+                editingAppList.add(url: url)
+            } else if FileUtils.isDir(url.path) {
+                scanAppsFolder(folderURL: url)
+            }
+        }
+        appPrefs.editingAppsConcat = editingAppList.concat
+        adjustEditingAppsMenu()
+    }
+    
+    func scanAppsFolder(folderURL: URL) {
+        do {
+            let dirContents = try fm.contentsOfDirectory(atPath: folderURL.path)
+            for item in dirContents {
+                if item.starts(with: ".") { continue }
+                if item.hasSuffix(".app") {
+                    let itemPath = FileUtils.joinPaths(path1: folderURL.path, path2: item)
+                    let newApp = EditingApp(path: itemPath)
+                    if newApp.isKnownEditor {
+                        editingAppList.add(newApp: newApp)
+                    }
+                }
+            }
+        } catch {
+            Logger.shared.log(subsystem: "com.powersurgepub.notenik",
+                              category: "CollectionJuggler",
+                              level: .error,
+                              message: "Error reading Applications folder from \(folderURL)")
+        }
+    }
+    
+    func clearEditingApps() {
+        editingAppList.clear()
+        appPrefs.editingAppsConcat = editingAppList.concat
+        adjustEditingAppsMenu()
+    }
+    
+    func adjustEditingAppsMenu() {
+        
+        guard editAppMenu != nil else { return }
+        editAppMenu.removeAllItems()
+        
+        let defaultItem = NSMenuItem(title: "Default Text Editor",
+                                     action: #selector(editWithApp(_:)),
+                                     keyEquivalent: "")
+        defaultItem.isEnabled = true
+        defaultItem.target = self
+        editAppMenu.addItem(defaultItem)
+        
+        for app in editingAppList {
+            let appItem = NSMenuItem(title: app.name,
+                                           action: #selector(editWithApp(_:)),
+                                           keyEquivalent: "")
+            appItem.isEnabled = true
+            appItem.target = self
+            editAppMenu.addItem(appItem)
+        }
+    }
+    
+    @objc func editWithApp(_ sender: NSMenuItem) {
+        guard let wc = lastWC else { return }
+        wc.textEditLookup(editorName: sender.title)
     }
     
     let countsStoryboard:          NSStoryboard = NSStoryboard(name: "Counts", bundle: nil)

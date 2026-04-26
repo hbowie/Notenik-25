@@ -322,6 +322,19 @@
                                                 <action selector="quickExportAndOpen:" target="Ady-hI-5gd" id="OFe-R9-Fnj"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="xer-YE-XGC"/>
+                                        <menuItem title="Add Editing App(s)..." id="iQy-cD-cT4">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="addEditingApps:" target="Ady-hI-5gd" id="OEc-Fp-mOc"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Clear Editing Apps" id="2LA-Wy-om0">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="clearEditingApps:" target="Voe-Tx-rLC" id="nhm-pL-7yu"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -908,6 +921,16 @@ CA
                                                 <action selector="textEditNote:" target="Ady-hI-5gd" id="6P1-cp-ypG"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Edit In" id="Xhd-xT-GBI">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Edit In" id="3A4-gg-MYx">
+                                                <items>
+                                                    <menuItem title="Default Text Editor" id="MwE-zM-ICO">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
                                         <menuItem title="Reload Note" keyEquivalent="j" toolTip="Reload the Note from Disk" id="xz4-Re-trG">
                                             <connections>
                                                 <action selector="reloadNote:" target="Ady-hI-5gd" id="fe3-Qc-Z8r"/>
@@ -1470,6 +1493,7 @@ CA
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Notenik" customModuleProvider="target">
                     <connections>
                         <outlet property="displayModeMenu" destination="rr0-v0-ht6" id="K85-tn-Q6i"/>
+                        <outlet property="editAppMenu" destination="3A4-gg-MYx" id="rr3-81-MoM"/>
                         <outlet property="favsToHTML" destination="eJv-R5-0H2" id="RKS-zi-0TK"/>
                         <outlet property="iCloudMenu" destination="zeP-2v-kFe" id="PRu-Cu-We2"/>
                         <outlet property="navAdvSearchItem" destination="dRa-3A-SnJ" id="lvV-93-h5d"/>
@@ -2251,13 +2275,13 @@ CA
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTK-bV-70K">
-                                <rect key="frame" x="0.0" y="0.0" width="479" height="30"/>
+                                <rect key="frame" x="0.0" y="0.0" width="479" height="26"/>
                                 <clipView key="contentView" id="caU-8Q-uow">
-                                    <rect key="frame" x="1" y="1" width="477" height="28"/>
+                                    <rect key="frame" x="1" y="1" width="477" height="24"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="fwC-s0-qs1" id="Zqh-F5-OQn">
-                                            <rect key="frame" x="0.0" y="0.0" width="477" height="28"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="477" height="24"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>

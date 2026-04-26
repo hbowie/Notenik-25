@@ -31,6 +31,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
     @IBOutlet weak var navAdvSearchItem: NSMenuItem!
     @IBOutlet weak var navFindAgainItem: NSMenuItem!
     
+    @IBOutlet weak var editAppMenu: NSMenu!
+    
     @IBOutlet weak var outlineTabMenu: NSMenu!
     
     var appPrefs:     AppPrefs?
@@ -93,6 +95,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         juggler!.sortMenu = sortMenu
         juggler!.displayModeMenu = displayModeMenu
         juggler!.outlineTabMenu = outlineTabMenu
+        juggler!.editAppMenu = editAppMenu
         recentDocumentURLs = docController!.recentDocumentURLs
         stage = "2"
         logger.logDestPrint = false
@@ -408,6 +411,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
     func displayRefresh() {
         juggler!.displayRefresh()
         juggler!.adjustListViews()
+    }
+    
+    @IBAction func addEditingApps(_ sender: Any) {
+        juggler!.addEditingApps()
+    }
+    
+    @IBAction func clearEditingApps(_ sender: Any) {
+        juggler!.clearEditingApps()
     }
     
     @IBAction func editPrefs(_ sender: Any) {

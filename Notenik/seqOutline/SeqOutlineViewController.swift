@@ -91,6 +91,29 @@ class SeqOutlineViewController: NSViewController,
         // Setup the popup menu for rows in the list.
         shortcutMenu = NSMenu()
         addToShortcutMenu(actionType: .showInFinder)
+        
+        let editingApps = CollectionJuggler.shared.getEditingAppList()
+        if editingApps.count > 0 {
+            let editInItem = NSMenuItem(title: "Edit In", action: nil, keyEquivalent: "")
+            let editInMenu = NSMenu(title: "Edit In")
+            let defaultItem = NSMenuItem(title: "Default Text Editor",
+                                         action: #selector(editWithApp(_:)),
+                                         keyEquivalent: "")
+            defaultItem.isEnabled = true
+            defaultItem.target = self
+            editInMenu.addItem(defaultItem)
+            for app in editingApps {
+                let appItem = NSMenuItem(title: app.name,
+                                               action: #selector(editWithApp(_:)),
+                                               keyEquivalent: "")
+                appItem.isEnabled = true
+                appItem.target = self
+                editInMenu.addItem(appItem)
+            }
+            editInItem.submenu = editInMenu
+            shortcutMenu.addItem(editInItem)
+        }
+        
         addToShortcutMenu(actionType: .launchLink)
         addToShortcutMenu(actionType: .share)
         addToShortcutMenu(actionType: .copyNotenikURL)
@@ -109,6 +132,23 @@ class SeqOutlineViewController: NSViewController,
         if notenikIO != nil {
             modShortcutMenuForCollection()
         }
+    }
+    @objc func editWithApp(_ sender: NSMenuItem) {
+
+        guard let wc = collectionWindowController else { return }
+        let menuItem = sender
+        guard let io = notenikIO else { return }
+        guard let collection = io.collection else { return }
+        guard let wc = collectionWindowController else { return }
+        let row = outlineView.clickedRow
+        guard row >= 0 else { return }
+        guard let node = outlineView.item(atRow: row) as? OutlineNode2 else { return }
+        guard node.type == .note else { return }
+        let clickedNote = node.sortedNote!
+        
+        guard clickedNote.note.title.value == CollectionJuggler.shared.lastSelectedNoteTitle else { return }
+        
+        wc.textEditLookup(editorName: sender.title)
     }
     
     /// Retain knowledge of user's requested setting for the Seq Outline.

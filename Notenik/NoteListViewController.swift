@@ -81,9 +81,34 @@ class NoteListViewController:   NSViewController,
         tableView.target = self
         tableView.doubleAction = #selector(doubleClick(_:))
         
-        // Setup the popup menu for rows in the list. 
+        buildShortcutMenu()
+    }
+    
+    /// Setup the popup menu for rows in the list. /
+    func buildShortcutMenu() {
         shortcutMenu = NSMenu()
         shortcutMenu.addItem(NSMenuItem(title: "Show in Finder", action: #selector(showInFinder(_:)), keyEquivalent: ""))
+        let editingApps = CollectionJuggler.shared.getEditingAppList()
+        if editingApps.count > 0 {
+            let editInItem = NSMenuItem(title: "Edit In", action: nil, keyEquivalent: "")
+            let editInMenu = NSMenu(title: "Edit in")
+            let defaultItem = NSMenuItem(title: "Default Text Editor",
+                                         action: #selector(editWithApp(_:)),
+                                         keyEquivalent: "")
+            defaultItem.isEnabled = true
+            defaultItem.target = self
+            editInMenu.addItem(defaultItem)
+            for app in editingApps {
+                let appItem = NSMenuItem(title: app.name,
+                                               action: #selector(editWithApp(_:)),
+                                               keyEquivalent: "")
+                appItem.isEnabled = true
+                appItem.target = self
+                editInMenu.addItem(appItem)
+            }
+            editInItem.submenu = editInMenu
+            shortcutMenu.addItem(editInItem)
+        }
         shortcutMenu.addItem(NSMenuItem(title: "Launch Link", action: #selector(launchLinkForItem(_:)), keyEquivalent: ""))
         shortcutMenu.addItem(NSMenuItem(title: "Share...", action: #selector(shareItem(_:)), keyEquivalent: ""))
         shortcutMenu.addItem(NSMenuItem(title: "Copy Notenik URL", action: #selector(copyItemInternalURL(_:)), keyEquivalent: ""))
@@ -96,6 +121,32 @@ class NoteListViewController:   NSViewController,
         shortcutMenu.addItem(NSMenuItem(title: "Duplicate", action: #selector(duplicateItem(_:)), keyEquivalent: ""))
         shortcutMenu.addItem(NSMenuItem(title: "Delete Range...", action: #selector(deleteNotes(_:)), keyEquivalent: ""))
         tableView.menu = shortcutMenu
+    }
+    
+    @objc func editWithApp(_ sender: NSMenuItem) {
+
+        guard let wc = collectionWindowController else { return }
+        
+        guard tableView.clickedRow >= 0 else { return }
+        
+        var clickedWithinSelected = false
+        for index in tableView.selectedRowIndexes {
+            if tableView.clickedRow == index {
+                clickedWithinSelected = true
+                break
+            }
+        }
+        
+        guard clickedWithinSelected else { return }
+        let row = tableView.clickedRow
+        
+        guard let io = notenikIO else { return }
+        guard row >= 0 else { return }
+        guard let clickedNote = io.getNote(at: row) else { return }
+        
+        guard clickedNote.title.value == CollectionJuggler.shared.lastSelectedNoteTitle else { return }
+        
+        wc.textEditLookup(editorName: sender.title)
     }
     
     func adjustFonts() {

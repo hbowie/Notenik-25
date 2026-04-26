@@ -4597,6 +4597,57 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
+    func textEditLookup(editorName: String) {
+
+        let editingApps = juggler.getEditingAppList()
+        if editorName.lowercased().starts(with: "default") {
+            textEditNote(editorName: editorName)
+        } else if let editingApp = editingApps.getApp(for: editorName) {
+            textEditNote(editorName: editorName, editorURL: editingApp.url)
+        } else {
+            textEditNote(editorName: "default", editorURL: nil)
+        }
+    }
+    
+    /// Open the current Note in the indicated text editor.
+    func textEditNote(editorName: String? = nil, editorURL: URL? = nil) {
+        let (_, sel) = guardForNoteAction()
+        guard let noteToUse = sel?.note else {
+            print("  - No Selected Note!")
+            return
+        }
+        var ok = true
+        if noteToUse.noteID.hasData {
+            if #available(macOS 11.0, *) {
+                if editorURL != nil
+                    && editorName != nil
+                    && !editorName!.isEmpty
+                    && !editorName!.lowercased().starts(with: "default") {
+                    let configuration = NSWorkspace.OpenConfiguration()
+                    configuration.arguments = ["/bin"]
+                    var urlsToOpen: [URL] = []
+                    let noteURL = noteToUse.noteID.getURL(note: noteToUse, preferExisting: true)!
+                    urlsToOpen.append(noteURL)
+                    NSWorkspace.shared.open(urlsToOpen,
+                                            withApplicationAt: editorURL!,
+                                            configuration: configuration,
+                                            completionHandler: nil)
+                    return
+                } else {
+                    ok = NSWorkspace.shared.open(noteToUse.noteID.getURL(note: noteToUse, preferExisting: true)!)
+                }
+            } else {
+                print("  - earlier system than macOS 11.0!")
+            }
+        } else {
+            print("  - note to use note ID has no data!")
+        }
+        if !ok {
+            communicateError("File at '\(noteToUse.noteID.getFullPath(note: noteToUse)!)' could not be opened",
+                             alert: true)
+        }
+    }
+    
     /// Reload the currently selected note from disk.
     @IBAction func reloadNote(_ sender: Any) {
         let (nio, sel) = guardForNoteAction()
