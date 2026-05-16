@@ -1343,6 +1343,70 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
+    func markOrUnmark(startingRow: Int, endingRow: Int, hoisting: Bool = false) {
+        guard let noteIO = guardForCollectionAction() else { return }
+        guard let collection = noteIO.collection else { return }
+        guard collection.markFieldDef != nil else { return }
+        var notesToUpdate: [Note] = []
+        
+        guard let firstNote = noteIO.getSortedNote(at: startingRow) else { return }
+        
+        let startingDepth = firstNote.note.depth
+        let markSet = !firstNote.note.isMarked()
+
+        notesToUpdate.append(firstNote.note)
+        
+        var done = false
+        var nextRow = startingRow + 1
+        while !done {
+            if !hoisting && nextRow > endingRow {
+                done = true
+                continue
+            }
+            guard let nextNote = noteIO.getSortedNote(at: nextRow) else {
+                done = true
+                continue
+            }
+            if hoisting && nextNote.note.depth <= startingDepth && nextRow > endingRow {
+                done = true
+                continue
+            }
+            if hoisting && markSet == nextNote.note.isMarked() {
+                // Already hoisted
+            } else {
+                notesToUpdate.append(nextNote.note)
+            }
+            nextRow += 1
+        }
+        
+        markOrUnmark(notesToUpdate: notesToUpdate,
+                     hoisting: hoisting,
+                     markSet: markSet,
+                     noteIO: noteIO)
+    }
+    
+    func markOrUnmark(notesToUpdate: [Note],
+                      hoisting: Bool,
+                      markSet: Bool,
+                      noteIO: NotenikIO) {
+        
+        guard !notesToUpdate.isEmpty else { return }
+        let firstNote = notesToUpdate[0]
+        for noteToUpdate in notesToUpdate {
+            let modNote = noteToUpdate.copy() as! Note
+            if hoisting {
+                _ = modNote.setMark(markSet)
+            } else {
+                _ = modNote.toggleMark()
+            }
+            _ = noteIO.modNote(oldNote: noteToUpdate, newNote: modNote)
+        }
+        
+        communicateSuccess("Marking/Unmarking completed")
+        
+        finishBatchOperation(positionKey: firstNote.noteID.getBasis())
+    }
+    
     func seqModify(startingRow: Int, endingRow: Int) {
         guard let noteIO = guardForCollectionAction() else { return }
         if let seqModController = self.seqModStoryboard.instantiateController(withIdentifier: "seqModWC") as? SeqModWindowController {
@@ -6374,8 +6438,20 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     }
     
     /// Finish up batch operations by reloading the lists and selecting the first note
-    func finishBatchOperation() {
-        let (sortedNote, position) = io!.firstNote()
+    func finishBatchOperation(positionKey: String? = nil) {
+        var sortedNote: SortedNote?
+        var position = NotePosition()
+        if positionKey != nil && !positionKey!.isEmpty {
+            if let note = io!.getNote(knownAs: positionKey!) {
+                position = io!.positionOfNote(note)
+                if position.index >= 0 {
+                    (sortedNote, position) = io!.selectNote(at: position.index)
+                }
+            }
+        }
+        if sortedNote == nil {
+            (sortedNote, position) = io!.firstNote()
+        }
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     sortedNote: sortedNote,
                                     position: position,

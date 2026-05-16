@@ -145,6 +145,7 @@
 		9C5BE16A277163FA0013C0D3 /* SeqMod.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C5BE169277163FA0013C0D3 /* SeqMod.storyboard */; };
 		9C5BE16C277166E60013C0D3 /* SeqModWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5BE16B277166E60013C0D3 /* SeqModWindowController.swift */; };
 		9C5BE16E277167070013C0D3 /* SeqModViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5BE16D277167070013C0D3 /* SeqModViewController.swift */; };
+		9C5CB6F12FA2B25F0068059B /* MarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5CB6F02FA2B25F0068059B /* MarkView.swift */; };
 		9C5CBC7925D60AA300D23F4B /* Down in Frameworks */ = {isa = PBXBuildFile; productRef = 9C5CBC7825D60AA300D23F4B /* Down */; };
 		9C5DE003288E03870099EC9A /* AddNoteFromTextIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5DE002288E03870099EC9A /* AddNoteFromTextIntentHandler.swift */; };
 		9C60E6D221F64B3B00C332ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C60E6D121F64B3B00C332ED /* AppDelegate.swift */; };
@@ -457,6 +458,7 @@
 		9C5BE169277163FA0013C0D3 /* SeqMod.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SeqMod.storyboard; sourceTree = "<group>"; };
 		9C5BE16B277166E60013C0D3 /* SeqModWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeqModWindowController.swift; sourceTree = "<group>"; };
 		9C5BE16D277167070013C0D3 /* SeqModViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeqModViewController.swift; sourceTree = "<group>"; };
+		9C5CB6F02FA2B25F0068059B /* MarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkView.swift; sourceTree = "<group>"; };
 		9C5DE002288E03870099EC9A /* AddNoteFromTextIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteFromTextIntentHandler.swift; sourceTree = "<group>"; };
 		9C60E6CE21F64B3B00C332ED /* Notenik.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notenik.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C60E6D121F64B3B00C332ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1164,6 +1166,7 @@
 				9CAE23F626D166CB0002FCCD /* LookupDataSource.swift */,
 				9CAE23F426D1659B0002FCCD /* LookupView.swift */,
 				9CD3261F2233068F00D06B77 /* MacEditView.swift */,
+				9C5CB6F02FA2B25F0068059B /* MarkView.swift */,
 				9C88DD8C2BD860C600D90CF5 /* PageStyleView.swift */,
 				9CC6DB7C2AE86C1700F670AF /* PersonView.swift */,
 				9CA4EE8B246A15BC00059F65 /* PickListDataSource.swift */,
@@ -1664,6 +1667,7 @@
 				9C619A38231B323B003CFFBE /* WorkTypeView.swift in Sources */,
 				9CBC386821FFA9C200BA7900 /* NoteEditViewController.swift in Sources */,
 				9C29A79B25645B78002C5F7A /* FileAttachView.swift in Sources */,
+				9C5CB6F12FA2B25F0068059B /* MarkView.swift in Sources */,
 				9CAD6A4922DF806800531D90 /* TagsExportViewController.swift in Sources */,
 				9CF1193E225827650015AE91 /* CollectionPrefsViewController.swift in Sources */,
 				9C47DD342840019A0025A7B9 /* ComboDataSource.swift in Sources */,
@@ -1963,7 +1967,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 976;
+				CURRENT_PROJECT_VERSION = 981;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1979,7 +1983,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 18.9.0;
+				MARKETING_VERSION = 18.9.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1997,7 +2001,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 976;
+				CURRENT_PROJECT_VERSION = 981;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2013,7 +2017,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 18.9.0;
+				MARKETING_VERSION = 18.9.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

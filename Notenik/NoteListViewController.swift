@@ -40,6 +40,8 @@ class NoteListViewController:   NSViewController,
     var seqModIndex = -1
     var renumberDisplaySeqIndex = -1
     var assignAttributionIndex = -1
+    var markIndex = -1
+    var hoistIndex = -1
     
     var window: CollectionWindowController? {
         get {
@@ -191,6 +193,21 @@ class NoteListViewController:   NSViewController,
     
     func modShortcutMenuForCollection() {
         
+        if hoistIndex >= 0 {
+            if shortcutMenu.numberOfItems > hoistIndex {
+                shortcutMenu.removeItem(at: hoistIndex)
+            }
+            hoistIndex = -1
+        }
+        
+        if markIndex >= 0 {
+            if shortcutMenu.numberOfItems > markIndex {
+                shortcutMenu.removeItem(at: markIndex)
+            }
+            markIndex = -1
+        }
+        
+        
         if assignAttributionIndex >= 0 {
             if shortcutMenu.numberOfItems > assignAttributionIndex {
                 shortcutMenu.removeItem(at: assignAttributionIndex)
@@ -254,7 +271,55 @@ class NoteListViewController:   NSViewController,
             assignAttributionIndex = shortcutMenu.numberOfItems
             shortcutMenu.addItem(withTitle: "Assign Attribution", action: #selector(assignAttribution(_:)), keyEquivalent: "")
         }
+        
+        if collection.markFieldDef != nil {
+            if collection.sortBySeq {
+                hoistIndex = shortcutMenu.numberOfItems
+                shortcutMenu.addItem(withTitle: "Hoist/Hide", action: #selector(hoistOrHide(_:)), keyEquivalent: "")
+            } else {
+                markIndex = shortcutMenu.numberOfItems
+                shortcutMenu.addItem(withTitle: "Mark/Unmark", action: #selector(markOrUnmark(_:)), keyEquivalent: "")
+            }
+        }
     
+    }
+    
+    @objc private func hoistOrHide(_ sender: AnyObject) {
+        guard tableView.numberOfSelectedRows > 0 else { return }
+        guard let collection = notenikIO?.collection else { return }
+        
+        guard collection.markFieldDef != nil else {
+            return
+        }
+
+        // Get the full range of selected notes.
+        let (lowIndex, highIndex) = getRangeOfSelectedRows()
+        guard lowIndex >= 0 else { return }
+        // Make sure the user clicked somewhere within this range.
+        if tableView.clickedRow > highIndex || tableView.clickedRow < lowIndex {
+            return
+        }
+        collectionWindowController!.markOrUnmark(startingRow: lowIndex,
+                                                 endingRow: highIndex,
+                                                 hoisting: true)
+    }
+    
+    @objc private func markOrUnmark(_ sender: AnyObject) {
+        guard tableView.numberOfSelectedRows > 0 else { return }
+        guard let collection = notenikIO?.collection else { return }
+        
+        guard collection.markFieldDef != nil else {
+            return
+        }
+
+        // Get the full range of selected notes.
+        let (lowIndex, highIndex) = getRangeOfSelectedRows()
+        guard lowIndex >= 0 else { return }
+        // Make sure the user clicked somewhere within this range.
+        if tableView.clickedRow > highIndex || tableView.clickedRow < lowIndex {
+            return
+        }
+        collectionWindowController!.markOrUnmark(startingRow: lowIndex, endingRow: highIndex)
     }
     
     @objc private func exportToICal(_ sender: AnyObject) {
@@ -743,6 +808,8 @@ class NoteListViewController:   NSViewController,
                 modifyCellView(cellView: cellView, value: note.dateModifiedValue, mono: true)
             } else if tableColumn?.title == "Date Picked" {
                 modifyCellView(cellView: cellView, value: note.datePickedValue, mono: true)
+            } else if tableColumn?.title == "Mk" {
+                modifyCellView(cellView: cellView, value: note.markStr, mono: true)
             } else if notenikIO != nil && notenikIO!.collection != nil {
                 if tableColumn?.title == notenikIO!.collection!.titleFieldDef.fieldLabel.properForm {
                     modifyCellView(cellView: cellView, value: note.getTitle(titleFormat: .plain))
@@ -872,113 +939,226 @@ class NoteListViewController:   NSViewController,
         guard let collection = notenikIO?.collection else { return }
         
         lnfCol1Title = ""
+        var columnIndex = 0
+        var marking = false
+        if notenikIO != nil {
+            if notenikIO!.collection?.markFieldDef != nil && !notenikIO!.filtering {
+                marking = true
+            }
+        }
         
         switch sortParm {
+
         case .title:
-            _ = addTitleColumn(at: 0)
-            trimColumns(to: 1)
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .seqPlusTitle:
             addSeqColumn(at: 0)
-            _ = addTitleColumn(at: 1)
-            trimColumns(to: 2)
+            columnIndex = 1
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .tasksByDate:
             addXColumn(at: 0)
             addDateColumn(at: 1)
+            columnIndex = 2
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
             if collection.outlineTabSetting != .withSeq {
-                addSeqColumn(at: 2)
-                _ = addTitleColumn(at: 3)
-                trimColumns(to: 4)
+                addSeqColumn(at: columnIndex)
+                columnIndex += 1
+                _ = addTitleColumn(at: columnIndex)
+                trimColumns(to: columnIndex + 1)
             } else {
-                _ = addTitleColumn(at: 2)
-                trimColumns(to: 3)
+                _ = addTitleColumn(at: columnIndex)
+                trimColumns(to: columnIndex + 1)
             }
         case .tasksBySeq:
             addXColumn(at: 0)
             addSeqColumn(at: 1)
             addDateColumn(at: 2)
-            _ = addTitleColumn(at: 3)
-            trimColumns(to: 4)
+            columnIndex = 3
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .tagsPlusTitle:
             addTagsColumn(at: 0)
             addStatusDigit(at: 1)
-            _ = addTitleColumn(at: 2)
+            columnIndex = 2
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .tagsPlusSeq:
             addTagsColumn(at: 0)
             addSeqColumn(at: 1)
-            _ = addTitleColumn(at: 2)
+            columnIndex = 2
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .author:
             _ = addAuthorColumn(at: 0)
-            var columns = 1
-            if collection.creatorFieldDef != collection.titleFieldDef {
-                _ = addTitleColumn(at: 1)
-                columns = 2
+            columnIndex = 1
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
             }
-            trimColumns(to: columns)
+            if collection.creatorFieldDef != collection.titleFieldDef {
+                _ = addTitleColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            trimColumns(to: columnIndex)
         case .dateAdded:
             addDateAddedColumn(at: 0)
-            _ = addTitleColumn(at: 1)
-            trimColumns(to: 2)
+            columnIndex = 1
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .dateModified:
             addDateModifiedColumn(at: 0)
-            _ = addTitleColumn(at: 1)
-            trimColumns(to: 2)
+            columnIndex = 1
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .datePicked:
             addDatePickedColumn(at: 0)
-            _ = addTitleColumn(at: 1)
-            trimColumns(to: 2)
-        case .datePlusSeq:
-            if collection.seqFieldDef == nil {
-                addDateColumn(at: 0)
-                _ = addTitleColumn(at: 1)
-            } else {
-                addDateColumn(at: 0)
-                addSeqColumn(at: 1)
-                _ = addTitleColumn(at: 2)
+            columnIndex = 1
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
             }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
+        case .datePlusSeq:
+            addDateColumn(at: 0)
+            columnIndex = 1
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            if collection.seqFieldDef != nil {
+                addSeqColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .rankSeqTitle:
             addRankColumn(at: 0)
             addSeqColumn(at: 1)
-            _ = addTitleColumn(at: 2)
-            trimColumns(to: 3)
+            columnIndex = 2
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .klassTitle:
             addKlassColumn(at: 0)
-            _ = addTitleColumn(at: 1)
-            trimColumns(to: 2)
+            columnIndex = 1
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .klassDateTitle:
             addKlassColumn(at: 0)
             addDateColumn(at: 1)
-            _ = addTitleColumn(at: 2)
-            trimColumns(to: 3)
+            columnIndex = 2
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .folderTitle:
             addFolderColumn(at: 0)
-            _ = addTitleColumn(at: 1)
-            trimColumns(to: 2)
+            columnIndex = 1
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .folderDateTitle:
             addFolderColumn(at: 0)
             addDateColumn(at: 1)
-            _ = addTitleColumn(at: 2)
-            trimColumns(to: 3)
+            columnIndex = 2
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .folderSeqTitle:
             addFolderColumn(at: 0)
             addSeqColumn(at: 1)
-            _ = addTitleColumn(at: 2)
-            trimColumns(to: 3)
+            columnIndex = 2
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         case .lastNameFirst:
             switch collection.lastNameFirstConfig {
             case .author:
                 lnfCol1Title = addAuthorColumn(at: 0)
-                _ = addTitleColumn(at: 1)
-                trimColumns(to: 2)
+                columnIndex = 1
+                if marking {
+                    addMarkColumn(at: columnIndex)
+                    columnIndex += 1
+                }
+                _ = addTitleColumn(at: columnIndex)
+                trimColumns(to: columnIndex + 1)
             case .person, .kindPlusPerson:
-                lnfCol1Title = addPersonColumn(at: 0)
-                trimColumns(to: 1)
+                columnIndex = 0
+                if marking {
+                    addMarkColumn(at: columnIndex)
+                    columnIndex += 1
+                }
+                lnfCol1Title = addPersonColumn(at: columnIndex)
+                trimColumns(to: columnIndex + 1)
             case .title, .kindPlusTitle:
-                lnfCol1Title = addTitleColumn(at: 0)
-                trimColumns(to: 1)
+                columnIndex = 0
+                if marking {
+                    addMarkColumn(at: columnIndex)
+                    columnIndex += 1
+                }
+                lnfCol1Title = addTitleColumn(at: columnIndex)
+                trimColumns(to: columnIndex + 1)
             }
         case .custom:
-            _ = addTitleColumn(at: 0)
-            trimColumns(to: 1)
+            columnIndex = 0
+            if marking {
+                addMarkColumn(at: columnIndex)
+                columnIndex += 1
+            }
+            _ = addTitleColumn(at: columnIndex)
+            trimColumns(to: columnIndex + 1)
         }
         tableView.reloadData()
     }
@@ -1064,6 +1244,14 @@ class NoteListViewController:   NSViewController,
             col = collection.columnWidths.getColumn(withTitle: "X")
         }
         addColumn(title: "X", strID: "x-column", at: desiredIndex, min: col.min, width: col.pref, max: col.max)
+    }
+    
+    func addMarkColumn(at desiredIndex: Int) {
+        var col = ColumnWidth(title: "Mk", min: 24, pref: 36, max: 48)
+        if let collection = notenikIO?.collection {
+            col = collection.columnWidths.getColumn(withTitle: "Mk")
+        }
+        addColumn(title: "Mk", strID: "mark-column", at: desiredIndex, min: col.min, width: col.pref, max: col.max)
     }
     
     func addStatusDigit(at desiredIndex: Int) {

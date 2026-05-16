@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 1/28/19.
-//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2026 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -27,6 +27,8 @@ class NoteTagsViewController: NSViewController,
     
     var shortcutMenu: NSMenu!
     
+    var markIndex = -1
+    
     /// Get or Set the Window Controller
     var window: CollectionWindowController? {
         get {
@@ -46,6 +48,7 @@ class NoteTagsViewController: NSViewController,
             guard notenikIO != nil && notenikIO!.collection != nil else {
                 return
             }
+            modShortcutMenuForCollection()
             outlineView.reloadData()
         }
     }
@@ -61,6 +64,73 @@ class NoteTagsViewController: NSViewController,
         shortcutMenu.addItem(NSMenuItem(title: "Launch Link", action: #selector(launchLinkForItem(_:)), keyEquivalent: ""))
         shortcutMenu.addItem(NSMenuItem(title: "Bulk Edit...", action: #selector(bulkEdit(_:)), keyEquivalent: ""))
         outlineView.menu = shortcutMenu
+    }
+    
+    /// Make modification sto the shortcut menu that are dependent on the nature of the collection.
+    func modShortcutMenuForCollection() {
+        
+        if markIndex >= 0 {
+            if shortcutMenu.numberOfItems > markIndex {
+                shortcutMenu.removeItem(at: markIndex)
+            }
+            markIndex = -1
+        }
+        
+        guard let collection = notenikIO?.collection else { return }
+        
+        if collection.markFieldDef != nil {
+            markIndex = shortcutMenu.numberOfItems
+            shortcutMenu.addItem(withTitle: "Mark/Unmark", action: #selector(markOrUnmark(_:)), keyEquivalent: "")
+        }
+    }
+    
+    @objc private func markOrUnmark(_ sender: AnyObject) {
+        
+        guard let io = notenikIO else { return }
+        guard let collection = io.collection else { return }
+        guard collection.markFieldDef != nil else { return }
+        guard outlineView.numberOfSelectedRows > 0 else { return }
+        guard let wc = collectionWindowController else { return }
+        
+        var clickedWithinSelected = false
+        for index in outlineView.selectedRowIndexes {
+            if outlineView.clickedRow == index {
+                clickedWithinSelected = true
+                break
+            }
+        }
+        
+        var selNotes: [Note] = []
+    
+        let item = outlineView.item(atRow: outlineView.clickedRow)
+        if let node = item as? TagsNode  {
+            if node.type == .tag {
+                for child in node.children {
+                    if child.type == .note {
+                        if let childNote = child.note {
+                            selNotes.append(childNote)
+                        }
+                    }
+                }
+            }
+        }
+        
+        if selNotes.isEmpty {
+            if clickedWithinSelected {
+                for index in outlineView.selectedRowIndexes {
+                    selectNoteAtRow(index, notes: &selNotes)
+                }
+            } else {
+                selectNoteAtRow(outlineView.clickedRow, notes: &selNotes)
+            }
+        }
+        guard !selNotes.isEmpty else { return }
+        let markSet = !selNotes[0].isMarked()
+        wc.markOrUnmark(notesToUpdate: selNotes,
+                        hoisting: true,
+                        markSet: markSet,
+                        noteIO: io)
+        
     }
     
     func reload() {
@@ -318,14 +388,23 @@ class NoteTagsViewController: NSViewController,
                 case .note:
                     if let note = node.note {
                         let sortParm = note.collection.sortParm
+                        var text = ""
                         if sortParm == .seqPlusTitle
                             || sortParm == .tasksBySeq
                             || sortParm == .datePlusSeq
                             || sortParm == .tagsPlusSeq {
-                            textField.stringValue = node.note!.getTitle(withSeq: true, full: true, sep: " - ", titleFormat: .plain)
+                            text = node.note!.getTitle(withSeq: true, full: true, sep: " - ", titleFormat: .plain)
                         } else {
-                            textField.stringValue = node.note!.title.getTitle(format: .plain)
+                            text = node.note!.title.getTitle(format: .plain)
                         }
+                        if note.collection.markFieldDef != nil {
+                            if let io = notenikIO {
+                                if !io.filtering {
+                                    text.append(note.markSuffix)
+                                }
+                            }
+                        }
+                        textField.stringValue = text
                     } else {
                         textField.stringValue = "???"
                     }

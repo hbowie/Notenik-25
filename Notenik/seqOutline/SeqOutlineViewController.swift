@@ -38,6 +38,8 @@ class SeqOutlineViewController: NSViewController,
     var newChildIndex = -1
     var newWithOptionsIndex = -1
     var seqModIndex = -1
+    var markIndex = -1
+    var hoistIndex = -1
     
     /// Get or Set the Window Controller
     var window: CollectionWindowController? {
@@ -136,10 +138,9 @@ class SeqOutlineViewController: NSViewController,
     @objc func editWithApp(_ sender: NSMenuItem) {
 
         guard let wc = collectionWindowController else { return }
-        let menuItem = sender
+        // let menuItem = sender
         guard let io = notenikIO else { return }
-        guard let collection = io.collection else { return }
-        guard let wc = collectionWindowController else { return }
+        // guard let collection = io.collection else { return }
         let row = outlineView.clickedRow
         guard row >= 0 else { return }
         guard let node = outlineView.item(atRow: row) as? OutlineNode2 else { return }
@@ -220,6 +221,20 @@ class SeqOutlineViewController: NSViewController,
             seqModIndex = -1
         }
         
+        if markIndex >= 0 {
+            if shortcutMenu.numberOfItems > markIndex {
+                shortcutMenu.removeItem(at: markIndex)
+            }
+            markIndex = -1
+        }
+        
+        if hoistIndex >= 0 {
+            if shortcutMenu.numberOfItems > hoistIndex {
+                shortcutMenu.removeItem(at: hoistIndex)
+            }
+            hoistIndex = -1
+        }
+        
         guard let collection = notenikIO?.collection else { return }
         
         if collection.seqFieldDef != nil
@@ -240,6 +255,16 @@ class SeqOutlineViewController: NSViewController,
             newWithOptionsIndex = shortcutMenu.numberOfItems
             addToShortcutMenu(actionType: .newWithOptions)
         }
+        
+        if collection.markFieldDef != nil {
+            if collection.sortBySeq {
+                hoistIndex = shortcutMenu.numberOfItems
+                shortcutMenu.addItem(withTitle: "Hoist/Hide", action: #selector(hoistOrHide(_:)), keyEquivalent: "")
+            } else {
+                markIndex = shortcutMenu.numberOfItems
+                shortcutMenu.addItem(withTitle: "Mark/Unmark", action: #selector(markOrUnmark(_:)), keyEquivalent: "")
+            }
+        }
     }
     
     /// Add an item to the shortcuts menu.
@@ -248,6 +273,36 @@ class SeqOutlineViewController: NSViewController,
                               action: #selector(takeShortcutAction(_:)),
                               keyEquivalent: "")
         shortcutMenu.addItem(item)
+    }
+    
+    @objc private func hoistOrHide(_ sender: AnyObject) {
+        guard outlineView.numberOfSelectedRows > 0 else { return }
+        guard let collection = notenikIO?.collection else { return }
+        
+        guard collection.markFieldDef != nil else {
+            return
+        }
+
+        // Get the full range of selected notes.
+        let (lowIndex, highIndex) = getRangeOfSelectedNotes(io: notenikIO!)
+        guard lowIndex >= 0 else { return }
+        collectionWindowController!.markOrUnmark(startingRow: lowIndex,
+                                                 endingRow: highIndex,
+                                                 hoisting: true)
+    }
+    
+    @objc private func markOrUnmark(_ sender: AnyObject) {
+        guard outlineView.numberOfSelectedRows > 0 else { return }
+        guard let collection = notenikIO?.collection else { return }
+        
+        guard collection.markFieldDef != nil else {
+            return
+        }
+
+        // Get the full range of selected notes.
+        let (lowIndex, highIndex) = getRangeOfSelectedNotes(io: notenikIO!)
+        guard lowIndex >= 0 else { return }
+        collectionWindowController!.markOrUnmark(startingRow: lowIndex, endingRow: highIndex)
     }
     
     /// Expand all the nodes in the outline so that all rows are visible.
@@ -569,19 +624,28 @@ class SeqOutlineViewController: NSViewController,
                 case .root:
                     textField.stringValue = notenikIO!.collection!.path
                 case .note:
+                    var text = ""
                     if let sortedNote = node.sortedNote {
                         if outlneTabSetting == .withSeq {
                             if sortedNote.note.collection.seqFormatter.isEmpty {
-                                textField.stringValue = sortedNote.getTitle(withSeq: true, formattedSeq: false, sep: " - ")
+                                text = sortedNote.getTitle(withSeq: true, formattedSeq: false, sep: " - ")
                             } else {
-                                textField.stringValue = sortedNote.getTitle(withSeq: true, formattedSeq: true, sep: " ")
+                                text = sortedNote.getTitle(withSeq: true, formattedSeq: true, sep: " ")
                             }
                         } else {
-                            textField.stringValue = sortedNote.getTitle(withSeq: false, sep: "")
+                            text = sortedNote.getTitle(withSeq: false, sep: "")
+                        }
+                        if sortedNote.note.collection.markFieldDef != nil {
+                            if let io = notenikIO {
+                                if !io.filtering {
+                                    text.append(sortedNote.note.markSuffix)
+                                }
+                            }
                         }
                     } else {
-                        textField.stringValue = "???"
+                        text = "???"
                     }
+                    textField.stringValue = text
                 }
                 textField.sizeToFit()
             }
