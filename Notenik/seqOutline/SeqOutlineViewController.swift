@@ -200,6 +200,20 @@ class SeqOutlineViewController: NSViewController,
     /// Make modification sto the shortcut menu that are dependent on the nature of the collection.
     func modShortcutMenuForCollection() {
         
+        if markIndex >= 0 {
+            if shortcutMenu.numberOfItems > markIndex {
+                shortcutMenu.removeItem(at: markIndex)
+            }
+            markIndex = -1
+        }
+        
+        if hoistIndex >= 0 {
+            if shortcutMenu.numberOfItems > hoistIndex {
+                shortcutMenu.removeItem(at: hoistIndex)
+            }
+            hoistIndex = -1
+        }
+        
         if newWithOptionsIndex >= 0 {
             if shortcutMenu.numberOfItems > newWithOptionsIndex {
                 shortcutMenu.removeItem(at: newWithOptionsIndex)
@@ -219,20 +233,6 @@ class SeqOutlineViewController: NSViewController,
                 shortcutMenu.removeItem(at: seqModIndex)
             }
             seqModIndex = -1
-        }
-        
-        if markIndex >= 0 {
-            if shortcutMenu.numberOfItems > markIndex {
-                shortcutMenu.removeItem(at: markIndex)
-            }
-            markIndex = -1
-        }
-        
-        if hoistIndex >= 0 {
-            if shortcutMenu.numberOfItems > hoistIndex {
-                shortcutMenu.removeItem(at: hoistIndex)
-            }
-            hoistIndex = -1
         }
         
         guard let collection = notenikIO?.collection else { return }
