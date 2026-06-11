@@ -35,6 +35,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
     
     @IBOutlet weak var outlineTabMenu: NSMenu!
     
+    @IBOutlet weak var filteringMenu: NSMenu!
+    
     var appPrefs:     AppPrefs?
     var displayPrefs: DisplayPrefs?
     var juggler: CollectionJuggler?
@@ -95,6 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         juggler!.sortMenu = sortMenu
         juggler!.displayModeMenu = displayModeMenu
         juggler!.outlineTabMenu = outlineTabMenu
+        juggler!.filteringMenu = filteringMenu
         juggler!.editAppMenu = editAppMenu
         recentDocumentURLs = docController!.recentDocumentURLs
         stage = "2"

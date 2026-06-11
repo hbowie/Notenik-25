@@ -34,10 +34,11 @@ class CollectionJuggler: NSObject {
     let osdir     = OpenSaveDirectory.shared
     private let editingAppList = EditingAppList()
     
-    var sortMenu: NSMenu!
-    var displayModeMenu: NSMenu!
-    var outlineTabMenu: NSMenu!
-    var editAppMenu: NSMenu!
+    var sortMenu:           NSMenu!
+    var displayModeMenu:    NSMenu!
+    var outlineTabMenu:     NSMenu!
+    var filteringMenu:      NSMenu!
+    var editAppMenu:        NSMenu!
     
     var menuBarExtra: NSStatusItem?
     var extraMenu: NSMenu?
@@ -1651,6 +1652,7 @@ class CollectionJuggler: NSObject {
             updateSortMenu()
             updateDisplayModeMenu()
             updateShowHideOutline()
+            updateFiltering()
         }
     }
     var _lastWC: CollectionWindowController? = nil
@@ -1802,6 +1804,36 @@ class CollectionJuggler: NSObject {
                 i += 1
             }
         }
+    }
+    
+    func updateFiltering() {
+        guard let io = _lastWC?.io else { return }
+        guard let collection = io.collection else { return }
+        filteringMenu.autoenablesItems = false
+        if collection.markFieldDef == nil {
+            for item in filteringMenu.items {
+                item.state = .off
+                item.isEnabled = false
+            }
+        } else {
+            var selIndex = 0
+            if io.filterStatus == .showMarked {
+                selIndex = 1
+            } else if io.filterStatus == .showUnmarked {
+                selIndex = 2
+            }
+            var i = 0
+            for item in filteringMenu.items {
+                if i == selIndex {
+                    item.state = .on
+                } else {
+                    item.state = .off
+                }
+                item.isEnabled = true
+                i += 1
+            }
+        }
+
     }
     
     func getEditingAppList() -> EditingAppList {

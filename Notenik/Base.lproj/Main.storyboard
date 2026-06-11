@@ -577,6 +577,34 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
+                                        <menuItem title="Filter" id="eh1-tD-Uhf">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Filter" autoenablesItems="NO" id="gSQ-RV-NFm">
+                                                <items>
+                                                    <menuItem title="Show All" id="2XX-Ws-kMc">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setFiltering:" target="Ady-hI-5gd" id="5bg-fp-LaX"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Show Marked Only" id="UGm-y2-Jb3">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setFiltering:" target="Ady-hI-5gd" id="mW3-na-9i6"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Show Unmarked Only" id="yln-Fx-yDf">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setFiltering:" target="Ady-hI-5gd" id="A8U-pf-38T"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                                <connections>
+                                                    <outlet property="delegate" destination="Voe-Tx-rLC" id="jR4-X0-MgD"/>
+                                                </connections>
+                                            </menu>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="6aQ-3d-Opo"/>
                                         <menuItem title="Copy Notenik URL for Collection..." id="Fbs-oD-G8K">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -1280,12 +1308,18 @@ CA
                                                 <action selector="presentationToggleWith_sender:" target="Ady-hI-5gd" id="hQZ-gQ-u7i"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Spoken Script Toggle" keyEquivalent="p" id="mMd-GN-yyg">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="toggleSpokenScript:" target="Ady-hI-5gd" id="Vdy-Kf-rFl"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Transform" id="8g3-jE-Mfe" userLabel="Transform">
+                            <menuItem title="Odds" id="8g3-jE-Mfe" userLabel="Transform">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Transform" id="rg3-XE-Ub4">
+                                <menu key="submenu" title="Odds" id="rg3-XE-Ub4">
                                     <items>
                                         <menuItem title="Mirror All Notes" id="FsU-Yb-h7i">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -1495,6 +1529,7 @@ CA
                         <outlet property="displayModeMenu" destination="rr0-v0-ht6" id="K85-tn-Q6i"/>
                         <outlet property="editAppMenu" destination="3A4-gg-MYx" id="rr3-81-MoM"/>
                         <outlet property="favsToHTML" destination="eJv-R5-0H2" id="RKS-zi-0TK"/>
+                        <outlet property="filteringMenu" destination="gSQ-RV-NFm" id="hHx-Go-WWf"/>
                         <outlet property="iCloudMenu" destination="zeP-2v-kFe" id="PRu-Cu-We2"/>
                         <outlet property="navAdvSearchItem" destination="dRa-3A-SnJ" id="lvV-93-h5d"/>
                         <outlet property="navFindAgainItem" destination="Sis-fg-Ibk" id="tld-89-TWt"/>
@@ -2268,7 +2303,7 @@ CA
                                         </tableView>
                                     </subviews>
                                 </clipView>
-                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.97715053763440862" horizontal="YES" id="CTE-sV-ET2">
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="CTE-sV-ET2">
                                     <rect key="frame" x="1" y="35" width="8" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -2307,13 +2342,13 @@ CA
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTK-bV-70K">
-                                <rect key="frame" x="0.0" y="0.0" width="479" height="19"/>
+                                <rect key="frame" x="0.0" y="0.0" width="479" height="299"/>
                                 <clipView key="contentView" id="caU-8Q-uow">
-                                    <rect key="frame" x="1" y="1" width="477" height="17"/>
+                                    <rect key="frame" x="1" y="1" width="477" height="297"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="fwC-s0-qs1" id="Zqh-F5-OQn">
-                                            <rect key="frame" x="0.0" y="0.0" width="477" height="19"/>
+                                        <outlineView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="fwC-s0-qs1" id="Zqh-F5-OQn">
+                                            <rect key="frame" x="0.0" y="0.0" width="477" height="297"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2369,7 +2404,7 @@ CA
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="AXZ-AI-824">
-                                    <rect key="frame" x="463" y="1" width="15" height="1"/>
+                                    <rect key="frame" x="461" y="1" width="17" height="2"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>

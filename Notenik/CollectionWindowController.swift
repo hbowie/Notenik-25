@@ -82,6 +82,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     let bulkEditStoryboard:        NSStoryboard = NSStoryboard(name: "BulkEdit", bundle: nil)
     let seqOutlineStoryboard:      NSStoryboard = NSStoryboard(name: "SeqOutline", bundle: nil)
     let wikiQuoteStoryboard:       NSStoryboard = NSStoryboard(name: "WikiQuote", bundle: nil)
+    let spokenStoryboard:          NSStoryboard = NSStoryboard(name: "Spoken", bundle: nil)
+    
+    var spokenScriptEngaged        = false
     
     // Has the user requested the opportunity to add a new Note to the Collection?
     var newNoteRequested = false
@@ -115,6 +118,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             var noteTabs: NoteTabsViewController?
                 var displayItem: NSTabViewItem?
                     var displayVC: NoteDisplayViewController?
+                    var spokenVC: SpokenViewController? = nil
                 var editItem: NSTabViewItem?
                     var editVC: NoteEditViewController?
     
@@ -227,6 +231,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             buildReportsActionMenu()
             
             juggler.updateShowHideOutline()
+            
+            juggler.updateFiltering()
             
             if notenikIO != nil {
                 if let collection = notenikIO!.collection {
@@ -607,6 +613,78 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         viewCoordinator.removeView(viewID: SeqOutlineViewController.staticViewID)
         tabs.selectedTabViewItemIndex = 0
         return true
+    }
+    
+    @IBAction func setFiltering(_ sender: Any) {
+        
+        // See if we're ready to proceed.
+        guard let io = notenikIO else { return }
+        guard io.collectionOpen else { return }
+        guard let collection = io.collection else { return }
+        guard collection.markFieldDef != nil else { return }
+        guard let menuItem = sender as? NSMenuItem else { return }
+        
+        // Determine which setting is being requested.
+        var turningOn = false
+        var requestedFilter: FilterIO = .showAll
+        switch menuItem.title {
+        case "Show All":
+            turningOn = false
+        case "Show Marked Only":
+            turningOn = true
+            requestedFilter = .showMarked
+        case "Show Unmarked Only":
+            turningOn = true
+            requestedFilter = .showUnmarked
+        default:
+            print("Unrecognized Filter Menu Item Title of \(menuItem.title)")
+            return
+        }
+        
+        let (selNote, _) = io.getSelectedNote()
+        
+        var success = false
+        if io.filterStatus.filtering && !turningOn {
+            io.stopFiltering()
+            success = true
+        } else if turningOn {
+            let filtered = io.startFiltering(filterIO: requestedFilter)
+            if filtered > 0 {
+                success = true
+            }
+        }
+        
+        var positioned = false
+        var focusNote: SortedNote?
+        var focusPosition = NotePosition()
+        
+        if success {
+            assignWindowTitle()
+            juggler.updateFiltering()
+        }
+        
+        if success && selNote != nil {
+            let newPosition = io.positionOfNote(selNote!)
+            if newPosition.valid {
+                (focusNote, focusPosition) = io.selectNote(at: newPosition.index)
+                if focusPosition.valid {
+                    positioned = true
+                }
+            }
+        }
+        if !positioned {
+            let (_, firstPosition) = io.firstNote()
+            if firstPosition.valid {
+                (focusNote, focusPosition) = io.selectNote(at: firstPosition.index)
+            }
+        }
+        if focusNote != nil && focusPosition.valid {
+            _ = viewCoordinator.focusOn(initViewID: collectionViewID,
+                                        note: focusNote!.note,
+                                        position: focusPosition,
+                                        row: -1, searchPhrase: "",
+                                        withUpdates: true)
+        }
     }
     
     @IBAction func increaseBodyEditSpace(_ sender: Any) {
@@ -1402,7 +1480,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = noteIO.modNote(oldNote: noteToUpdate, newNote: modNote)
         }
         
-        communicateSuccess("Marking/Unmarking completed")
+        // communicateSuccess("Marking/Unmarking completed")
         
         finishBatchOperation(positionKey: firstNote.noteID.getBasis())
     }
@@ -4511,6 +4589,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         if displayVC != nil {
             displayVC!.display(sortedNote: SortedNote(note: updatedNote), io: notenikIO!)
         }
+        if spokenVC != nil {
+            spokenVC!.display(note: updatedNote)
+        }
         if updatedNote.collection.mirror != nil {
             mirrorNote(updatedNote)
         }
@@ -4578,13 +4659,26 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     func assignWindowTitle() {
         guard let collection = notenikIO?.collection else { return }
+        guard let io = notenikIO else { return }
         var suffix = ""
-        if collection.essential && collection.general {
-            suffix = " (E+G)"
-        } else if collection.essential {
-            suffix = " (E)"
-        } else if collection.general {
-            suffix = " (G)"
+        if collection.essential {
+            suffix = "E"
+        }
+        if collection.general {
+            if !suffix.isEmpty {
+                suffix.append("+")
+            }
+            suffix.append("G")
+        }
+        if io.filterStatus.filtering {
+            if !suffix.isEmpty {
+                suffix.append(" ")
+            }
+            suffix.append("Filtered")
+        }
+        if !suffix.isEmpty {
+            suffix.insert(contentsOf: " (", at: suffix.startIndex)
+            suffix.append(")")
         }
         window!.title = collection.userFacingLabel() + suffix
     }
@@ -4615,7 +4709,26 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     @IBAction func textEditTemplate(_ sender: Any) {
         guard let nnkIO = guardForCollectionAction() else { return }
         if let templateURL = nnkIO.collection!.lib.getURL(type: .template) {
-            NSWorkspace.shared.open(templateURL)
+            logInfo(msg: "Attempting to text edit template URL of '\(templateURL)'")
+            // let ok = NSWorkspace.shared.open(templateURL)
+            // logInfo(msg: "Template URL Open OK? \(ok)")
+            let openConfiguration = NSWorkspace.OpenConfiguration()
+            openConfiguration.activates = true
+            openConfiguration.promptsUserIfNeeded = true
+            openConfiguration.allowsRunningApplicationSubstitution = true
+            NSWorkspace.shared.open(
+                templateURL,
+                configuration: openConfiguration, // No special options
+                completionHandler: { (appRef, error) in
+                    if let error = error {
+                        print("Failed to open URL: \(error.localizedDescription)")
+                    } else if appRef != nil {
+                        print("URL opened successfully!")
+                    } else {
+                        print("Unknown error opening URL.")
+                    }
+                }
+            )
         }
     }
     
@@ -4989,6 +5102,74 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
         noteIO.persistCollectionInfo()
         reloadCollection(self)
+    }
+    
+    @IBAction func toggleSpokenScript(_ sender: Any) {
+        
+        guard let noteIO = notenikIO else { return }
+        guard noteIO.collectionOpen else { return }
+        guard let collection = noteIO.collection else { return }
+        
+        if spokenScriptEngaged {
+            toggleSpokenSciptOff()
+        } else {
+            toggleSpokenScriptOn(io: noteIO, collection: collection)
+        }
+    }
+    
+    func toggleSpokenScriptOn(io: NotenikIO, collection: NoteCollection) {
+        
+        print("  - firing up spoken script window")
+        
+        guard collection.spokenScriptFieldDef != nil else {
+            communicateError("Collection does not define a spoken script field", alert: true)
+            return
+        }
+        
+        guard let spokenScriptController = self.spokenStoryboard.instantiateController(withIdentifier: "spokenWC") as? SpokenWindowController else {
+            Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                              category: "CollectionWindowController",
+                              level: .fault,
+                              message: "Couldn't get a Spoken Script Window Controller!")
+            return
+        }
+
+        guard let vc = spokenScriptController.contentViewController as? SpokenViewController else { return }
+        
+        spokenVC = vc
+        spokenScriptController.showWindow(self)
+        vc.collectionController = self
+        vc.wc = spokenScriptController
+        vc.io = io
+        
+        viewCoordinator.addView(newView: vc)
+        
+        var (selected, position) = io.getSelectedNote()
+        if selected == nil {
+            (selected, position) = notenikIO!.firstNote()
+        }
+        if selected != nil {
+            _ = viewCoordinator.focusOn(initViewID: collectionViewID,
+                                        sortedNote: selected,
+                                        position: position,
+                                        row: -1,
+                                        searchPhrase: nil)
+        }
+        
+        spokenScriptEngaged = true
+    }
+    
+    func closingSpokenWindow() {
+        spokenScriptEngaged = false
+        guard spokenVC != nil else { return }
+        viewCoordinator.removeView(viewID: spokenVC!.viewID)
+        spokenVC = nil
+    }
+    
+    func toggleSpokenSciptOff() {
+        print(" - shutting down spoken script window")
+        spokenVC = nil
+        spokenScriptEngaged = false
     }
     
     // ----------------------------------------------------------------------------------

@@ -41,7 +41,6 @@ class NoteListViewController:   NSViewController,
     var renumberDisplaySeqIndex = -1
     var assignAttributionIndex = -1
     var markIndex = -1
-    var hoistIndex = -1
     
     var window: CollectionWindowController? {
         get {
@@ -193,20 +192,12 @@ class NoteListViewController:   NSViewController,
     
     func modShortcutMenuForCollection() {
         
-        if hoistIndex >= 0 {
-            if shortcutMenu.numberOfItems > hoistIndex {
-                shortcutMenu.removeItem(at: hoistIndex)
-            }
-            hoistIndex = -1
-        }
-        
         if markIndex >= 0 {
             if shortcutMenu.numberOfItems > markIndex {
                 shortcutMenu.removeItem(at: markIndex)
             }
             markIndex = -1
         }
-        
         
         if assignAttributionIndex >= 0 {
             if shortcutMenu.numberOfItems > assignAttributionIndex {
@@ -273,13 +264,8 @@ class NoteListViewController:   NSViewController,
         }
         
         if collection.markFieldDef != nil {
-            if collection.sortBySeq {
-                hoistIndex = shortcutMenu.numberOfItems
-                shortcutMenu.addItem(withTitle: "Hoist/Hide", action: #selector(hoistOrHide(_:)), keyEquivalent: "")
-            } else {
-                markIndex = shortcutMenu.numberOfItems
-                shortcutMenu.addItem(withTitle: "Mark/Unmark", action: #selector(markOrUnmark(_:)), keyEquivalent: "")
-            }
+            markIndex = shortcutMenu.numberOfItems
+            shortcutMenu.addItem(withTitle: "Mark/Unmark", action: #selector(markOrUnmark(_:)), keyEquivalent: "")
         }
     
     }
@@ -942,7 +928,7 @@ class NoteListViewController:   NSViewController,
         var columnIndex = 0
         var marking = false
         if notenikIO != nil {
-            if notenikIO!.collection?.markFieldDef != nil && !notenikIO!.filtering {
+            if notenikIO!.collection?.markFieldDef != nil /* && !notenikIO!.filtering */ {
                 marking = true
             }
         }

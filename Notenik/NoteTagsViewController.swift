@@ -399,9 +399,9 @@ class NoteTagsViewController: NSViewController,
                         }
                         if note.collection.markFieldDef != nil {
                             if let io = notenikIO {
-                                if !io.filtering {
+                                // if !io.filtering {
                                     text.append(note.markSuffix)
-                                }
+                                // }
                             }
                         }
                         textField.stringValue = text

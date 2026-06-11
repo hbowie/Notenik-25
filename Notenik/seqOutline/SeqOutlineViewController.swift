@@ -39,7 +39,6 @@ class SeqOutlineViewController: NSViewController,
     var newWithOptionsIndex = -1
     var seqModIndex = -1
     var markIndex = -1
-    var hoistIndex = -1
     
     /// Get or Set the Window Controller
     var window: CollectionWindowController? {
@@ -207,13 +206,6 @@ class SeqOutlineViewController: NSViewController,
             markIndex = -1
         }
         
-        if hoistIndex >= 0 {
-            if shortcutMenu.numberOfItems > hoistIndex {
-                shortcutMenu.removeItem(at: hoistIndex)
-            }
-            hoistIndex = -1
-        }
-        
         if newWithOptionsIndex >= 0 {
             if shortcutMenu.numberOfItems > newWithOptionsIndex {
                 shortcutMenu.removeItem(at: newWithOptionsIndex)
@@ -257,13 +249,8 @@ class SeqOutlineViewController: NSViewController,
         }
         
         if collection.markFieldDef != nil {
-            if collection.sortBySeq {
-                hoistIndex = shortcutMenu.numberOfItems
-                shortcutMenu.addItem(withTitle: "Hoist/Hide", action: #selector(hoistOrHide(_:)), keyEquivalent: "")
-            } else {
-                markIndex = shortcutMenu.numberOfItems
-                shortcutMenu.addItem(withTitle: "Mark/Unmark", action: #selector(markOrUnmark(_:)), keyEquivalent: "")
-            }
+            markIndex = shortcutMenu.numberOfItems
+            shortcutMenu.addItem(withTitle: "Mark/Unmark", action: #selector(markOrUnmark(_:)), keyEquivalent: "")
         }
     }
     
@@ -302,7 +289,7 @@ class SeqOutlineViewController: NSViewController,
         // Get the full range of selected notes.
         let (lowIndex, highIndex) = getRangeOfSelectedNotes(io: notenikIO!)
         guard lowIndex >= 0 else { return }
-        collectionWindowController!.markOrUnmark(startingRow: lowIndex, endingRow: highIndex)
+        collectionWindowController!.markOrUnmark(startingRow: lowIndex, endingRow: highIndex, hoisting: true)
     }
     
     /// Expand all the nodes in the outline so that all rows are visible.
@@ -637,9 +624,9 @@ class SeqOutlineViewController: NSViewController,
                         }
                         if sortedNote.note.collection.markFieldDef != nil {
                             if let io = notenikIO {
-                                if !io.filtering {
+                                // if !io.filtering {
                                     text.append(sortedNote.note.markSuffix)
-                                }
+                                // }
                             }
                         }
                     } else {

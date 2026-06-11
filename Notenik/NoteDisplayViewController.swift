@@ -119,6 +119,7 @@ class NoteDisplayViewController: NSViewController,
         }
     }
     
+    /// Override method from NSResponder. 
     override func keyDown(with event: NSEvent) {
         
         guard wc != nil else {

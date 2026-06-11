@@ -35,6 +35,7 @@ class ExportViewController: NSViewController {
     let webBookSite = "Web Book as Site"
     let webBookEPUB = "Web Book as EPUB"
     let webPresentation = "Web Presentation"
+    let iaPresenter = "iA Presenter"
     
     let osdir     = OpenSaveDirectory.shared
     
@@ -114,6 +115,7 @@ class ExportViewController: NSViewController {
         formatPopup.addItem(withTitle: webBookSite)
         formatPopup.addItem(withTitle: webBookEPUB)
         formatPopup.addItem(withTitle: webPresentation)
+        formatPopup.addItem(withTitle: iaPresenter)
         startOfExportScripts = formatPopup.numberOfItems
         formatPopup.selectItem(at: 0)
         
@@ -182,6 +184,9 @@ class ExportViewController: NSViewController {
                 splitTagsCheckBox.state = .off
             case webPresentation:
                 fileExtCombo.selectItem(withObjectValue: html)
+                splitTagsCheckBox.state = .off
+            case iaPresenter:
+                fileExtCombo.selectItem(withObjectValue: md)
                 splitTagsCheckBox.state = .off
             default:
                 break
@@ -253,6 +258,8 @@ class ExportViewController: NSViewController {
                 publishWebPresentation()
                 window.close()
                 return
+            case iaPresenter:
+                format = .iaPresenter
             default:
                 format = .commaSeparated
             }
