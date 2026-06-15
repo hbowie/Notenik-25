@@ -83,8 +83,11 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     let seqOutlineStoryboard:      NSStoryboard = NSStoryboard(name: "SeqOutline", bundle: nil)
     let wikiQuoteStoryboard:       NSStoryboard = NSStoryboard(name: "WikiQuote", bundle: nil)
     let spokenStoryboard:          NSStoryboard = NSStoryboard(name: "Spoken", bundle: nil)
+    let presentStoryboard:         NSStoryboard = NSStoryboard(name: "Present", bundle: nil)
     
     var spokenScriptEngaged        = false
+    
+    var presentationEngaged        = false
     
     // Has the user requested the opportunity to add a new Note to the Collection?
     var newNoteRequested = false
@@ -119,6 +122,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 var displayItem: NSTabViewItem?
                     var displayVC: NoteDisplayViewController?
                     var spokenVC: SpokenViewController? = nil
+                    var presentVC: PresentViewController? = nil
                 var editItem: NSTabViewItem?
                     var editVC: NoteEditViewController?
     
@@ -247,6 +251,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     override func windowDidLoad() {
         super.windowDidLoad()
         viewCoordinator = CollectionViewCoordinator(collectionWindowController: self)
+        auxWindows = []
         shareButton.sendAction(on: .leftMouseDown)
         getWindowComponents()
         juggler.registerWindow(window: self)
@@ -268,6 +273,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     }
     
     func windowWillClose() {
+        closeAuxWindows()
         juggler.windowClosing(wc: self)
     }
     
@@ -287,6 +293,12 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             tempIO.tempCleanup()
         }
     }
+    
+    // -----------------------------------------------------------
+    //
+    // MARK: Handle window size and position.
+    //
+    // -----------------------------------------------------------
     
     /// Save position of window as a string by concatenating a series of formatted doubles.
     func saveNumbers() -> String {
@@ -412,8 +424,112 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
+    // -----------------------------------------------------------
+    //
+    // MARK: Keep track of auxiliary windows
+    //
+    // -----------------------------------------------------------
+    
+    var auxWindows: [NSWindow?] = []
+    
+    func addAuxWindow(_ window: NSWindow) {
+        for existingWindow in auxWindows {
+            if existingWindow != nil {
+                if existingWindow == window {
+                    return
+                }
+            }
+        }
+        auxWindows.append(window)
+    }
+    
+    func removeAuxWindow(_ window: NSWindow) {
+        var i = 0
+        for existingWindow in auxWindows {
+            if existingWindow != nil {
+                if existingWindow == window {
+                    auxWindows.remove(at: i)
+                    return
+                }
+            }
+            i += 1
+        }
+    }
+    
+    func closeAuxWindows() {
+        for existingWindow in auxWindows {
+            if existingWindow != nil {
+                existingWindow!.close()
+            }
+        }
+        auxWindows.removeAll()
+    }
+    
+    /// Show a separate window for a presentation.
+    @IBAction func showPresentationWindow(_ sender: Any) {
+        guard !presentationEngaged else { return }
+        guard let io = notenikIO else { return }
+        guard io.collectionOpen else { return }
+        guard let collection = io.collection else { return }
+        guard collection.seqFieldDef != nil else { return }
+        if collection.sortParm != .seqPlusTitle {
+            setSortParm(.seqPlusTitle)
+        }
+        if collection.displayMode != .presentation {
+            setDisplayTo(.presentation)
+        }
+        
+        guard let presentController = self.presentStoryboard.instantiateController(withIdentifier: "presentWC") as? PresentWindowController else {
+            Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                              category: "CollectionWindowController",
+                              level: .fault,
+                              message: "Couldn't get a Presentation Window Controller!")
+            return
+        }
+
+        guard let vc = presentController.contentViewController as? PresentViewController else {
+            Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                              category: "CollectionWindowController",
+                              level: .fault,
+                              message: "Couldn't get a Presentation View Controller!")
+            return
+        }
+        
+        presentVC = vc
+        presentController.showWindow(self)
+        vc.collectionController = self
+        vc.wc = presentController
+        vc.io = io
+        
+        viewCoordinator.addView(newView: vc)
+        guard presentController.window != nil else { return }
+        addAuxWindow(presentController.window!)
+        
+        var (selected, position) = io.getSelectedNote()
+        if selected == nil {
+            (selected, position) = notenikIO!.firstNote()
+        }
+        if selected != nil {
+            _ = viewCoordinator.focusOn(initViewID: collectionViewID,
+                                        sortedNote: selected,
+                                        position: position,
+                                        row: -1,
+                                        searchPhrase: nil)
+        }
+        
+        presentationEngaged = true
+    }
+    
+    func closingPresentWindow() {
+        presentationEngaged = false
+        guard presentVC != nil else { return }
+        viewCoordinator.removeView(viewID: presentVC!.viewID)
+        presentVC = nil
+    }
+    
     @IBAction func presentationToggle(_sender: Any) {
         guard let collection = notenikIO?.collection else { return }
+        guard collection.seqFieldDef != nil else { return }
         if collection.sortParm != .seqPlusTitle {
             setSortParm(.seqPlusTitle)
         }
@@ -4592,6 +4708,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         if spokenVC != nil {
             spokenVC!.display(note: updatedNote)
         }
+        if presentVC != nil {
+            presentVC!.display(note: updatedNote)
+        }
         if updatedNote.collection.mirror != nil {
             mirrorNote(updatedNote)
         }
@@ -4722,9 +4841,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 completionHandler: { (appRef, error) in
                     if let error = error {
                         print("Failed to open URL: \(error.localizedDescription)")
-                    } else if appRef != nil {
-                        print("URL opened successfully!")
-                    } else {
+                    } else if appRef == nil {
                         print("Unknown error opening URL.")
                     }
                 }
@@ -5143,6 +5260,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         vc.io = io
         
         viewCoordinator.addView(newView: vc)
+        guard spokenScriptController.window != nil else { return }
+        addAuxWindow(spokenScriptController.window!)
         
         var (selected, position) = io.getSelectedNote()
         if selected == nil {
@@ -5167,9 +5286,65 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     }
     
     func toggleSpokenSciptOff() {
-        print(" - shutting down spoken script window")
+        logInfo(msg: "Shutting down spoken script window")
         spokenVC = nil
         spokenScriptEngaged = false
+    }
+
+    @IBAction func togglePresent(_ sender: Any) {
+        
+        guard let noteIO = notenikIO else { return }
+        guard noteIO.collectionOpen else { return }
+        guard let collection = noteIO.collection else { return }
+        
+        if presentationEngaged {
+            togglePresentOff()
+        } else {
+            togglePresentOn(io: noteIO, collection: collection)
+        }
+    }
+    
+    func togglePresentOn(io: NotenikIO, collection: NoteCollection) {
+        
+        logInfo(msg: "Firing up presentation window")
+        
+        guard let presentController = self.presentStoryboard.instantiateController(withIdentifier: "presentWC") as? PresentWindowController else {
+            Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                              category: "CollectionWindowController",
+                              level: .fault,
+                              message: "Couldn't get a Presentation Window Controller!")
+            return
+        }
+
+        guard let vc = presentController.contentViewController as? PresentViewController else { return }
+        
+        presentVC = vc
+        presentController.showWindow(self)
+        vc.collectionController = self
+        vc.wc = presentController
+        vc.io = io
+        
+        viewCoordinator.addView(newView: vc)
+        
+        var (selected, position) = io.getSelectedNote()
+        if selected == nil {
+            (selected, position) = notenikIO!.firstNote()
+        }
+        if selected != nil {
+            _ = viewCoordinator.focusOn(initViewID: collectionViewID,
+                                        sortedNote: selected,
+                                        position: position,
+                                        row: -1,
+                                        searchPhrase: nil)
+        }
+        
+        presentationEngaged = true
+    }
+    
+    func togglePresentOff() {
+        logInfo(msg: "Shutting down presentation window")
+        presentVC = nil
+        presentationEngaged = false
     }
     
     // ----------------------------------------------------------------------------------

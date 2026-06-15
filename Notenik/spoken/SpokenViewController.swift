@@ -77,6 +77,7 @@ class SpokenViewController: NSViewController,
         saveNumbers()
         super.viewWillDisappear()
         if collectionController != nil {
+            collectionController!.removeAuxWindow(wc.window!)
             collectionController!.closingSpokenWindow()
         }
     }
@@ -258,6 +259,7 @@ class SpokenViewController: NSViewController,
                                    note: note)
         code.append(mdResults.html)
          */
+         
         
         if note.hasSpokenScript {
             // code.horizontalRule()
@@ -273,6 +275,8 @@ class SpokenViewController: NSViewController,
                                        noteFileName: note.noteID.commonFileName,
                                        note: note)
             code.append(mdResults.html)
+        } else {
+            code.paragraph(text: "No Spoken script for this slide")
         }
         
         code.finishMain()

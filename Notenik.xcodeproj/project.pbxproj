@@ -611,6 +611,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		9C6287612FDB60CB00DBE6D9 /* present */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = present; sourceTree = "<group>"; };
 		9C9E89B92D6F903C0017FA69 /* clone */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = clone; sourceTree = "<group>"; };
 		9CA5045D2E05DFFE00D561AB /* sync */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = sync; sourceTree = "<group>"; };
 		9CC3473D2FC23F5400E1B1D3 /* spoken */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = spoken; sourceTree = "<group>"; };
@@ -875,6 +876,7 @@
 				9C10831225AA66A8004B33CA /* news */,
 				9C617AE027DBDBD000ACEC8A /* notepicker */,
 				9C832A00224ABDBD007DA6FC /* prefs */,
+				9C6287612FDB60CB00DBE6D9 /* present */,
 				9C66C88A2881C9CD001F5E2A /* queryBuilder */,
 				9C674C1B288F3B120035E612 /* queryOutput */,
 				9CCE7C61264AE8AB003818DF /* quick */,
@@ -1284,6 +1286,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				9C6287612FDB60CB00DBE6D9 /* present */,
 				9C9E89B92D6F903C0017FA69 /* clone */,
 				9CA5045D2E05DFFE00D561AB /* sync */,
 				9CC3473D2FC23F5400E1B1D3 /* spoken */,
@@ -1970,7 +1973,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 993;
+				CURRENT_PROJECT_VERSION = 995;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1986,7 +1989,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 19.0.9;
+				MARKETING_VERSION = 19.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2004,7 +2007,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 993;
+				CURRENT_PROJECT_VERSION = 995;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2020,7 +2023,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 19.0.9;
+				MARKETING_VERSION = 19.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

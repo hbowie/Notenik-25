@@ -7,43 +7,43 @@
     </dependencies>
     <scenes>
         <!--Window Controller-->
-        <scene sceneID="z6T-Nj-BGV">
+        <scene sceneID="JXZ-tA-FfR">
             <objects>
-                <windowController storyboardIdentifier="spokenWC" id="knq-TY-1d7" customClass="SpokenWindowController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="Speaker's Script" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="Dcc-M0-Jrs">
+                <windowController storyboardIdentifier="presentWC" id="sAq-Dh-QVq" customClass="PresentWindowController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Presentation" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="WNf-oP-osK">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-                        <windowPositionMask key="initialPositionMask" leftStrut="YES" topStrut="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="425" y="462" width="480" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1410"/>
                         <value key="minSize" type="size" width="480" height="270"/>
-                        <view key="contentView" id="fPu-Py-ODY">
+                        <view key="contentView" id="ECH-XL-lbf">
                             <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </view>
                         <connections>
-                            <outlet property="delegate" destination="knq-TY-1d7" id="vap-tq-Jgd"/>
+                            <outlet property="delegate" destination="sAq-Dh-QVq" id="l0t-3c-Up9"/>
                         </connections>
                     </window>
                     <connections>
-                        <segue destination="mqW-7G-dYS" kind="relationship" relationship="window.shadowedContentViewController" id="BnL-7b-aud"/>
+                        <segue destination="fct-Hz-XPf" kind="relationship" relationship="window.shadowedContentViewController" id="CpQ-kw-jSd"/>
                     </connections>
                 </windowController>
-                <customObject id="TPa-rS-MY4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customObject id="hXb-FX-ZQV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-211" y="52"/>
+            <point key="canvasLocation" x="86" y="-112"/>
         </scene>
-        <!--Spoken View Controller-->
-        <scene sceneID="7UX-ji-t2o">
+        <!--Present View Controller-->
+        <scene sceneID="dfE-8V-eKC">
             <objects>
-                <viewController id="mqW-7G-dYS" customClass="SpokenViewController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="V2i-tE-EAu">
+                <viewController id="fct-Hz-XPf" customClass="PresentViewController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="fAB-Ix-IUv">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </view>
                 </viewController>
-                <customObject id="wS2-wD-n2M" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customObject id="3yf-SX-k44" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-202" y="399"/>
+            <point key="canvasLocation" x="86" y="404"/>
         </scene>
     </scenes>
 </document>
