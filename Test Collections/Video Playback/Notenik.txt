@@ -1,0 +1,19 @@
+Title:  Notenik
+
+Tags:   Software.Groovy
+
+Body:
+
+A note-taking system cunningly devised by Herb Bowie. 
+
+Learn more at [Notenik.app](https://notenik.app).
+
+You can delete this starting Note after creating one or two of your own.
+
+Let's see if we can embed a video!
+
+![](files/Notenik | Morph.mp4)
+
+And now a wider one. 
+
+![](files/Notenik | pyramid.mp4)

@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 4/5/19.
-//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2026 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -36,7 +36,6 @@ class CollectionPrefsViewController: NSViewController {
     @IBOutlet var noteTitleDisplayPopUp: NSPopUpButton!
     @IBOutlet var mirrorAutoIndexCkBox: NSButton!
     @IBOutlet var bodyLabelCkBox:       NSButton!
-    @IBOutlet var streamlinedCkBox:     NSButton!
     @IBOutlet var mathJaxCkBox:         NSButton!
     @IBOutlet var imgLocalCkBox:        NSButton!
     @IBOutlet var missingTargetsCkBox:  NSButton!
@@ -154,23 +153,6 @@ class CollectionPrefsViewController: NSViewController {
         setBodyLabel(collection!.bodyLabel)
         setMinBodyEdit(collection!.minBodyEditViewHeight)
         setTitleDisplay(collection!.titleDisplayOption)
-        setStreamlined(collection!.displayMode != .normal)
-        switch collection!.displayMode {
-        case .normal:
-            displayModePopUp.selectItem(at: 0)
-        case .streamlinedReading:
-            displayModePopUp.selectItem(at: 1)
-        case .continuous:
-            displayModePopUp.selectItem(at: 2)
-        case .continuousPartial:
-            displayModePopUp.selectItem(at: 3) // ???
-        case .presentation:
-            displayModePopUp.selectItem(at: 3)
-        case .quotations:
-            displayModePopUp.selectItem(at: 4)
-        case .custom:
-            displayModePopUp.selectItem(at: 5)
-        }
         setMathJax(collection!.mathJax)
         setImgLocal(collection!.imgLocal)
         setMissingTargets(collection!.missingTargets)
@@ -430,14 +412,6 @@ class CollectionPrefsViewController: NSViewController {
         noteTitleDisplayPopUp.selectItem(withTitle: opt.rawValue)
     }
     
-    func setStreamlined(_ on: Bool) {
-        if on {
-            streamlinedCkBox.state = .on
-        } else {
-            streamlinedCkBox.state = .off
-        }
-    }
-    
     func setMathJax(_ on: Bool) {
         if on {
             mathJaxCkBox.state = .on
@@ -575,22 +549,6 @@ class CollectionPrefsViewController: NSViewController {
             }
         }
         
-        switch displayModePopUp.indexOfSelectedItem {
-        case 0:
-            collection!.displayMode = .normal
-        case 1:
-            collection!.displayMode = .streamlinedReading
-        case 2:
-            collection!.displayMode = .continuous
-        case 3:
-            collection!.displayMode = .presentation
-        case 4:
-            collection!.displayMode = .quotations
-        case 5:
-            collection!.displayMode = .custom
-        default:
-            collection!.displayMode = .normal
-        }
         collection!.mathJax = (mathJaxCkBox.state == .on)
         collection!.imgLocal = (imgLocalCkBox.state == .on)
         collection!.missingTargets = (missingTargetsCkBox.state == .on)
