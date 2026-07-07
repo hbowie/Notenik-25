@@ -270,6 +270,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                  link: sortedNote.note.getNotenikLink(preferringTimestamp: true),
                                  filepath: filepath,
                                  wc: self)
+        if textEditing {
+            textEditing = false
+            promptToReload()
+        }
+        if textEditingTemplate {
+            textEditingTemplate = false
+            promptToReloadCollection()
+        }
     }
     
     func windowWillClose() {
@@ -4825,12 +4833,15 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         reportNumberOfNotesUpdated(updated)
     }
     
+    var textEditingTemplate = false
+    
     @IBAction func textEditTemplate(_ sender: Any) {
         guard let nnkIO = guardForCollectionAction() else { return }
         if let templateURL = nnkIO.collection!.lib.getURL(type: .template) {
             logInfo(msg: "Attempting to text edit template URL of '\(templateURL)'")
             // let ok = NSWorkspace.shared.open(templateURL)
             // logInfo(msg: "Template URL Open OK? \(ok)")
+            textEditingTemplate = true
             let openConfiguration = NSWorkspace.OpenConfiguration()
             openConfiguration.activates = true
             openConfiguration.promptsUserIfNeeded = true
@@ -4855,6 +4866,24 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: folderPath)
     }
     
+    func promptToReloadCollection() {
+        textEditingTemplate = false
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.messageText = "Would you like to reload the collection from disk?"
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Cancel")
+        let response = alert.runModal()
+        switch response {
+        case .alertSecondButtonReturn:
+            break
+        case .alertFirstButtonReturn:
+            reloadCollection(self)
+        default:
+            break
+        }
+    }
+    
     /// Reload the current collection from disk
     @IBAction func reloadCollection(_ sender: Any) {
         guard let noteIO = guardForCollectionAction() else { return }
@@ -4872,12 +4901,15 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         collectionTabs?.selectedTabViewItemIndex = 0
     }
     
+    var textEditing = false
+    
     /// Open the current Note in the user's preferred text editor.
     @IBAction func textEditNote(_ sender: Any) {
         let (_, sel) = guardForNoteAction()
         guard let noteToUse = sel?.note else { return }
         var ok = true
         if noteToUse.noteID.hasData {
+            textEditing = true
             if #available(macOS 11.0, *) {
                 // print("Attempting to open via URL: \(noteToUse.noteID.getURL(note: noteToUse)!)")
                 ok = NSWorkspace.shared.open(noteToUse.noteID.getURL(note: noteToUse, preferExisting: true)!)
@@ -4886,6 +4918,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             }
         }
         if !ok {
+            textEditing = false
             communicateError("File at '\(noteToUse.noteID.getFullPath(note: noteToUse)!)' could not be opened",
                              alert: true)
         }
@@ -4922,12 +4955,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                     var urlsToOpen: [URL] = []
                     let noteURL = noteToUse.noteID.getURL(note: noteToUse, preferExisting: true)!
                     urlsToOpen.append(noteURL)
+                    textEditing = true
                     NSWorkspace.shared.open(urlsToOpen,
                                             withApplicationAt: editorURL!,
                                             configuration: configuration,
                                             completionHandler: nil)
                     return
                 } else {
+                    textEditing = true
                     ok = NSWorkspace.shared.open(noteToUse.noteID.getURL(note: noteToUse, preferExisting: true)!)
                 }
             } else {
@@ -4937,8 +4972,27 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             print("  - note to use note ID has no data!")
         }
         if !ok {
+            textEditing = false
             communicateError("File at '\(noteToUse.noteID.getFullPath(note: noteToUse)!)' could not be opened",
                              alert: true)
+        }
+    }
+    
+    func promptToReload() {
+        textEditing = false
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.messageText = "Would you like to reload the note from disk?"
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Cancel")
+        let response = alert.runModal()
+        switch response {
+        case .alertSecondButtonReturn:
+            break
+        case .alertFirstButtonReturn:
+            reloadNote(self)
+        default:
+            break
         }
     }
     
@@ -5235,8 +5289,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     }
     
     func toggleSpokenScriptOn(io: NotenikIO, collection: NoteCollection) {
-        
-        print("  - firing up spoken script window")
         
         guard collection.spokenScriptFieldDef != nil else {
             communicateError("Collection does not define a spoken script field", alert: true)
