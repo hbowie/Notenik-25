@@ -374,6 +374,13 @@ DQ
                                     <url key="url" string="file://localhost/Applications/"/>
                                 </pathCell>
                             </pathControl>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dza-uS-5kS">
+                                <rect key="frame" x="20" y="97" width="196" height="16"/>
+                                <buttonCell key="cell" type="check" title="Special Fonts Configuration?" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="LkT-es-gBG">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="aTM-FJ-DUt" firstAttribute="top" secondItem="EcW-4G-BGA" secondAttribute="bottom" constant="13" id="0HF-vr-gme"/>
@@ -404,6 +411,7 @@ DQ
                             <constraint firstItem="cux-df-xvY" firstAttribute="leading" secondItem="5ON-x4-vsd" secondAttribute="leading" id="Dpx-4q-SeA"/>
                             <constraint firstItem="EcW-4G-BGA" firstAttribute="baseline" secondItem="Ysr-xa-ZdS" secondAttribute="baseline" id="Eul-HW-cXi"/>
                             <constraint firstItem="ej5-lu-c8j" firstAttribute="trailing" secondItem="Efh-7d-Aq5" secondAttribute="trailing" id="GJ2-9y-7hl"/>
+                            <constraint firstItem="dza-uS-5kS" firstAttribute="leading" secondItem="DJo-S8-chd" secondAttribute="leading" id="GKa-eY-SVz"/>
                             <constraint firstItem="ej5-lu-c8j" firstAttribute="top" secondItem="ctF-qt-QqX" secondAttribute="bottom" constant="8" symbolic="YES" id="HSe-N9-7t4"/>
                             <constraint firstItem="Aoj-in-jnY" firstAttribute="trailing" secondItem="Li6-NU-shO" secondAttribute="trailing" id="HaT-dU-AnU"/>
                             <constraint firstItem="Efh-7d-Aq5" firstAttribute="leading" secondItem="oqg-Xn-baG" secondAttribute="leading" id="Ij4-25-xC3"/>
@@ -454,6 +462,7 @@ DQ
                             <constraint firstItem="7lB-vo-DZX" firstAttribute="leading" secondItem="NUU-7E-qEx" secondAttribute="leading" id="vAO-Au-PBn"/>
                             <constraint firstItem="AjV-Tf-hMa" firstAttribute="top" secondItem="aEa-DL-FC0" secondAttribute="bottom" constant="15" id="z4f-yW-lD4"/>
                             <constraint firstItem="VNE-Tk-2ei" firstAttribute="top" secondItem="aOo-DV-xUH" secondAttribute="bottom" constant="6" symbolic="YES" id="zAn-hP-ciF"/>
+                            <constraint firstItem="dza-uS-5kS" firstAttribute="top" secondItem="DJo-S8-chd" secondAttribute="bottom" constant="6" symbolic="YES" id="zhy-aB-4Pj"/>
                         </constraints>
                     </view>
                     <connections>
@@ -476,6 +485,7 @@ DQ
                         <outlet property="noteTitleDisplayPopUp" destination="aEa-DL-FC0" id="ipF-Cm-BDP"/>
                         <outlet property="pathControl" destination="aTM-FJ-DUt" id="KXA-4o-N0X"/>
                         <outlet property="scrollingSyncCkBox" destination="rYq-m1-yR5" id="ecx-jT-j3e"/>
+                        <outlet property="specialFontsCkBox" destination="dza-uS-5kS" id="LcT-ku-apt"/>
                         <outlet property="tagsDisplayPopup" destination="Li6-NU-shO" id="qMY-YN-ncV"/>
                         <outlet property="tagsHandlingPopup" destination="Aoj-in-jnY" id="B9b-zg-b5b"/>
                     </connections>

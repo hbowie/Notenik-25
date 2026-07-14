@@ -41,7 +41,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     let application     = NSApplication.shared
     let juggler         = CollectionJuggler.shared
     let appPrefs        = AppPrefs.shared
-    let displayPrefs    = DisplayPrefs.shared
     let osdir           = OpenSaveDirectory.shared
     let multi           = MultiFileIO.shared
     
@@ -49,6 +48,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     let addAttachmentTitle = "Add Attachment..."
     
     var notenikIO:          NotenikIO?
+    var displayPrefs      = DisplayPrefs.shared
     var preferredExt        = ""
     var backLinksDef:       FieldDefinition?
     var noteFileFormat:     NoteFileFormat = .notenik
@@ -84,6 +84,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     let wikiQuoteStoryboard:       NSStoryboard = NSStoryboard(name: "WikiQuote", bundle: nil)
     let spokenStoryboard:          NSStoryboard = NSStoryboard(name: "Spoken", bundle: nil)
     let presentStoryboard:         NSStoryboard = NSStoryboard(name: "Present", bundle: nil)
+    let displayPrefsStoryboard:    NSStoryboard = NSStoryboard(name: "DisplayPrefs", bundle: nil)
     
     var spokenScriptEngaged        = false
     
@@ -205,6 +206,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                             collection.outlineTabSetting = .none
                         }
                     }
+                    if collection.specialFontsConfig {
+                        displayPrefs = collection.displayPrefs
+                    }
                 }
             }
             
@@ -271,12 +275,30 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                  filepath: filepath,
                                  wc: self)
         if textEditing {
+            switch appPrefs.reloadPrompts {
+            case 1:
+                break
+            case 2:
+                promptToReload()
+            case 3:
+                reloadNote(self)
+            default:
+                break
+            }
             textEditing = false
-            promptToReload()
         }
         if textEditingTemplate {
+            switch appPrefs.reloadPrompts {
+            case 1:
+                break
+            case 2:
+                promptToReloadCollection()
+            case 3:
+                reloadCollection(self)
+            default:
+                break
+            }
             textEditingTemplate = false
-            promptToReloadCollection()
         }
     }
     
@@ -533,6 +555,21 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard presentVC != nil else { return }
         viewCoordinator.removeView(viewID: presentVC!.viewID)
         presentVC = nil
+    }
+    
+    @IBAction func displayPrefs(_ sender: Any) {
+        if let displayPrefsController = self.displayPrefsStoryboard.instantiateController(withIdentifier: "displayPrefsWC") as? DisplayPrefsWindowController {
+            if let collection = notenikIO?.collection {
+                displayPrefsController.displayPrefsViewController?.setCollection(collection: collection)
+            }
+            displayPrefsController.showWindow(self)
+            // displayPrefsController.passCollectionPrefsRequesterInfo(owner: self, collection: io!.collection!)
+        } else {
+            Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                              category: "CollectionWindowController",
+                              level: .fault,
+                              message: "Couldn't get a Display Prefs Window Controller!")
+        }
     }
     
     @IBAction func presentationToggle(_sender: Any) {
@@ -5650,6 +5687,48 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
         informUserOfImportExportResults(operation: "import", ok: ok, numberOfNotes: importParms.input, path: importURL.path)
         
+        editVC!.io = noteIO
+        finishBatchOperation()
+    }
+    
+    @IBAction func importMDtoOutline(_ sender: Any) {
+        guard let noteIO = guardForCollectionAction() else { return }
+        guard let collection = noteIO.collection else { return }
+        
+        guard collection.seqFieldDef != nil else {
+            communicateError("Collection does not have a Seq field defined", alert: true)
+            return
+        }
+        
+        guard collection.levelFieldDef != nil else {
+            communicateError("Collection does not have a Level field defined", alert: true)
+            return
+        }
+        
+        guard collection.sortParm == .seqPlusTitle else {
+            communicateError("Collection must be sorted by Seq", alert: true)
+            return
+        }
+        
+        guard let importURL = promptUserForImportFile(
+                title: "Select Markdown file for Import",
+                parent: noteIO.collection!.lib.getURL(type: .parent))
+            else { return }
+        importMDtoOutlineFromURL(importURL, noteIO: noteIO)
+    }
+    
+    func importMDtoOutlineFromURL(_ fileURL: URL, noteIO: NotenikIO) {
+        let importer = MDtoOutlineImporter()
+        let (imports, mods) = importer.importNow(io: noteIO, fileURL: fileURL, importParms: importParms)
+        Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                          category: "CollectionWindowController",
+                          level: .info,
+                          message: "Imported \(imports) notes, modified \(mods) notes, from \(fileURL.path)")
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = "Imported \(imports) notes, modified \(mods) notes, from \(fileURL.path)"
+        alert.addButton(withTitle: "OK")
+        _ = alert.runModal()
         editVC!.io = noteIO
         finishBatchOperation()
     }

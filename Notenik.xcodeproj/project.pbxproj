@@ -230,6 +230,8 @@
 		9CA5DEB32F50FAD200F6DBA5 /* RecentCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA5DEB22F50FAD200F6DBA5 /* RecentCollection.swift */; };
 		9CA80797229EE97100C5D673 /* GeneralPrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA80796229EE97100C5D673 /* GeneralPrefsViewController.swift */; };
 		9CA80798229EE97100C5D673 /* GeneralPrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA80796229EE97100C5D673 /* GeneralPrefsViewController.swift */; };
+		9CAAAC382FFD9D9200F3FBCA /* OtherPrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAAAC372FFD9D9200F3FBCA /* OtherPrefsViewController.swift */; };
+		9CAAAC392FFD9D9200F3FBCA /* OtherPrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAAAC372FFD9D9200F3FBCA /* OtherPrefsViewController.swift */; };
 		9CAD6A4922DF806800531D90 /* TagsExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD6A4822DF806800531D90 /* TagsExportViewController.swift */; };
 		9CAD6A4A22DF806800531D90 /* TagsExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD6A4822DF806800531D90 /* TagsExportViewController.swift */; };
 		9CAD6A4F22DF9ACD00531D90 /* PrefsTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAD6A4E22DF9ACD00531D90 /* PrefsTabViewController.swift */; };
@@ -527,6 +529,7 @@
 		9CA5C84927EBCA1A007CDA96 /* AppGetSelectedNoteBacklink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGetSelectedNoteBacklink.swift; sourceTree = "<group>"; };
 		9CA5DEB22F50FAD200F6DBA5 /* RecentCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCollection.swift; sourceTree = "<group>"; };
 		9CA80796229EE97100C5D673 /* GeneralPrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralPrefsViewController.swift; sourceTree = "<group>"; };
+		9CAAAC372FFD9D9200F3FBCA /* OtherPrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherPrefsViewController.swift; sourceTree = "<group>"; };
 		9CAD6A4822DF806800531D90 /* TagsExportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsExportViewController.swift; sourceTree = "<group>"; };
 		9CAD6A4E22DF9ACD00531D90 /* PrefsTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsTabViewController.swift; sourceTree = "<group>"; };
 		9CAD6A5122DFA0B000531D90 /* PrefsTabVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsTabVC.swift; sourceTree = "<group>"; };
@@ -1003,6 +1006,7 @@
 				9CAD6A4E22DF9ACD00531D90 /* PrefsTabViewController.swift */,
 				9C857C6323830F1600EDB93C /* FavoritesPrefsViewController.swift */,
 				9CA80796229EE97100C5D673 /* GeneralPrefsViewController.swift */,
+				9CAAAC372FFD9D9200F3FBCA /* OtherPrefsViewController.swift */,
 				9C036299239AFAAB00C948DB /* MarkdownPrefsViewController.swift */,
 				9CAD6A4822DF806800531D90 /* TagsExportViewController.swift */,
 				9C2F96C324F4702200C4B8A2 /* AppPrefsCocoa.swift */,
@@ -1551,6 +1555,7 @@
 				9C1E0C9222E4F7D00025C99C /* AttachmentWindowController.swift in Sources */,
 				9CE0BEC72BDC6FD4007EEE8B /* BulkEditViewController.swift in Sources */,
 				9C4A45AA272346BD00BE3202 /* KlassDataSource.swift in Sources */,
+				9CAAAC392FFD9D9200F3FBCA /* OtherPrefsViewController.swift in Sources */,
 				9CAE23F726D166CB0002FCCD /* LookupDataSource.swift in Sources */,
 				9C01E46624D74E1C00AEB4F6 /* BooleanView.swift in Sources */,
 				9C9A025421F65B990027F364 /* NoteDisplayViewController.swift in Sources */,
@@ -1801,6 +1806,7 @@
 				9C02D2B72267F5E700587EDF /* CalendarViewController.swift in Sources */,
 				9C822B9F22D6D5D6008EF106 /* TagsView.swift in Sources */,
 				9C0B643D23888D9E00869FAA /* TagsMassChangeViewController.swift in Sources */,
+				9CAAAC382FFD9D9200F3FBCA /* OtherPrefsViewController.swift in Sources */,
 				9CAD6A4A22DF806800531D90 /* TagsExportViewController.swift in Sources */,
 				9CE32508224D561E0051CA1F /* PrefsWindowController.swift in Sources */,
 				9C2AE52A220A34D800AE8BEE /* NoteEditViewController.swift in Sources */,
@@ -1973,7 +1979,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1001;
+				CURRENT_PROJECT_VERSION = 1005;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1989,7 +1995,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 19.2.1;
+				MARKETING_VERSION = 19.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2007,7 +2013,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1001;
+				CURRENT_PROJECT_VERSION = 1005;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2023,7 +2029,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 19.2.1;
+				MARKETING_VERSION = 19.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

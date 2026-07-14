@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24128"/>
-        <plugIn identifier="com.apple.WebKit2IBPlugin" version="24128"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
+        <plugIn identifier="com.apple.WebKit2IBPlugin" version="24765"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -318,6 +318,7 @@ Gw
                         <outlet property="centerHeadingsFinishPopup" destination="Hcw-jC-MN0" id="zu6-sy-dC3"/>
                         <outlet property="centerHeadingsStartPopup" destination="h8y-5Q-d2S" id="xSK-vY-caw"/>
                         <outlet property="cssText" destination="WdN-Ae-Mpd" id="0Ed-3o-fCq"/>
+                        <outlet property="cssTextEdited" destination="IlR-Jh-neB" id="3aj-6P-ZNX"/>
                         <outlet property="fontComboBox" destination="V3o-zb-THK" id="Z5D-fr-Up5"/>
                         <outlet property="headingsButton" destination="6YQ-oT-hAf" id="DE0-dx-XRJ"/>
                         <outlet property="listButton" destination="yOg-LE-ZhE" id="Xr2-yt-PkL"/>

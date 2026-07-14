@@ -67,7 +67,19 @@ class DisplayPrefsViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        adjustPrefs()
+
+    }
+    
+    public func setCollection(collection: NoteCollection) {
+        displayPrefs = collection.displayPrefs
+        if collection.specialFontsConfig {
+            window.window!.title = "Special Display Settings for Current Collection"
+        }
+        adjustPrefs()
+    }
+    
+    func adjustPrefs() {
         let centerHeadingStart = displayPrefs.headingCenterStart
         startingCenterHeadingStart = centerHeadingStart
         latestCenterHeadingStart = centerHeadingStart
@@ -300,15 +312,18 @@ class DisplayPrefsViewController: NSViewController {
         fontSpecs.setLatestFont(userSpec: fontComboBox.stringValue)
         fontSpecs.setLatestSize(userSpec: sizeComboBox.stringValue)
         latestCSS = cssText.string
+        var gen = !displayPrefs.customCSS
         if latestCSS == startingCSS {
             if displayPrefs.bodySpecs.latestSpecsChanged {
                 latestCSS = displayPrefs.bodySpecs.buildLatestCSS(indent: 0)
+                displayPrefs.customCSS = false
+                gen = true
             }
         }
         displayPrefs.headingCenterStart = latestCenterHeadingStart
         displayPrefs.headingCenterFinish = latestCenterHeadingFinish
         displayPrefs.saveLatestFontSpecs()
-        displayPrefs.fontCSS = latestCSS
+        displayPrefs.set(fontCSS: latestCSS, gen: gen)
         window.close()
         displayPrefs.displayRefresh()
     }

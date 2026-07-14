@@ -18,7 +18,7 @@ import NotenikUtils
 class QueryBuilderViewController: NSViewController {
     
     let cocoaPrefs = AppPrefsCocoa.shared
-    let displayPrefs = DisplayPrefs.shared
+    var displayPrefs = DisplayPrefs.shared
     
     var collectionWC: CollectionWindowController!
     var windowController: QueryBuilderWindowController?
@@ -58,6 +58,7 @@ class QueryBuilderViewController: NSViewController {
     func buildView() {
         guard io != nil && io!.collection != nil else { return }
         collection = io!.collection!
+        displayPrefs = collection.displayPrefs
         queryNameTextField.stringValue = "query"
         fields = collection.dict.list
         

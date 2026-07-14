@@ -31,6 +31,7 @@ public class ReportRunner: NSObject, TemplateOutputSource {
     
     init(io: NotenikIO) {
         self.io = io
+        displayPrefs = io.collection!.displayPrefs
     }
     
     public func refreshQuery() {

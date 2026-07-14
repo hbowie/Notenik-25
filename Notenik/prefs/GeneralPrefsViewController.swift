@@ -3,7 +3,7 @@
 //  Notenik
 //
 //  Created by Herb Bowie on 5/29/19.
-//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2026 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
@@ -42,19 +42,13 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
     
     @IBOutlet var grantAccessOptPopUpButton: NSPopUpButton!
     
-    @IBOutlet var mastodonHandleTextField: NSTextField!
-    
-    @IBOutlet var mastodonDomainTextField: NSTextField!
+    @IBOutlet var manualReloadsPopUpButton: NSPopUpButton!
     
     @IBOutlet var idFolderLevelsField: NSTextField!
     
     @IBOutlet var idFolderSepField: NSTextField!
     
-    @IBOutlet var horizListScrollBarField: NSPopUpButton!
-    
     @IBOutlet var inlineLongTextField: NSPopUpButton!
-    
-    @IBOutlet var openInNovaButton: NSPopUpButton!
     
     @IBOutlet var allowDotsButton: NSPopUpButton!
     
@@ -80,24 +74,11 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
             default: break
         }
         
-        switch appPrefs.horizontalListScrollBar {
-            case "on": horizListScrollBarField.selectItem(at: 0)
-            case "off":  horizListScrollBarField.selectItem(at: 1)
-            default: break;
-        }
-        
         switch appPrefs.auxLongText {
         case false:
             inlineLongTextField.selectItem(at: 0)
         case true:
             inlineLongTextField.selectItem(at: 1)
-        }
-        
-        switch appPrefs.openInNova {
-        case false:
-            openInNovaButton.selectItem(at: 1)
-        case true:
-            openInNovaButton.selectItem(at: 0)
         }
         
         switch appPrefs.allowDots {
@@ -121,11 +102,11 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
         let grantAccessOpt = appPrefs.grantAccessOption
         grantAccessOptPopUpButton.selectItem(at: grantAccessOpt - 1)
         
-        mastodonHandleTextField.stringValue = appPrefs.mastodonHandle
-        mastodonDomainTextField.stringValue = appPrefs.mastodonDomain
-        
         idFolderLevelsField.stringValue = "\(appPrefs.idFolderLevels)"
         idFolderSepField.stringValue = appPrefs.idFolderSep
+        
+        let reloadPrompts = appPrefs.reloadPrompts
+        manualReloadsPopUpButton.selectItem(at: reloadPrompts - 1)
     }
     
     @IBAction func appPrefsConfirmDeletes (_ sender: Any) {
@@ -144,18 +125,6 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
         }
     }
     
-    @IBAction func horizListScrollBarUpdated(_ sender: Any) {
-        switch horizListScrollBarField.indexOfSelectedItem {
-        case 0:
-            appPrefs.horizontalListScrollBar = "on"
-        case 1:
-            appPrefs.horizontalListScrollBar = "off"
-        default:
-            break
-        }
-        CollectionJuggler.shared.adjustListViews()
-    }
-    
     @IBAction func inlineLongTextPopupUpdated(_ sender: NSPopUpButton) {
         switch inlineLongTextField.indexOfSelectedItem {
         case 0:
@@ -164,17 +133,6 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
             appPrefs.auxLongText = true
         default:
             appPrefs.auxLongText = false
-        }
-    }
-    
-    @IBAction func openInNovaUpdated(_ sender: Any) {
-        switch openInNovaButton.indexOfSelectedItem {
-        case 0:
-            appPrefs.openInNova = true
-        case 1:
-            appPrefs.openInNova = false
-        default:
-            appPrefs.openInNova = false
         }
     }
     
@@ -226,9 +184,12 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
         CollectionJuggler.shared.adjustListViews()
     }
     
+    
+    @IBAction func reloadPromptSelected(_ sender: Any) {
+        appPrefs.reloadPrompts = manualReloadsPopUpButton.indexOfSelectedItem + 1
+    }
+    
     @IBAction func appPrefsOK(_ sender: Any) {
-        appPrefs.mastodonHandle = mastodonHandleTextField.stringValue
-        appPrefs.mastodonDomain = mastodonDomainTextField.stringValue
         if let folderLevels = Int(idFolderLevelsField.stringValue) {
             if folderLevels > 0 && folderLevels < 9 {
                 appPrefs.idFolderLevels = folderLevels
@@ -236,14 +197,6 @@ class GeneralPrefsViewController: NSViewController, PrefsTabVC {
         }
         appPrefs.idFolderSep = idFolderSepField.stringValue
         self.view.window!.close()
-    }
-    
-    @IBAction func mastodonHandleEdited(_ sender: Any) {
-        appPrefs.mastodonHandle = mastodonHandleTextField.stringValue
-    }
-    
-    @IBAction func mastodonDomainEdited(_ sender: Any) {
-        appPrefs.mastodonDomain = mastodonDomainTextField.stringValue
     }
     
     @IBAction func funcgrantAccessOptionSelected(_ sender: Any) {

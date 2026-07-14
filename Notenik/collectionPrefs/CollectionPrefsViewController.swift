@@ -49,6 +49,9 @@ class CollectionPrefsViewController: NSViewController {
     @IBOutlet var minEditBodyHeight:    NSTextField!
     @IBOutlet var cssFilePopup:         NSPopUpButton!
     @IBOutlet var dailyCkBox:           NSButton!
+    @IBOutlet var specialFontsCkBox:    NSButton!
+    
+    var originalSpecialFontsConfig = false
     
     var extPicker: FileExtensionPicker!
     
@@ -158,6 +161,8 @@ class CollectionPrefsViewController: NSViewController {
         setMissingTargets(collection!.missingTargets)
         setCurlyApostrophes(collection!.curlyApostrophes)
         setExtLinks(collection!.extLinksOpenInNewWindows)
+        setSpecialFonts(collection!.specialFontsConfig)
+        originalSpecialFontsConfig = collection!.specialFontsConfig
         setDaily(collection!.dailyNotesType)
         setScrollingSync(collection!.scrollingSync)
         
@@ -452,6 +457,14 @@ class CollectionPrefsViewController: NSViewController {
         }
     }
     
+    func setSpecialFonts(_ on: Bool) {
+        if on {
+            specialFontsCkBox.state = .on
+        } else {
+            specialFontsCkBox.state = .off
+        }
+    }
+    
     func setDaily(_ type: DailyNotesType) {
         if type == .none {
             dailyCkBox.state = .off
@@ -554,6 +567,14 @@ class CollectionPrefsViewController: NSViewController {
         collection!.missingTargets = (missingTargetsCkBox.state == .on)
         collection!.curlyApostrophes = (curlyApostsCkBox.state == .on)
         collection!.extLinksOpenInNewWindows = (extLinksCkBox.state == .on)
+        collection!.specialFontsConfig = (specialFontsCkBox.state == .on)
+        
+        if originalSpecialFontsConfig && !collection!.specialFontsConfig {
+            collection!.displayPrefs = DisplayPrefs.shared
+        } else if !originalSpecialFontsConfig && collection!.specialFontsConfig {
+            collection!.displayPrefs = DisplayPrefs.shared.copy(storeType: .collectionSettings)
+        }
+        originalSpecialFontsConfig = collection!.specialFontsConfig
         collection!.scrollingSync = (scrollingSyncCkBox.state == .on)
         
         collection!.selCSSfile = ""
