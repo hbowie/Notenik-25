@@ -71,6 +71,8 @@ class NoteListViewController:   NSViewController,
         
         adjustScroller()
         
+        adjustRowColors()
+        
         // Setup for drag and drop.
         tableView.setDraggingSourceOperationMask(.copy, forLocal: false)
         tableView.registerForDraggedTypes(NSFilePromiseReceiver.readableDraggedTypes.map { NSPasteboard.PasteboardType($0) })
@@ -692,11 +694,13 @@ class NoteListViewController:   NSViewController,
     
     /// Reload the Table's Data.
     func reload() {
+
         adjustFonts()
         if let collection = notenikIO?.collection {
             setSortParm(collection.sortParm)
         }
         adjustScroller()
+        adjustRowColors()
         tableView.reloadData()
     }
     
@@ -707,6 +711,17 @@ class NoteListViewController:   NSViewController,
             scrollView.hasHorizontalScroller = true
         case "off":
             scrollView.hasHorizontalScroller = false
+        default:
+            break
+        }
+    }
+    
+    func adjustRowColors() {
+        switch AppPrefs.shared.alternatingRowColors {
+        case "on":
+            tableView.usesAlternatingRowBackgroundColors = true
+        case "off":
+            tableView.usesAlternatingRowBackgroundColors = false
         default:
             break
         }

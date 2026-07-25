@@ -24,6 +24,8 @@ class OtherPrefsViewController: NSViewController, PrefsTabVC {
     
     @IBOutlet var horizListScrollBarField: NSPopUpButton!
     
+    @IBOutlet var alternatingRowColorsField: NSPopUpButton!
+    
     @IBOutlet var openInNovaButton: NSPopUpButton!
     
     override func viewDidLoad() {
@@ -33,6 +35,15 @@ class OtherPrefsViewController: NSViewController, PrefsTabVC {
             case "on": horizListScrollBarField.selectItem(at: 0)
             case "off":  horizListScrollBarField.selectItem(at: 1)
             default: break;
+        }
+        
+        switch appPrefs.alternatingRowColors {
+        case "on":
+            alternatingRowColorsField.selectItem(at: 0)
+        case "off":
+            alternatingRowColorsField.selectItem(at: 1)
+        default:
+            break
         }
         
         switch appPrefs.openInNova {
@@ -60,6 +71,18 @@ class OtherPrefsViewController: NSViewController, PrefsTabVC {
             appPrefs.horizontalListScrollBar = "on"
         case 1:
             appPrefs.horizontalListScrollBar = "off"
+        default:
+            break
+        }
+        CollectionJuggler.shared.adjustListViews()
+    }
+    
+    @IBAction func alternatingRowColorsUpdated(_ sender: Any) {
+        switch alternatingRowColorsField.indexOfSelectedItem {
+        case 0:
+            appPrefs.alternatingRowColors = "on"
+        case 1:
+            appPrefs.alternatingRowColors = "off"
         default:
             break
         }

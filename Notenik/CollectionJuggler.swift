@@ -1112,6 +1112,12 @@ class CollectionJuggler: NSObject {
                 if let lvc = window.listVC {
                     lvc.reload()
                 }
+                if let tvc = window.tagsVC {
+                    tvc.reload()
+                }
+                if let ovc = window.seqOutlineVC {
+                    ovc.reload()
+                }
             }
         }
     }

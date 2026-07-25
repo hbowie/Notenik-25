@@ -707,6 +707,11 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Nav" id="4yX-W2-chZ">
                                     <items>
+                                        <menuItem title="Home" keyEquivalent="H" toolTip="Go to First Note" id="I7x-Vx-Owr" userLabel="Home">
+                                            <connections>
+                                                <action selector="goToFirstNote:" target="Ady-hI-5gd" id="TZy-4W-GCE"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Next in Seq" keyEquivalent="]" id="IvG-LL-jYe" userLabel="Go To Next Note">
                                             <connections>
                                                 <action selector="goToNextNote:" target="Ady-hI-5gd" id="TKQ-6h-RVt"/>
@@ -2354,13 +2359,13 @@ CA
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTK-bV-70K">
-                                <rect key="frame" x="0.0" y="0.0" width="479" height="281"/>
+                                <rect key="frame" x="0.0" y="0.0" width="479" height="279"/>
                                 <clipView key="contentView" id="caU-8Q-uow">
-                                    <rect key="frame" x="1" y="1" width="477" height="279"/>
+                                    <rect key="frame" x="1" y="1" width="477" height="277"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="fwC-s0-qs1" id="Zqh-F5-OQn">
-                                            <rect key="frame" x="0.0" y="0.0" width="477" height="279"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="477" height="277"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
