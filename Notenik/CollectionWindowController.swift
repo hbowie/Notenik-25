@@ -4557,6 +4557,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                         position: nextPosition,
                                         row: -1, searchPhrase: nil,
                                         withUpdates: true)
+        } else {
+            let (firstNote, firstPosition) = noteIO.firstNote()
+            _ = viewCoordinator.focusOn(initViewID: collectionViewID,
+                                        sortedNote: firstNote,
+                                        position: firstPosition,
+                                        row: 0, searchPhrase: nil,
+                                        withUpdates: true)
             // select(note: nextNote, position: nextPosition, source: .action, andScroll: true)
         }
     }
