@@ -138,6 +138,8 @@ class ViewFactory {
             }
         case NotenikConstants.personCommon:
             return PersonView()
+        case NotenikConstants.noteLinkCommon:
+            return NoteLinkView()
         case NotenikConstants.rankCommon:
             return RankView(config: collection.rankConfig)
         case NotenikConstants.seqCommon:

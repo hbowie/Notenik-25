@@ -43,14 +43,15 @@ class NoteEditViewController: NSViewController, CollectionView {
     var lookupViews: [LookupView] = []
     var grid:      [[NSView]] = []
     
-    var titleView:  MacEditView?
-    var dateView:   DateView?
-    var recursView: MacEditView?
-    var statusView: StatusView?
-    var levelView:  LevelView?
-    var linkView:   AuxTextView?
+    var titleView:    MacEditView?
+    var dateView:     DateView?
+    var recursView:   MacEditView?
+    var statusView:   StatusView?
+    var levelView:    LevelView?
+    var linkView:     AuxTextView?
     var imageNameView: ImageNameView?
-    var bodyView:   BodyView?
+    var bodyView:     BodyView?
+    var noteLinkView: NoteLinkView?
     var bodyRow = -1
     
     var window: CollectionWindowController? {
@@ -151,6 +152,7 @@ class NoteEditViewController: NSViewController, CollectionView {
         linkView = nil
         imageNameView = nil
         bodyView = nil
+        noteLinkView = nil
         
         // Build the label and value views for each field in the dictionary
         for def in editDefs {
@@ -178,6 +180,14 @@ class NoteEditViewController: NSViewController, CollectionView {
                                                pickLists: notenikIO!.pickLists,
                                                def: def,
                                                auxLongText: AppPrefs.shared.auxLongText)
+        
+        if let nlv = editView as? NoteLinkView {
+            noteLinkView = nlv
+            if notenikIO != nil {
+                noteLinkView!.loadFromIO(io: notenikIO!)
+            }
+        }
+        
         let valueView = editView.view
         
         editViews.append(editView)

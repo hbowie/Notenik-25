@@ -218,6 +218,8 @@
 		9C9E47FD271F5BB60094FEA5 /* AdvSearch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C9E47FC271F5BB60094FEA5 /* AdvSearch.storyboard */; };
 		9C9E47FF271F602C0094FEA5 /* AdvSearchWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9E47FE271F602C0094FEA5 /* AdvSearchWindowController.swift */; };
 		9C9E4801271F60980094FEA5 /* AdvSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9E4800271F60980094FEA5 /* AdvSearchViewController.swift */; };
+		9CA1BC6D301C05D6006F6191 /* NoteLinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA1BC6C301C05D6006F6191 /* NoteLinkView.swift */; };
+		9CA1BC6F301C0C83006F6191 /* NoteLinkDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA1BC6E301C0C83006F6191 /* NoteLinkDataSource.swift */; };
 		9CA4EE88246A143C00059F65 /* PickListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA4EE87246A143B00059F65 /* PickListView.swift */; };
 		9CA4EE89246A143C00059F65 /* PickListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA4EE87246A143B00059F65 /* PickListView.swift */; };
 		9CA4EE8A246A143C00059F65 /* PickListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CA4EE87246A143B00059F65 /* PickListView.swift */; };
@@ -522,6 +524,8 @@
 		9C9E47FC271F5BB60094FEA5 /* AdvSearch.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AdvSearch.storyboard; sourceTree = "<group>"; };
 		9C9E47FE271F602C0094FEA5 /* AdvSearchWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvSearchWindowController.swift; sourceTree = "<group>"; };
 		9C9E4800271F60980094FEA5 /* AdvSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvSearchViewController.swift; sourceTree = "<group>"; };
+		9CA1BC6C301C05D6006F6191 /* NoteLinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteLinkView.swift; sourceTree = "<group>"; };
+		9CA1BC6E301C0C83006F6191 /* NoteLinkDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteLinkDataSource.swift; sourceTree = "<group>"; };
 		9CA4EE87246A143B00059F65 /* PickListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickListView.swift; sourceTree = "<group>"; };
 		9CA4EE8B246A15BC00059F65 /* PickListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickListDataSource.swift; sourceTree = "<group>"; };
 		9CA5C84527EBB7DB007CDA96 /* AppHasSelectedNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHasSelectedNote.swift; sourceTree = "<group>"; };
@@ -1175,6 +1179,8 @@
 				9CAE23F426D1659B0002FCCD /* LookupView.swift */,
 				9CD3261F2233068F00D06B77 /* MacEditView.swift */,
 				9C5CB6F02FA2B25F0068059B /* MarkView.swift */,
+				9CA1BC6E301C0C83006F6191 /* NoteLinkDataSource.swift */,
+				9CA1BC6C301C05D6006F6191 /* NoteLinkView.swift */,
 				9C88DD8C2BD860C600D90CF5 /* PageStyleView.swift */,
 				9CC6DB7C2AE86C1700F670AF /* PersonView.swift */,
 				9CA4EE8B246A15BC00059F65 /* PickListDataSource.swift */,
@@ -1579,6 +1585,7 @@
 				9CF256CD21FD175E00D9F06A /* CollectionWindowController.swift in Sources */,
 				9C1E0C9522E4F7FA0025C99C /* AttachmentViewController.swift in Sources */,
 				9C6D7036295778AE003F5924 /* ImportViewController.swift in Sources */,
+				9CA1BC6F301C0C83006F6191 /* NoteLinkDataSource.swift in Sources */,
 				9C7995BF288773D2003C22D5 /* GetNoteTitleIntentHandler.swift in Sources */,
 				9C0C76962F4E531C00EE7523 /* WindowJuggler.swift in Sources */,
 				9CD400D02A3A52CE00347106 /* AuxTextView.swift in Sources */,
@@ -1680,6 +1687,7 @@
 				9C29A79B25645B78002C5F7A /* FileAttachView.swift in Sources */,
 				9C5CB6F12FA2B25F0068059B /* MarkView.swift in Sources */,
 				9CAD6A4922DF806800531D90 /* TagsExportViewController.swift in Sources */,
+				9CA1BC6D301C05D6006F6191 /* NoteLinkView.swift in Sources */,
 				9CF1193E225827650015AE91 /* CollectionPrefsViewController.swift in Sources */,
 				9C47DD342840019A0025A7B9 /* ComboDataSource.swift in Sources */,
 				9C7B2B8D2B28FBAF008D7F3F /* FieldRenameParms.swift in Sources */,
@@ -1979,7 +1987,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1011;
+				CURRENT_PROJECT_VERSION = 1013;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1995,7 +2003,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 19.3.7;
+				MARKETING_VERSION = 19.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2013,7 +2021,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1011;
+				CURRENT_PROJECT_VERSION = 1013;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2029,7 +2037,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 19.3.7;
+				MARKETING_VERSION = 19.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
