@@ -75,5 +75,15 @@ class JuggledWindow: Comparable {
     static func == (lhs: JuggledWindow, rhs: JuggledWindow) -> Bool {
         return lhs.path == rhs.path
     }
+    
+    public func display() {
+        print("JuggledWindow.display")
+        print("  - path: \(path)")
+        if let windowTitle = cwc?.window?.title {
+            print("  - window titled: \(windowTitle)")
+        } else {
+            print("  - window title unavailable")
+        }
+    }
 
 }

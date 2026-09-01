@@ -12,6 +12,8 @@
 
 import Cocoa
 
+import NotenikUtils
+
 class WindowJuggler: NSObject, Sequence {
     
     var items: [JuggledWindow] = []
@@ -79,13 +81,19 @@ class WindowJuggler: NSObject, Sequence {
     func windowClosing(withController: CollectionWindowController) -> Int {
 
         var windowCount = 0
-        for item in self {
+        var i = 0
+        while i < items.count {
+            let item = items[i]
+            var inc = 1
+            item.display()
             if let nextWC = item.cwc {
                 if nextWC.window == nil {
                     // Don't count it
                 } else {
                     if nextWC as AnyObject === withController as AnyObject {
-                        item.cwc = nil
+                        // item.cwc = nil
+                        items.remove(at: i)
+                        inc = 0
                         // This is the closing window -- don't count it
                     } else if !nextWC.window!.isVisible {
                         // Don't count it if it is not visible
@@ -97,7 +105,7 @@ class WindowJuggler: NSObject, Sequence {
                     }
                 }
             }
-
+            i += inc
         }
         return windowCount
     }
@@ -128,7 +136,7 @@ class WindowJuggler: NSObject, Sequence {
             } else {
                 return item
             }
-        }
+        } 
         return nil
     }
     
