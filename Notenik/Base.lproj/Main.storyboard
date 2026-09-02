@@ -587,8 +587,7 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Filter" autoenablesItems="NO" id="gSQ-RV-NFm">
                                                 <items>
-                                                    <menuItem title="Show All" id="2XX-Ws-kMc">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    <menuItem title="Show All" keyEquivalent="A" id="2XX-Ws-kMc">
                                                         <connections>
                                                             <action selector="setFiltering:" target="Ady-hI-5gd" id="5bg-fp-LaX"/>
                                                         </connections>
@@ -770,6 +769,11 @@
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="advSearch:" target="Ady-hI-5gd" id="jlo-su-m0k"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Search &amp; Filter" keyEquivalent="F" id="D8z-Mh-FZ2">
+                                            <connections>
+                                                <action selector="searchAndFilter:" target="Ady-hI-5gd" id="TTx-cd-Pze"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Search Next" keyEquivalent="g" id="Sis-fg-Ibk" userLabel="Find Again">
@@ -2359,13 +2363,13 @@ CA
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTK-bV-70K">
-                                <rect key="frame" x="0.0" y="0.0" width="479" height="277"/>
+                                <rect key="frame" x="0.0" y="0.0" width="479" height="269"/>
                                 <clipView key="contentView" id="caU-8Q-uow">
-                                    <rect key="frame" x="1" y="1" width="477" height="275"/>
+                                    <rect key="frame" x="1" y="1" width="477" height="267"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="fwC-s0-qs1" id="Zqh-F5-OQn">
-                                            <rect key="frame" x="0.0" y="0.0" width="477" height="275"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="477" height="267"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>

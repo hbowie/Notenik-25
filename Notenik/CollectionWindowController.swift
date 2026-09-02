@@ -27,6 +27,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     let minimumWindowWidth: CGFloat = 550.0
     
+    let logger = Logger.shared
+    
     @IBOutlet var shareButton: NSButton!
     
     @IBOutlet var searchField: NSSearchField!
@@ -242,11 +244,13 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             
             juggler.updateFiltering()
             
+            
             if notenikIO != nil {
                 if let collection = notenikIO!.collection {
                     if collection.duplicates > 0 {
                         communicateError("Duplicates found within the Collection folder -- see Log for details", alert: true)
                     }
+                    collection.setFiltering(option: notenikIO!.filterStatus)
                 }
             }
         }
@@ -780,9 +784,9 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         
         // See if we're ready to proceed.
         guard let io = notenikIO else { return }
-        guard io.collectionOpen else { return }
         guard let collection = io.collection else { return }
-        guard collection.markFieldDef != nil else { return }
+        guard io.collectionOpen else { return }
+        // guard collection.markFieldDef != nil else { return }
         guard let menuItem = sender as? NSMenuItem else { return }
         
         // Determine which setting is being requested.
@@ -801,6 +805,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             print("Unrecognized Filter Menu Item Title of \(menuItem.title)")
             return
         }
+        collection.setFiltering(option: requestedFilter)
         
         let (selNote, _) = io.getSelectedNote()
         
@@ -3851,26 +3856,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                     row: -1, searchPhrase: nil)
     }
     
-    /// Respond to a user request for an Advanced Search.
-    @IBAction func advSearch(_ sender: Any) {
-        guard let noteIO = guardForCollectionAction() else { return }
-        searcher = SearchNotes(io: noteIO)
-        searcher.searchText = searchField.stringValue
-        if let advSearchController = self.advSearchStoryboard.instantiateController(withIdentifier: "AdvSearchWC") as? AdvSearchWindowController {
-            guard let vc = advSearchController.contentViewController as? AdvSearchViewController else { return }
-            advSearchController.showWindow(self)
-            vc.window = advSearchController
-            vc.noteIO = noteIO
-            vc.collectionController = self
-            vc.searchOptions = searcher.options
-        } else {
-            Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
-                              category: "CollectionWindowController",
-                              level: .fault,
-                              message: "Couldn't get an Advanced Search Window Controller!")
-        }
-    }
-    
     @IBAction func selectNote(_ sender: Any) {
         
         guard let noteIO = notenikIO else { return }
@@ -3993,6 +3978,75 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         vc.windowController = queryBuilderController
     }
     
+    // -----------------------------------------------------------
+    //
+    // MARK: Search (aka Find) Routines
+    //
+    // -----------------------------------------------------------
+    
+    /// Respond to the Find command. All this does is position the cursor in the  Search field
+    /// in the Toolbar.
+    /// - Parameter sender: The control that triggered this method.
+    @IBAction func findNote(_ sender: Any) {
+        guard let confirmedWindow = self.window else { return }
+        searcher.options.filterResults = false
+        confirmedWindow.makeFirstResponder(searchField)
+    }
+    
+    /// Search for the first matching Note using the search field.
+    /// - Parameter sender: The Search field.
+    @IBAction func searchNow(_ sender: Any) {
+        guard let searchField = sender as? NSSearchField else { return }
+        guard let noteIO = guardForCollectionAction() else { return }
+        applyCheckBoxUpdates()
+        if noteIO.filterStatus == .showSearchResults {
+            saveFocus()
+            noteIO.stopFiltering()
+            restoreFocus()
+            assignWindowTitle()
+            juggler.updateFiltering()
+            noteIO.collection!.setFiltering(option: .showAll)
+        }
+        searcher.searchText = searchField.stringValue
+        searchUsingOptions()
+    }
+    
+    /// Respond to a request for a filtered search. Next steps depend on current state,
+    /// - Parameter sender: Any old thing.
+    @IBAction func searchAndFilter(_ sender: Any) {
+        guard let confirmedWindow = self.window else { return }
+        guard let collection = notenikIO?.collection else { return }
+        applyCheckBoxUpdates()
+        searcher.options.filterResults = true
+        searcher.checkUserInput(str: searchField.stringValue)
+        if searcher.hasText {
+            collection.setFiltering(option: .showSearchResults)
+            searchUsingOptions()
+        } else {
+            confirmedWindow.makeFirstResponder(searchField)
+        }
+    }
+    
+    /// Respond to a user request for an Advanced Search.
+    @IBAction func advSearch(_ sender: Any) {
+        guard let noteIO = guardForCollectionAction() else { return }
+        searcher = SearchNotes(io: noteIO)
+        searcher.searchText = searchField.stringValue
+        if let advSearchController = self.advSearchStoryboard.instantiateController(withIdentifier: "AdvSearchWC") as? AdvSearchWindowController {
+            guard let vc = advSearchController.contentViewController as? AdvSearchViewController else { return }
+            advSearchController.showWindow(self)
+            vc.window = advSearchController
+            vc.noteIO = noteIO
+            vc.collectionController = self
+            vc.searchOptions = searcher.options
+        } else {
+            Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                              category: "CollectionWindowController",
+                              level: .fault,
+                              message: "Couldn't get an Advanced Search Window Controller!")
+        }
+    }
+    
     /// Start an Advanced Search using the options provided by the user.
     /// - Parameter options: The options as specified by the user.
     func advSearchNow(options: SearchOptions) {
@@ -4001,25 +4055,27 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         searchUsingOptions()
     }
     
-    /// Respond to the Find command.
-    /// - Parameter sender: The control that triggered this method.
-    @IBAction func findNote(_ sender: Any) {
-        guard let confirmedWindow = self.window else { return }
-        confirmedWindow.makeFirstResponder(searchField)
-    }
-    
-    /// Search for the first matching Note using the search field.
-    /// - Parameter sender: The Search field.
-    @IBAction func searchNow(_ sender: Any) {
-        guard let searchField = sender as? NSSearchField else { return }
-        applyCheckBoxUpdates()
-        searcher.searchText = searchField.stringValue
-        searchUsingOptions()
-    }
-    
     func searchUsingOptions() {
-        guard searcher.hasText else { return }
+        guard let io = notenikIO else { return }
+        guard let collection = io.collection else { return }
+        guard searcher.hasText else {
+            saveFocus()
+            io.stopFiltering()
+            collection.setFiltering(option: .showAll)
+            restoreFocus()
+            assignWindowTitle()
+            juggler.updateFiltering()
+            return
+        }
         guard guardForCollectionAction() != nil else { return }
+        if searcher.options.filterResults {
+            searchAndFilterUsingOptions()
+        } else {
+            searchFirstUsingOptions()
+        }
+    }
+    
+    func searchFirstUsingOptions() {
         let (sortedNote, position) = searcher.nextMatching(startNew: true)
 
         if sortedNote != nil {
@@ -4038,6 +4094,38 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
     }
     
+    func searchAndFilterUsingOptions() {
+        
+        guard let io = notenikIO else { return }
+        guard io.collectionOpen else { return }
+        guard let collection = io.collection else { return }
+        
+        var foundCount = io.loadFound(searcher: searcher)
+
+        if foundCount == 0 {
+            let alert = NSAlert()
+            alert.alertStyle = .warning
+            alert.messageText = "No Note found containing search string '\(searcher.searchText)'"
+            alert.informativeText = "Searched for match using current advanced options"
+            alert.addButton(withTitle: "OK")
+            let _ = alert.runModal()
+            return
+        } else {
+            foundCount = io.startFiltering(filterIO: .showSearchResults)
+        }
+        
+        collection.setFiltering(option: io.filterStatus)
+        assignWindowTitle()
+        juggler.updateFiltering()
+        
+        let (firstNote, firstPosition) = io.firstNote()
+        _ = viewCoordinator.focusOn(initViewID: collectionViewID,
+                                    note: firstNote!.note,
+                                    position: firstPosition,
+                                    row: -1, searchPhrase: searcher.searchText,
+                                    withUpdates: true)
+    }
+    
     @IBAction func searchForNext(_ sender: Any) {
         searcher.checkUserInput(str: searchField.stringValue)
         guard searcher.hasText else {
@@ -4046,6 +4134,12 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard let noteIO = guardForCollectionAction() else {
             return
         }
+        
+        if noteIO.filterStatus == .showSearchResults {
+            goToNextNote(self)
+            return
+        }
+        
         let (sortedNote, position) = searcher.nextMatching(startNew: false)
 
         if sortedNote != nil {
@@ -4075,6 +4169,11 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         }
         guard searcher.hasText else { return }
         guard let noteIO = guardForCollectionAction() else { return }
+        
+        if noteIO.filterStatus == .showSearchResults {
+            goToPriorNote(self)
+            return
+        }
         let note = searcher.searchForPrevious()
         if note != nil {
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
@@ -4100,6 +4199,43 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                         row: -1, searchPhrase: nil)
             // select(note: startingNote, position: startingPosition, source: .action, andScroll: true)
             _ = noteIO.selectNote(at: startingPosition.index)
+        }
+    }
+    
+    var positioned = false
+    var focusNote: SortedNote?
+    var focusPosition = NotePosition()
+    
+    func saveFocus() {
+        guard let io = notenikIO else { return }
+        guard io.collectionOpen else { return }
+        guard let collection = io.collection else { return }
+        let (selNote, _) = io.getSelectedNote()
+        if selNote != nil {
+            let newPosition = io.positionOfNote(selNote!)
+            if newPosition.valid {
+                (focusNote, focusPosition) = io.selectNote(at: newPosition.index)
+                if focusPosition.valid {
+                    positioned = true
+                }
+            }
+        }
+    }
+    
+    func restoreFocus() {
+        guard let io = notenikIO else { return }
+        if !positioned {
+            let (_, firstPosition) = io.firstNote()
+            if firstPosition.valid {
+                (focusNote, focusPosition) = io.selectNote(at: firstPosition.index)
+            }
+        }
+        if focusNote != nil && focusPosition.valid {
+            _ = viewCoordinator.focusOn(initViewID: collectionViewID,
+                                        note: focusNote!.note,
+                                        position: focusPosition,
+                                        row: -1, searchPhrase: searcher.searchText,
+                                        withUpdates: true)
         }
     }
     
@@ -4845,7 +4981,11 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             if !suffix.isEmpty {
                 suffix.append(" ")
             }
-            suffix.append("Filtered")
+            if io.filterStatus == .showSearchResults {
+                suffix.append("Found")
+            } else {
+                suffix.append("Filtered")
+            }
         }
         if !suffix.isEmpty {
             suffix.insert(contentsOf: " (", at: suffix.startIndex)

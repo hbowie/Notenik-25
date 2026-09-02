@@ -40,6 +40,7 @@ class AdvSearchViewController: NSViewController {
     @IBOutlet var bodyField: NSButton!
     
     @IBOutlet var caseSensitive: NSButton!
+    @IBOutlet var filterResults: NSButton!
     
     @IBOutlet var searchAll: NSButton!
     @IBOutlet var searchWithin: NSButton!
@@ -86,6 +87,7 @@ class AdvSearchViewController: NSViewController {
         setCkBox(ckBox: titleField, selected: _searchOptions.titleField)
         setCkBox(ckBox: bodyField, selected: _searchOptions.bodyField)
         setCkBox(ckBox: caseSensitive, selected: _searchOptions.caseSensitive)
+        setCkBox(ckBox: filterResults, selected: _searchOptions.filterResults)
         searchAll.state = .on
     }
     
@@ -114,6 +116,7 @@ class AdvSearchViewController: NSViewController {
         searchOptions.tagsField = tagsField.state == .on
         searchOptions.titleField = titleField.state == .on
         searchOptions.caseSensitive = caseSensitive.state == .on
+        searchOptions.filterResults = filterResults.state == .on
         
         if searchAll.state == .on {
             searchOptions.scope = .all

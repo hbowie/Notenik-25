@@ -1812,34 +1812,55 @@ class CollectionJuggler: NSObject {
         }
     }
     
+    /// Update Filter menu
+    /// - 0 = Show All
+    /// - 1 = Show Marked
+    /// - 2 = Show Unmarked
     func updateFiltering() {
         guard let io = _lastWC?.io else { return }
         guard let collection = io.collection else { return }
         filteringMenu.autoenablesItems = false
-        if collection.markFieldDef == nil {
-            for item in filteringMenu.items {
-                item.state = .off
-                item.isEnabled = false
-            }
-        } else {
-            var selIndex = 0
-            if io.filterStatus == .showMarked {
-                selIndex = 1
-            } else if io.filterStatus == .showUnmarked {
-                selIndex = 2
-            }
-            var i = 0
-            for item in filteringMenu.items {
-                if i == selIndex {
+        
+        var i = 0
+        for item in filteringMenu.items {
+            switch i {
+            case 0:
+                item.isEnabled = true
+                if io.filterStatus == .showAll {
                     item.state = .on
                 } else {
                     item.state = .off
                 }
-                item.isEnabled = true
-                i += 1
+            case 1:
+                if collection.markFieldDef == nil {
+                    item.isEnabled = false
+                    item.state = .off
+                } else {
+                    item.isEnabled = true
+                    if io.filterStatus == .showMarked {
+                        item.state = .on
+                    } else {
+                        item.state = .off
+                    }
+                }
+            case 2:
+                if collection.markFieldDef == nil {
+                    item.isEnabled = false
+                    item.state = .off
+                } else {
+                    item.isEnabled = true
+                    if io.filterStatus == .showUnmarked {
+                        item.state = .on
+                    } else {
+                        item.state = .off
+                    }
+                }
+            default:
+                item.state = .off
+                item.isEnabled = false
             }
+            i += 1
         }
-
     }
     
     func getEditingAppList() -> EditingAppList {

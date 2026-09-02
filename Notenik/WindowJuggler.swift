@@ -85,7 +85,6 @@ class WindowJuggler: NSObject, Sequence {
         while i < items.count {
             let item = items[i]
             var inc = 1
-            item.display()
             if let nextWC = item.cwc {
                 if nextWC.window == nil {
                     // Don't count it
