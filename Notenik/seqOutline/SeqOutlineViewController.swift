@@ -659,7 +659,7 @@ class SeqOutlineViewController: NSViewController,
                                      sortedNote: node.sortedNote,
                                      position: nil,
                                      row: -1,
-                                     searchPhrase: nil)
+                                     searchPhrase: collectionWindowController!.searcher.searchText)
         case .root:
             break
         }

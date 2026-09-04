@@ -235,7 +235,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                             sortedNote: selected,
                                             position: position,
                                             row: -1,
-                                            searchPhrase: nil)
+                                            searchPhrase: searcher.searchText)
             }
             
             buildReportsActionMenu()
@@ -548,7 +548,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                         sortedNote: selected,
                                         position: position,
                                         row: -1,
-                                        searchPhrase: nil)
+                                        searchPhrase: searcher.searchText)
         }
         
         presentationEngaged = true
@@ -1791,7 +1791,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     sortedNote: startingNote,
-                                    position: nil, row: -1, searchPhrase: nil)
+                                    position: nil, row: -1, searchPhrase: searcher.searchText)
     
     }
     
@@ -1803,7 +1803,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             if modStartingNote != nil {
                 _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                             sortedNote: modStartingNote,
-                                            position: nil, row: -1, searchPhrase: nil)
+                                            position: nil, row: -1, searchPhrase: searcher.searchText)
                 if listVC != nil && rowCount > 1 {
                     listVC!.extendSelection(rowCount: rowCount)
                 }
@@ -1811,7 +1811,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 let (sortedNote, position) = io!.firstNote()
                 _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                             sortedNote: sortedNote, position: position,
-                                            row: -1, searchPhrase: nil)
+                                            row: -1, searchPhrase: searcher.searchText)
             }
         }
     }
@@ -1890,7 +1890,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         guard let _ = guardForCollectionAction() else { return }
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     sortedNote: SortedNote(note: noteToUpdate),
-                                    position: nil, row: -1, searchPhrase: nil)
+                                    position: nil, row: -1, searchPhrase: searcher.searchText)
         let (_, sel) = guardForNoteAction()
         guard let selectedNote = sel else { return }
         var body = selectedNote.note.body.value
@@ -1940,7 +1940,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         if note != nil {
             _ = viewCoordinator.focusOn(initViewID: collectionViewID, 
                                                   note: note,
-                                                  position: nil, row: -1, searchPhrase: nil)
+                                                  position: nil, row: -1, searchPhrase: searcher.searchText)
             /* select(note: note,
                    position: nil,
                    source: .action,
@@ -2042,7 +2042,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             if newNote != nil {
                 _ = viewCoordinator.focusOn(initViewID: collectionViewID, 
                                             note: newNote!,
-                                            position: nil, row: -1, searchPhrase: nil,
+                                            position: nil, row: -1, searchPhrase: searcher.searchText,
                                             withUpdates: true)
                 // select(note: newNote!, position: nil, source: .action, andScroll: true)
                 newWithOptions(currentNote: newNote!)
@@ -2274,7 +2274,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         (sortedNote, position) = io!.firstNote()
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     sortedNote: sortedNote,
-                                    position: position, row: -1, searchPhrase: nil,
+                                    position: position, row: -1, searchPhrase: searcher.searchText,
                                     withUpdates: true)
     }
     
@@ -2412,14 +2412,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         if firstNote != nil {
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: firstNote,
-                                        position: nil, row: -1, searchPhrase: nil,
+                                        position: nil, row: -1, searchPhrase: searcher.searchText,
                                         withUpdates: true)
             // select(note: firstNote, position: nil, source: .nav, andScroll: true)
         } else {
             let (sortedNote, position) = io!.firstNote()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: sortedNote,
-                                        position: position, row: -1, searchPhrase: nil)
+                                        position: position, row: -1, searchPhrase: searcher.searchText)
             // select(note: note, position: position, source: .nav, andScroll: true)
         }
     }
@@ -2557,14 +2557,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: tagStartNote,
                                         position: tagStartPosition,
-                                        row: -1, searchPhrase: nil,
+                                        row: -1, searchPhrase: searcher.searchText,
                                         withUpdates: true)
             // select(note: tagStartNote, position: tagStartPosition, source: .action)
         } else {
             let (sortedNote, position) = io!.firstNote()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: sortedNote,
-                                        position: position, row: -1, searchPhrase: nil)
+                                        position: position, row: -1, searchPhrase: searcher.searchText)
             // select(note: note, position: position, source: .action, andScroll: true)
         }
         logInfo(msg: "Notes with tags added = \(updated)")
@@ -2776,7 +2776,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                     if dropNote != nil {
                         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                                     note: dropNote,
-                                                    position: nil, row: -1, searchPhrase: nil)
+                                                    position: nil, row: -1, searchPhrase: searcher.searchText)
                         // select(note: dropNote, position: nil, source: .action, andScroll: true)
                         addAttachment(urlToAttach: fileRefURL!)
                         if firstNotePasted == nil {
@@ -2886,7 +2886,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         if firstNotePasted != nil {
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: firstNotePasted,
-                                        position: nil, row: -1, searchPhrase: nil,
+                                        position: nil, row: -1, searchPhrase: searcher.searchText,
                                         withUpdates: true)
             // select(note: firstNotePasted, position: nil, source: .nav, andScroll: true)
         } else {
@@ -3077,7 +3077,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         if addedNote != nil {
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: addedNote,
-                                        position: nil, row: -1, searchPhrase: nil)
+                                        position: nil, row: -1, searchPhrase: searcher.searchText)
             // select(note: addedNote, position: nil, source: .action, andScroll: true)
         }
         return addedNote
@@ -3195,7 +3195,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             // reloadViews()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: selNote,
-                                        position: nil, row: -1, searchPhrase: nil,
+                                        position: nil, row: -1, searchPhrase: searcher.searchText,
                                         withUpdates: true)
             // select(note: selNote, position: nil, source: .action, andScroll: true)
         }
@@ -3277,7 +3277,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                 displayModifiedNote(updatedNote: chgNote!)
                 _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                             note: chgNote,
-                                            position: nil, row: -1, searchPhrase: nil,
+                                            position: nil, row: -1, searchPhrase: searcher.searchText,
                                             withUpdates: true)
                 // select(note: chgNote, position: nil, source: .action)
             }
@@ -3359,7 +3359,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             firstModNote!.genSortKey()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: firstModNote!,
-                                        position: nil, row: -1, searchPhrase: nil,
+                                        position: nil, row: -1, searchPhrase: searcher.searchText,
                                         withUpdates: true)
         } else {
             print("  - first mod note is nil!")
@@ -3379,7 +3379,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             populateEditFields(with: firstModNote!.note)
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: firstModNote!,
-                                        position: nil, row: -1, searchPhrase: nil,
+                                        position: nil, row: -1, searchPhrase: searcher.searchText,
                                         withUpdates: true)
         }
     }
@@ -3470,7 +3470,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             }
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: modNote,
-                                        position: nil, row: -1, searchPhrase: nil,
+                                        position: nil, row: -1, searchPhrase: searcher.searchText,
                                         withUpdates: true)
         }
     }
@@ -3498,7 +3498,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             // reloadViews()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: chgNote,
-                                        position: nil, row: -1, searchPhrase: nil,
+                                        position: nil, row: -1, searchPhrase: searcher.searchText,
                                         withUpdates: true)
             // select(note: chgNote, position: nil, source: .action, andScroll: true)
             return true
@@ -3627,7 +3627,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     sortedNote: sortedNote,
                                     position: position,
-                                    row: -1, searchPhrase: nil)
+                                    row: -1, searchPhrase: searcher.searchText)
     }
     
     /// Go to the next note in the list
@@ -3644,7 +3644,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     sortedNote: nextNote,
                                     position: nil,
-                                    row: -1, searchPhrase: nil)
+                                    row: -1, searchPhrase: searcher.searchText)
     }
     
     @IBAction func scrollToSelected(_ sender: Any) {
@@ -3672,7 +3672,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     sortedNote: priorNote,
                                     position: nil,
-                                    row: -1, searchPhrase: nil)
+                                    row: -1, searchPhrase: searcher.searchText)
     }
     
     @IBAction func goToRandomNote(_ sender: Any) {
@@ -3715,7 +3715,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     sortedNote: randomNote,
                                     position: randomPosition,
-                                    row: -1, searchPhrase: nil)
+                                    row: -1, searchPhrase: searcher.searchText)
     }
     
     @IBAction func clearAllPicks(_ sender: Any) {
@@ -3776,7 +3776,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: priorNote,
                                         position: nil,
-                                        row: -1, searchPhrase: nil)
+                                        row: -1, searchPhrase: searcher.searchText)
             // select(note: priorNote, position: nil, source: .nav, andScroll: true)
         } else {
             communicateError("Navigation History Exhausted", alert: true)
@@ -3791,7 +3791,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: nextNote,
                                         position: nil,
-                                        row: -1, searchPhrase: nil)
+                                        row: -1, searchPhrase: searcher.searchText)
         } else {
             communicateError("Navigation History Exhausted", alert: true)
         }
@@ -3853,7 +3853,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     note: nextNote,
                                     position: nextPosition,
-                                    row: -1, searchPhrase: nil)
+                                    row: -1, searchPhrase: searcher.searchText)
     }
     
     @IBAction func selectNote(_ sender: Any) {
@@ -4158,7 +4158,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: startingNote,
                                         position: startingPosition,
-                                        row: -1, searchPhrase: nil)
+                                        row: -1, searchPhrase: searcher.searchText)
             _ = noteIO.selectNote(at: startingPosition.index)
         }
     }
@@ -4179,7 +4179,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: note,
                                         position: nil,
-                                        row: -1, searchPhrase: nil)
+                                        row: -1, searchPhrase: searcher.searchText)
             /* select(note: note,
                    position: nil,
                    source: .action,
@@ -4196,7 +4196,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: startingNote,
                                         position: startingPosition,
-                                        row: -1, searchPhrase: nil)
+                                        row: -1, searchPhrase: searcher.searchText)
             // select(note: startingNote, position: startingPosition, source: .action, andScroll: true)
             _ = noteIO.selectNote(at: startingPosition.index)
         }
@@ -4209,7 +4209,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     func saveFocus() {
         guard let io = notenikIO else { return }
         guard io.collectionOpen else { return }
-        guard let collection = io.collection else { return }
         let (selNote, _) = io.getSelectedNote()
         if selNote != nil {
             let newPosition = io.positionOfNote(selNote!)
@@ -4247,7 +4246,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     note: note,
                                     position: nil,
-                                    row: -1, searchPhrase: nil)
+                                    row: -1, searchPhrase: searcher.searchText)
     }
     
     
@@ -4258,7 +4257,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     sortedNote: firstNote,
                                     position: firstPosition,
-                                    row: -1, searchPhrase: nil)
+                                    row: -1, searchPhrase: searcher.searchText)
     }
     
     /// Adjust the Attachments menu based on the attachments found in the passed note.
@@ -4620,7 +4619,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: selNote,
                                         position: nil,
-                                        row: -1, searchPhrase: nil,
+                                        row: -1, searchPhrase: searcher.searchText,
                                         withUpdates: true)
             // select(note: selNote, position: nil, source: .action, andScroll: true)
         }
@@ -4691,14 +4690,14 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: nextNote,
                                         position: nextPosition,
-                                        row: -1, searchPhrase: nil,
+                                        row: -1, searchPhrase: searcher.searchText,
                                         withUpdates: true)
         } else {
             let (firstNote, firstPosition) = noteIO.firstNote()
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: firstNote,
                                         position: firstPosition,
-                                        row: 0, searchPhrase: nil,
+                                        row: 0, searchPhrase: searcher.searchText,
                                         withUpdates: true)
             // select(note: nextNote, position: nextPosition, source: .action, andScroll: true)
         }
@@ -4720,7 +4719,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     note: note,
                                     position: nil,
-                                    row: -1, searchPhrase: nil)
+                                    row: -1, searchPhrase: searcher.searchText)
         // select(note: note, position: nil, source: .action, andScroll: true, searchPhrase: nil)
         deleteNote(self)
     }
@@ -4759,7 +4758,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: sortedNote,
                                         position: position,
-                                        row: -1, searchPhrase: nil)
+                                        row: -1, searchPhrase: searcher.searchText)
             // select(note: note, position: position, source: .action, andScroll: true)
         } else {
             let (sortedNote, _) = io!.getSelectedNote()
@@ -4767,7 +4766,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         sortedNote: sortedNote,
                                         position: nil,
-                                        row: -1, searchPhrase: nil)
+                                        row: -1, searchPhrase: searcher.searchText)
             // select(note: note, position: nil, source: .action, andScroll: true)
         }
         noteTabs!.tabView.selectFirstTabViewItem(nil)
@@ -4866,7 +4865,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                         note: note,
                                         position: position,
-                                        row: -1, searchPhrase: nil,
+                                        row: -1, searchPhrase: searcher.searchText,
                                         withUpdates: true)
             // select(note: note, position: nil, source: .action, andScroll: true)
             if note != nil {
@@ -5188,7 +5187,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     note: reloaded,
                                     position: nil,
-                                    row: -1, searchPhrase: nil,
+                                    row: -1, searchPhrase: searcher.searchText,
                                     withUpdates: true)
     }
     
@@ -5508,7 +5507,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                         sortedNote: selected,
                                         position: position,
                                         row: -1,
-                                        searchPhrase: nil)
+                                        searchPhrase: searcher.searchText)
         }
         
         spokenScriptEngaged = true
@@ -5571,7 +5570,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                                         sortedNote: selected,
                                         position: position,
                                         row: -1,
-                                        searchPhrase: nil)
+                                        searchPhrase: searcher.searchText)
         }
         
         presentationEngaged = true
@@ -5658,7 +5657,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     sortedNote: sortedNote,
                                     position: position,
-                                    row: -1, searchPhrase: nil,
+                                    row: -1, searchPhrase: searcher.searchText,
                                     withUpdates: true)
         
         let alert = NSAlert()
@@ -7089,7 +7088,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         _ = viewCoordinator.focusOn(initViewID: collectionViewID,
                                     sortedNote: sortedNote,
                                     position: position,
-                                    row: -1, searchPhrase: nil,
+                                    row: -1, searchPhrase: searcher.searchText,
                                     withUpdates: true)
     }
 }

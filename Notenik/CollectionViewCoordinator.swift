@@ -14,6 +14,8 @@ import Cocoa
 
 import NotenikLib
 
+import NotenikUtils
+
 /// This class coordinated the selection of a note between the various views.
 class CollectionViewCoordinator: NSObject {
     

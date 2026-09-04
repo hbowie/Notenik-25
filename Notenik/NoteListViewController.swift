@@ -893,7 +893,7 @@ class NoteListViewController:   NSViewController,
                              sortedNote: sortedNote!,
                              position: notePosition,
                              row: row,
-                             searchPhrase: nil)
+                                 searchPhrase: collectionWindowController!.searcher.searchText)
         lastRowSelected = row
     }
     

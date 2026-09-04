@@ -431,8 +431,7 @@ class NoteTagsViewController: NSViewController,
         case .note:
             _ = coordinator!.focusOn(initViewID: viewID,
                                      note: node.note!,
-                                     position: nil, row: -1, searchPhrase: nil)
-            // collectionWindowController!.select(note: node.note!, position: nil, source: .tree)
+                                     position: nil, row: -1, searchPhrase: collectionWindowController!.searcher.searchText)
         case .tag:
             var nextChildNode: TagsNode = node
             var childrenExhausted = false
