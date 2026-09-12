@@ -18,9 +18,17 @@ Mirror Auto Index: false
 
 Display Body Label: true
 
+Minimum Body Edit View Height: 5.0
+
 Title Display Option: p bold
 
+Tags Display: above-title
+
 Display Mode: normal
+
+Outline Tab: 0
+
+Override Custom Display: false
 
 MathJax: false
 
@@ -34,11 +42,17 @@ Ext Links Open in New Windows: true
 
 Scrolling Sync: false
 
+ToC Depth: 3
+
 Note File Format: yaml
 
-Hash Tags: false
+Hash Tags: notenik-field
 
-Window Numbers: 1145.0;201.0;1234.0;1214.0;517.5;
+Window Numbers: 90.0;0.0;1234.0;903.0;517.5;
 
-Column Widths: tags: 50, 100, 1200; author: 100, 200, 1000; seq: 30, 80, 250; klass: 60, 80, 150; dateadded: 100, 180, 250; x: 12, 20, 50; statusdigit: 20, 30, 50; rank: 50, 80, 250; date: 80, 120, 500; title: 200, 503, 1500; datemod: 100, 180, 250; 
+Column Widths: tags: 50, 100, 1200; mk: 24, 36, 48; date: 80, 120, 500; x: 12, 20, 50; statusdigit: 20, 30, 50; dateadded: 100, 180, 250; datemod: 100, 180, 250; title: 200, 503, 1500; klass: 60, 80, 150; seq: 30, 80, 250; rank: 50, 80, 250; author: 100, 200, 1000; 
+
+Boost Factor: 1.2
+
+Special Fonts Config: false
 

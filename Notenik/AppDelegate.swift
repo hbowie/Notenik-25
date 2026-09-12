@@ -187,6 +187,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         _ = juggler!.openParentRealm()
     }
     
+    @IBAction func menuScanForCollections(_ sender: Any) {
+        juggler!.scanForCollections()
+    }
+    
     /// To handle events from Notenik's URL scheme.
     @objc func handleAppleEvent(event: NSAppleEventDescriptor, replyEvent: NSAppleEventDescriptor) {
         logInfo("Received an Apple Event")

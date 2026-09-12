@@ -740,6 +740,24 @@ class CollectionJuggler: NSObject {
         return nil
     }
     
+    func scanForCollections() {
+        let openPanel = NSOpenPanel();
+        openPanel.title = "Select a Parent Folder containing one or more Collections"
+        openPanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
+        openPanel.showsResizeIndicator = true
+        openPanel.showsHiddenFiles = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = false
+        openPanel.allowsMultipleSelection = false
+        openPanel.prompt = "Scan Within"
+        let result = openPanel.runModal()
+        guard result == .OK else { return }
+        let scanner = CollectionScanner()
+        let io = scanner.scan(within: openPanel.url!)
+        _ = assignIOtoWindow(io: io)
+    }
+    
     /// The user has requested us to save the current collection in a new location
     func userRequestsSaveAs(currentIO: NotenikIO, currentWindow: CollectionWindow) {
         guard currentIO.collectionOpen else { return }
