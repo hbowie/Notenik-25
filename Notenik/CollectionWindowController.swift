@@ -87,6 +87,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     let spokenStoryboard:          NSStoryboard = NSStoryboard(name: "Spoken", bundle: nil)
     let presentStoryboard:         NSStoryboard = NSStoryboard(name: "Present", bundle: nil)
     let displayPrefsStoryboard:    NSStoryboard = NSStoryboard(name: "DisplayPrefs", bundle: nil)
+    let instructionsStoryboard:    NSStoryboard = NSStoryboard(name: "Instructions", bundle: nil)
     
     var spokenScriptEngaged        = false
     
@@ -6925,6 +6926,83 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     func presentedSubitemDidChange(at: URL) {
         // print("NSFilePresenter presented sub item did change at: \(at)")
+    }
+    
+    // -----------------------------------------------------------
+    //
+    // MARK: Edit Instructions Window
+    //
+    // -----------------------------------------------------------
+    
+    var instructWC: InstructionsWindowController?
+    var instructVC: InstructionsViewController?
+    var instructWindow: NSWindow?
+    
+    func updateEditInstructions(html: String) {
+
+        if html.isEmpty && instructVC == nil { return }
+        
+        if html.isEmpty && instructWindow != nil {
+            closeInstructionsWindow()
+            return
+        }
+        
+        if !html.isEmpty && instructVC == nil {
+            presentInstructionsWindow()
+        }
+        
+        if !html.isEmpty && instructVC != nil {
+            instructVC!.loadHTML(instr: html)
+        }
+        
+        if instructWindow != nil {
+            instructWindow!.makeKeyAndOrderFront(self)
+        }
+    }
+    
+    func presentInstructionsWindow() {
+        guard instructVC == nil else { return }
+        
+        guard let instructController = self.instructionsStoryboard.instantiateController(withIdentifier: "instructionsWC") as? InstructionsWindowController else {
+            Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                              category: "CollectionWindowController",
+                              level: .fault,
+                              message: "Couldn't get an Instructions Window Controller!")
+            return
+        }
+
+        guard let vc = instructController.contentViewController as? InstructionsViewController else {
+            Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                              category: "CollectionWindowController",
+                              level: .fault,
+                              message: "Couldn't get an Instructions View Controller!")
+            return
+        }
+        
+        instructWC = instructController
+        instructVC = vc
+        instructWC!.showWindow(self)
+        guard let instructWin = instructWC?.window else {
+            Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                              category: "CollectionWindowController",
+                              level: .fault,
+                              message: "Couldn't present an Instructions Window!")
+            return
+        }
+        instructWindow = instructWin
+        vc.collectionController = self
+        vc.wc = instructWC
+        
+        addAuxWindow(instructWin)
+    }
+
+    func closeInstructionsWindow() {
+        guard instructWindow != nil else { return }
+        removeAuxWindow(instructWindow!)
+        instructWindow!.close()
+        instructWC = nil
+        instructVC = nil
+        instructWindow = nil
     }
     
     // ----------------------------------------------------------------------------------

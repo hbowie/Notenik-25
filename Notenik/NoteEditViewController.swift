@@ -4,13 +4,15 @@
 //
 //  Created by Herb Bowie on 1/28/19.
 //
-//  Copyright © 2019 - 2025 Herb Bowie (https://hbowie.net)
+//  Copyright © 2019 - 2026 Herb Bowie (https://hbowie.net)
 //
 //  This programming code is published as open source software under the
 //  terms of the MIT License (https://opensource.org/licenses/MIT).
 //
 
 import Cocoa
+
+import Ink
 
 import NotenikLib
 import NotenikUtils
@@ -39,6 +41,8 @@ class NoteEditViewController: NSViewController, CollectionView {
     var containerViewBuilt = false
     
     var editDefs:  [FieldDefinition] = []
+    var instructionsState: [Bool] = []
+    var activeInstructions = 0
     var editViews: [MacEditView] = []
     var lookupViews: [LookupView] = []
     var grid:      [[NSView]] = []
@@ -130,9 +134,12 @@ class NoteEditViewController: NSViewController, CollectionView {
             }
         }
         editDefs = []
+        instructionsState = []
+        activeInstructions = 0
         for def in fieldDefs {
             if def.fieldType.userEditable && !def.parentField {
                 editDefs.append(def)
+                instructionsState.append(false)
             }
         }
         
@@ -174,7 +181,7 @@ class NoteEditViewController: NSViewController, CollectionView {
         guard def.fieldType.typeString != NotenikConstants.wikilinksCommon else { return }
         
         let label = def.fieldLabel
-        let labelView = makeLabelView(with: label)
+        let labelView = makeLabelView(def: def)
         
         let editView = ViewFactory.getEditView(collection: collection,
                                                pickLists: notenikIO!.pickLists,
@@ -189,6 +196,10 @@ class NoteEditViewController: NSViewController, CollectionView {
         }
         
         let valueView = editView.view
+        
+        if !def.toolTip.isEmpty {
+            valueView.toolTip = def.toolTip
+        }
         
         editViews.append(editView)
         if let lookupView = editView as? LookupView {
@@ -266,10 +277,74 @@ class NoteEditViewController: NSViewController, CollectionView {
     }
     
     /// Make a View to contain a field label
-    func makeLabelView(with label: FieldLabel) -> NSView {
-        let str = AppPrefsCocoa.shared.makeUserAttributedString(text: label.properWithParent + ": ", usage: .edit)
+    func makeLabelView(def: FieldDefinition) -> NSView {
+        if !def.instructions.isEmpty {
+            return makeLabelWithInstructions(def: def)
+        }
+        let str = AppPrefsCocoa.shared.makeUserAttributedString(text: def.fieldLabel.properWithParent + ": ", usage: .edit)
         let vw = NSTextField(labelWithAttributedString: str)
         return vw
+    }
+    
+    func makeLabelWithInstructions(def: FieldDefinition) -> NSView {
+        var stack:      NSStackView!
+        var textField:  NSTextField!
+        var infoButton: NSButton!
+        var controls = [NSView]()
+        
+        textField = NSTextField(labelWithString: def.fieldLabel.properForm)
+        // AppPrefsCocoa.shared.setTextEditingFont(object: textField)
+        textField.isSelectable = true
+        controls.append(textField)
+        
+        infoButton = NSButton(image: NSImage(systemSymbolName: "i.circle",
+                                             accessibilityDescription: def.fieldLabel.properForm)!,
+                              target: self, action: #selector(infoButtonClicked(sender: )))
+        infoButton.setAccessibilityLabel(def.fieldLabel.commonForm)
+        controls.append(infoButton)
+        
+        stack = NSStackView(views: controls)
+        stack.orientation = .horizontal
+        
+        return stack
+    }
+    
+    @objc func infoButtonClicked(sender: NSButton) {
+        var i = 0
+        while i < editDefs.count {
+            if editDefs[i].fieldLabel.commonForm == sender.accessibilityLabel() {
+                if instructionsState[i] == false {
+                    instructionsState[i] = true
+                    activeInstructions += 1
+                } else {
+                    instructionsState[i] = false
+                    activeInstructions -= 1
+                }
+                break
+            }
+            i += 1
+        }
+        var instrMD = ""
+        var instrHTML = ""
+        if activeInstructions > 0 {
+            i = 0
+            while i < editDefs.count {
+                if instructionsState[i] {
+                    if !instrMD.isEmpty {
+                        instrMD.append("\n")
+                    }
+                    let def = editDefs[i]
+                    instrMD.append("**\(def.fieldLabel.properForm)**: \(def.instructions)\n")
+                }
+                i += 1
+            }
+            let ink = MarkdownParser()
+            instrHTML = ink.html(from: instrMD)
+        }
+        
+        if let cwc = collectionWindowController {
+            cwc.updateEditInstructions(html: instrHTML)
+        }
     }
     
     // -----------------------------------------------------------

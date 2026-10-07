@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
+        <plugIn identifier="com.apple.WebKit2IBPlugin" version="25098"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="Bay-0W-sCR">
+            <objects>
+                <windowController storyboardIdentifier="instructionsWC" id="r8q-3q-fCb" customClass="InstructionsWindowController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Edit Instructions" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="FKF-6B-9hY">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="196" y="250" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1440" height="903"/>
+                        <view key="contentView" id="vxD-yT-rSC">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="r8q-3q-fCb" id="dnB-eW-Spz"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="Iwn-nX-K3l" kind="relationship" relationship="window.shadowedContentViewController" id="glz-s6-vTZ"/>
+                    </connections>
+                </windowController>
+                <customObject id="pwL-Ck-Tae" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="34" y="2"/>
+        </scene>
+        <!--Instructions View Controller-->
+        <scene sceneID="RBd-Wj-KbD">
+            <objects>
+                <viewController id="Iwn-nX-K3l" customClass="InstructionsViewController" customModule="Notenik" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="6uj-XX-JdP">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Onk-5n-oj8">
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Onk-5n-oj8" firstAttribute="top" secondItem="6uj-XX-JdP" secondAttribute="top" id="Cjg-WQ-41G"/>
+                            <constraint firstItem="Onk-5n-oj8" firstAttribute="leading" secondItem="6uj-XX-JdP" secondAttribute="leading" id="K4C-lm-Tmp"/>
+                            <constraint firstAttribute="bottom" secondItem="Onk-5n-oj8" secondAttribute="bottom" id="XPx-Fs-dE0"/>
+                            <constraint firstAttribute="trailing" secondItem="Onk-5n-oj8" secondAttribute="trailing" id="bDD-wc-vYi"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="Onk-5n-oj8" id="Ptk-nh-1S1"/>
+                    </connections>
+                </viewController>
+                <customObject id="tNB-6Z-CIo" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="34" y="470"/>
+        </scene>
+    </scenes>
+</document>
