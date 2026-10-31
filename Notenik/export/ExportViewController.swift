@@ -36,6 +36,7 @@ class ExportViewController: NSViewController {
     let webBookEPUB = "Web Book as EPUB"
     let webPresentation = "Web Presentation"
     let iaPresenter = "iA Presenter"
+    let budgetSpread = "Budget Spread"
     
     let osdir     = OpenSaveDirectory.shared
     
@@ -116,6 +117,7 @@ class ExportViewController: NSViewController {
         formatPopup.addItem(withTitle: webBookEPUB)
         formatPopup.addItem(withTitle: webPresentation)
         formatPopup.addItem(withTitle: iaPresenter)
+        formatPopup.addItem(withTitle: budgetSpread)
         startOfExportScripts = formatPopup.numberOfItems
         formatPopup.selectItem(at: 0)
         
@@ -187,6 +189,9 @@ class ExportViewController: NSViewController {
                 splitTagsCheckBox.state = .off
             case iaPresenter:
                 fileExtCombo.selectItem(withObjectValue: md)
+                splitTagsCheckBox.state = .off
+            case budgetSpread:
+                fileExtCombo.selectItem(withObjectValue: csv)
                 splitTagsCheckBox.state = .off
             default:
                 break
@@ -260,9 +265,18 @@ class ExportViewController: NSViewController {
                 return
             case iaPresenter:
                 format = .iaPresenter
+            case budgetSpread:
+                format = .budgetSpread
             default:
                 format = .commaSeparated
             }
+        }
+        
+        // Check for required fields
+        if format == .budgetSpread && io!.collection!.spreadFieldDef == nil {
+            communicateError("Collection does not have a Spread field", alert: true)
+            window.close()
+            return
         }
         
         // See where the user wants to save it.
@@ -534,6 +548,23 @@ class ExportViewController: NSViewController {
     
     @IBAction func cancelButtonPressed(_ sender: Any) {
         window.close()
+    }
+    
+    /// Log an error message and optionally display an alert message.
+    func communicateError(_ msg: String, alert: Bool=false) {
+        
+        Logger.shared.log(subsystem: "com.powersurgepub.notenik.macos",
+                          category: "ExportViewController",
+                          level: .error,
+                          message: msg)
+        
+        if alert {
+            let dialog = NSAlert()
+            dialog.alertStyle = .warning
+            dialog.messageText = msg
+            dialog.addButton(withTitle: "OK")
+            let _ = dialog.runModal()
+        }
     }
     
 }
