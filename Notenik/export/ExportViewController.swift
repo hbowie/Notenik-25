@@ -117,7 +117,9 @@ class ExportViewController: NSViewController {
         formatPopup.addItem(withTitle: webBookEPUB)
         formatPopup.addItem(withTitle: webPresentation)
         formatPopup.addItem(withTitle: iaPresenter)
-        formatPopup.addItem(withTitle: budgetSpread)
+        if let spreadDef = io?.collection?.spreadFieldDef {
+            formatPopup.addItem(withTitle: budgetSpread)
+        }
         startOfExportScripts = formatPopup.numberOfItems
         formatPopup.selectItem(at: 0)
         

@@ -136,6 +136,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     var reportRunner: ReportRunner?
     
+    /// Getter and Setter for the I/O module
     var io: NotenikIO? {
         get {
             return notenikIO
@@ -252,8 +253,40 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
                         communicateError("Duplicates found within the Collection folder -- see Log for details", alert: true)
                     }
                     collection.setFiltering(option: notenikIO!.filterStatus)
+                    
+                    /* if let mainMenu = NSApplication.shared.mainMenu {
+                        print("Obtained app main menu")
+                        processMenu(menu: mainMenu, parents: [])
+                    } */
                 }
             }
+        }
+    }
+    
+    func processMenu(menu: NSMenu, parents: [String]) {
+        let prefix = String(repeating: "  ", count: parents.count)
+        print(prefix + "- \(menu.title) contains \(menu.numberOfItems) items")
+        var parentsPlus = parents
+        parentsPlus.append(menu.title)
+        for item in menu.items {
+            processMenuItem(item: item, parents: parentsPlus)
+        }
+    }
+    
+    func processMenuItem(item: NSMenuItem, parents: [String]) {
+        let prefix = String(repeating: "  ", count: parents.count)
+        var separator = false
+        if #available(macOS 14.0, *) {
+            if item.isSeparatorItem {
+                print(prefix + "- ----------")
+                separator = true
+            }
+        }
+        if !separator {
+            print(prefix + "- \(item.title)")
+        }
+        if let anotherMenu = item.submenu {
+            processMenu(menu: anotherMenu, parents: parents)
         }
     }
 

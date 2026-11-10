@@ -439,24 +439,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NoteDisplayMaster {
         }
     }
     
-    @available(macOS 11.0, *)
-    func application(_ application: NSApplication, handlerFor intent: INIntent) -> Any? {
-        if intent is GetNoteTitleIntent {
-            return GetNoteTitleIntentHandler()
-        } else if intent is GetNoteSharingLinkIntent {
-            return GetNoteSharingLinkIntentHandler()
-        } else if intent is GetNoteFilePathIntent {
-            return GetNoteFilePathIntentHandler()
-        } else if intent is AddNoteFromTextIntent {
-            return AddNoteFromTextIntentHandler()
-        } else if intent is RunScriptIntent {
-            return RunScriptIntentHandler()
-        } else if intent is OpenQuickActionIntent {
-            return OpenQuickActionIntentHandler()
-        }
-        return nil
-    }
-    
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return false
     }
