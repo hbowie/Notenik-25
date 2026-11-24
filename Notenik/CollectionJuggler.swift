@@ -1717,6 +1717,13 @@ class CollectionJuggler: NSObject {
         return lastWC
     }
     
+    func showInAppSearchResults(searchTerm: String) {
+        guard lastWC != nil else {
+            return
+        }
+        lastWC!.searchNow(term: searchTerm)
+    }
+    
     func updateSortMenu() {
         guard sortMenu != nil else { return }
         var reverseMenuItem: NSMenuItem?

@@ -164,6 +164,13 @@ class CollectionViewCoordinator: NSObject {
             return false
         }
         
+        /* if positionToUse == nil || positionToUse!.invalid {
+            print("  - bum position!")
+        } else {
+            _ = notenikIO!.selectNote(at: positionToUse!.index)
+            print("  - selecting note at row # \(positionToUse!.index)")
+        } */
+        
         /*
         if listVC != nil && source != .list && positionToUse != nil && positionToUse!.index >= 0 {
             listVC!.selectRow(index: positionToUse!.index, andScroll: andScroll, checkForMods: (source != .action))

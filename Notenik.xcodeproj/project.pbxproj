@@ -33,6 +33,7 @@
 		9C0612192B647E4F00BCCA23 /* NotenikDocs in Resources */ = {isa = PBXBuildFile; fileRef = 9C0612182B647E4F00BCCA23 /* NotenikDocs */; };
 		9C06454E2730C4C7008943A5 /* DefsRemoved.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C06454D2730C4C7008943A5 /* DefsRemoved.swift */; };
 		9C07F7522436904F00460E14 /* NotenikUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 9C07F7512436904F00460E14 /* NotenikUtils */; };
+		9C08B5AA30A5269B003B5AF4 /* AppIntentEntities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C08B5A930A5269B003B5AF4 /* AppIntentEntities.swift */; };
 		9C097D5D259AB95A00834A42 /* MediumPubWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C097D5B259AB95A00834A42 /* MediumPubWindowController.swift */; };
 		9C09E1762248601D0046D50D /* notenik.iconset in Resources */ = {isa = PBXBuildFile; fileRef = 9C09E1752248601D0046D50D /* notenik.iconset */; };
 		9C0A347D244A262300B39604 /* NotenikLib in Frameworks */ = {isa = PBXBuildFile; productRef = 9C0A347C244A262300B39604 /* NotenikLib */; };
@@ -141,6 +142,7 @@
 		9C568DF323230B17005D6B0A /* WorkTitleDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C568DF123230B17005D6B0A /* WorkTitleDataSource.swift */; };
 		9C568DF5232325B5005D6B0A /* WorkTypeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C568DF4232325B5005D6B0A /* WorkTypeDataSource.swift */; };
 		9C568DF6232325B5005D6B0A /* WorkTypeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C568DF4232325B5005D6B0A /* WorkTypeDataSource.swift */; };
+		9C58FDD030A3E46C0024B2A7 /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C58FDCF30A3E46C0024B2A7 /* AppIntents.swift */; };
 		9C5BE16A277163FA0013C0D3 /* SeqMod.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C5BE169277163FA0013C0D3 /* SeqMod.storyboard */; };
 		9C5BE16C277166E60013C0D3 /* SeqModWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5BE16B277166E60013C0D3 /* SeqModWindowController.swift */; };
 		9C5BE16E277167070013C0D3 /* SeqModViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5BE16D277167070013C0D3 /* SeqModViewController.swift */; };
@@ -181,7 +183,7 @@
 		9C7A2F1928613EB10020DC21 /* EditPrefs.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C7A2F1828613EB10020DC21 /* EditPrefs.storyboard */; };
 		9C7B2B8B2B28FAE6008D7F3F /* FieldRenameAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7B2B8A2B28FAE6008D7F3F /* FieldRenameAction.swift */; };
 		9C7B2B8D2B28FBAF008D7F3F /* FieldRenameParms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7B2B8C2B28FBAF008D7F3F /* FieldRenameParms.swift */; };
-		9C7D61A9309FA8F200CD6CEA /* AppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7D61A8309FA8F200CD6CEA /* AppIntents.swift */; };
+		9C7D61A9309FA8F200CD6CEA /* AppIntentsOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7D61A8309FA8F200CD6CEA /* AppIntentsOld.swift */; };
 		9C7DDD91255B36AA00065812 /* CocoaFontsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7DDD90255B36AA00065812 /* CocoaFontsDataSource.swift */; };
 		9C7DDD92255B36AA00065812 /* CocoaFontsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7DDD90255B36AA00065812 /* CocoaFontsDataSource.swift */; };
 		9C822B9D22D6D5D6008EF106 /* TagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C822B9C22D6D5D6008EF106 /* TagsView.swift */; };
@@ -378,6 +380,7 @@
 		9C05C5C52DBAC2B6000046F5 /* SeqViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeqViewDelegate.swift; sourceTree = "<group>"; };
 		9C0612182B647E4F00BCCA23 /* NotenikDocs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = NotenikDocs; path = ../../NotenikDocs; sourceTree = "<group>"; };
 		9C06454D2730C4C7008943A5 /* DefsRemoved.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefsRemoved.swift; sourceTree = "<group>"; };
+		9C08B5A930A5269B003B5AF4 /* AppIntentEntities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntentEntities.swift; sourceTree = "<group>"; };
 		9C097D5B259AB95A00834A42 /* MediumPubWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediumPubWindowController.swift; sourceTree = "<group>"; };
 		9C09E1752248601D0046D50D /* notenik.iconset */ = {isa = PBXFileReference; lastKnownFileType = folder.iconset; path = notenik.iconset; sourceTree = "<group>"; };
 		9C0B643423885E9900869FAA /* TagsMassChange.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TagsMassChange.storyboard; sourceTree = "<group>"; };
@@ -457,6 +460,7 @@
 		9C568DEC2322FBF0005D6B0A /* AuthorDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorDataSource.swift; sourceTree = "<group>"; };
 		9C568DF123230B17005D6B0A /* WorkTitleDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkTitleDataSource.swift; sourceTree = "<group>"; };
 		9C568DF4232325B5005D6B0A /* WorkTypeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkTypeDataSource.swift; sourceTree = "<group>"; };
+		9C58FDCF30A3E46C0024B2A7 /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
 		9C5BE169277163FA0013C0D3 /* SeqMod.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SeqMod.storyboard; sourceTree = "<group>"; };
 		9C5BE16B277166E60013C0D3 /* SeqModWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeqModWindowController.swift; sourceTree = "<group>"; };
 		9C5BE16D277167070013C0D3 /* SeqModViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeqModViewController.swift; sourceTree = "<group>"; };
@@ -492,7 +496,7 @@
 		9C7A2F1828613EB10020DC21 /* EditPrefs.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EditPrefs.storyboard; sourceTree = "<group>"; };
 		9C7B2B8A2B28FAE6008D7F3F /* FieldRenameAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldRenameAction.swift; sourceTree = "<group>"; };
 		9C7B2B8C2B28FBAF008D7F3F /* FieldRenameParms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldRenameParms.swift; sourceTree = "<group>"; };
-		9C7D61A8309FA8F200CD6CEA /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
+		9C7D61A8309FA8F200CD6CEA /* AppIntentsOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntentsOld.swift; sourceTree = "<group>"; };
 		9C7DDD90255B36AA00065812 /* CocoaFontsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoaFontsDataSource.swift; sourceTree = "<group>"; };
 		9C822B9C22D6D5D6008EF106 /* TagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsView.swift; sourceTree = "<group>"; };
 		9C822BA122D6DC71008EF106 /* TagsTokenDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsTokenDelegate.swift; sourceTree = "<group>"; };
@@ -813,6 +817,9 @@
 		9C60E6D021F64B3B00C332ED /* Notenik */ = {
 			isa = PBXGroup;
 			children = (
+				9C58FDCF30A3E46C0024B2A7 /* AppIntents.swift */,
+				9C08B5A930A5269B003B5AF4 /* AppIntentEntities.swift */,
+				9C7D61A8309FA8F200CD6CEA /* AppIntentsOld.swift */,
 				9C9094C42249A664002207EB /* NoteDocumentController.swift */,
 				9CC41CD4229CA61700E92A66 /* Credits.rtf */,
 				9C60E6D721F64B3C00C332ED /* Main.storyboard */,
@@ -846,7 +853,6 @@
 				9C60E6D521F64B3C00C332ED /* Assets.xcassets */,
 				9C60E6DA21F64B3C00C332ED /* Info.plist */,
 				9C6E781827EA646D004BB9A0 /* Notenik.sdef */,
-				9C7D61A8309FA8F200CD6CEA /* AppIntents.swift */,
 				9C60E6DB21F64B3C00C332ED /* Notenik.entitlements */,
 				9C4AE8D526A205EB00CD4EB4 /* MathJax */,
 				9C29A4E925D1CABC00409BF5 /* models */,
@@ -1606,7 +1612,7 @@
 				9CADA0232861475C00E71990 /* EditPrefsWindowController.swift in Sources */,
 				9C568DF223230B17005D6B0A /* WorkTitleDataSource.swift in Sources */,
 				9CE286182F38007D00822CBC /* NSMenuItem+RSCore.swift in Sources */,
-				9C7D61A9309FA8F200CD6CEA /* AppIntents.swift in Sources */,
+				9C7D61A9309FA8F200CD6CEA /* AppIntentsOld.swift in Sources */,
 				9C15A11428774E7900D5E6EF /* DateInsertViewController.swift in Sources */,
 				9C9094C52249A664002207EB /* NoteDocumentController.swift in Sources */,
 				9CD32624223308C400D06B77 /* StringView.swift in Sources */,
@@ -1653,6 +1659,7 @@
 				9C097D5D259AB95A00834A42 /* MediumPubWindowController.swift in Sources */,
 				9C2709C827A1B7D300B8FD9B /* LinkCleanerWindowController.swift in Sources */,
 				9CB8876E28625D1300AA91DB /* CocoaFontUsage.swift in Sources */,
+				9C58FDD030A3E46C0024B2A7 /* AppIntents.swift in Sources */,
 				9C674C1F288F3C0E0035E612 /* QueryOutputWindowController.swift in Sources */,
 				9C13708129B3D1C0000F8CFB /* FontSizeDataSource.swift in Sources */,
 				9C2BDBC72764188200E2041C /* IncludeChildrenView.swift in Sources */,
@@ -1693,6 +1700,7 @@
 				9CF1193B225822870015AE91 /* CollectionPrefsWindowController.swift in Sources */,
 				9C055D4D2251513B00282E36 /* NoteTabsViewController.swift in Sources */,
 				9CF256CB21FD0FF000D9F06A /* CollectionJuggler.swift in Sources */,
+				9C08B5AA30A5269B003B5AF4 /* AppIntentEntities.swift in Sources */,
 				9C0E23C02E7B21EF00D05CFB /* LongTitleView.swift in Sources */,
 				9C15A11228774E3C00D5E6EF /* DateInsertWindowController.swift in Sources */,
 				9C8693EB257565AB00F045D2 /* NewICloudViewController.swift in Sources */,
@@ -1983,7 +1991,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1033;
+				CURRENT_PROJECT_VERSION = 1038;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1999,7 +2007,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 19.9.2;
+				MARKETING_VERSION = 20.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2017,7 +2025,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1033;
+				CURRENT_PROJECT_VERSION = 1038;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = W3CJLBABN3;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2033,7 +2041,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 19.9.2;
+				MARKETING_VERSION = 20.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.powersurgepub.notenik.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

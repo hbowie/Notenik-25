@@ -265,7 +265,6 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     
     func processMenu(menu: NSMenu, parents: [String]) {
         let prefix = String(repeating: "  ", count: parents.count)
-        print(prefix + "- \(menu.title) contains \(menu.numberOfItems) items")
         var parentsPlus = parents
         parentsPlus.append(menu.title)
         for item in menu.items {
@@ -278,12 +277,8 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
         var separator = false
         if #available(macOS 14.0, *) {
             if item.isSeparatorItem {
-                print(prefix + "- ----------")
                 separator = true
             }
-        }
-        if !separator {
-            print(prefix + "- \(item.title)")
         }
         if let anotherMenu = item.submenu {
             processMenu(menu: anotherMenu, parents: parents)
@@ -4031,6 +4026,12 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
     /// - Parameter sender: The Search field.
     @IBAction func searchNow(_ sender: Any) {
         guard let searchField = sender as? NSSearchField else { return }
+        searchNow(term: searchField.stringValue)
+    }
+    
+    /// Search for the first matching Note using the search field.
+    /// - Parameter sender: The search text.
+    func searchNow(term: String) {
         guard let noteIO = guardForCollectionAction() else { return }
         applyCheckBoxUpdates()
         if noteIO.filterStatus == .showSearchResults {
@@ -4041,7 +4042,7 @@ class CollectionWindowController: NSWindowController, NSWindowDelegate, Attachme
             juggler.updateFiltering()
             noteIO.collection!.setFiltering(option: .showAll)
         }
-        searcher.searchText = searchField.stringValue
+        searcher.searchText = term
         searchUsingOptions()
     }
     
